@@ -1,3 +1,3 @@
 # TeamTimo
 
-# description du projet
+description du projet
