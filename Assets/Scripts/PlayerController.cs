@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -13,29 +14,36 @@ public class PlayerController : MonoBehaviour
     private Vector3 _direction;
 
     [SerializeField] private float smoothTime = 0.05f;
-    [SerializeField] private float speed = 10.0f;
-    [SerializeField] private float gravityMultiplier = 3.0f;
-    [SerializeField] private float jumpPower = 5.0f;
+    [SerializeField] private float speed = 15.0f;
+    [SerializeField] private float speedBoost = 2.0f;
+    [SerializeField] private float jump = 3.0f;
+    [SerializeField] private float jumpBoost = 1.2f; // Coeff multiplicateur de la hauteur de saut lors du sprint par rapport a la marche
+    [SerializeField] private float gravityMultiplier = 1.0f;
+    
 
     private float _gravity = -9.81f;
     private float _currentVelocity;
+    private float _fallSpeed;
     private float _velocity;
+    private float _jumpHeight;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _velocity = speed;
+        _jumpHeight = 1.0f;
     }
 
     private void Update()
     {
-        //ApplyMovement();
-        //ApplyRotation();
-        //ApplyGravity();
+        ApplyMovement();
+        ApplyGravity();
+        ApplyRotation();
     }
 
     private void ApplyMovement()
     {
-        _characterController.Move(_direction * speed * Time.deltaTime);
+        _characterController.Move(new Vector3(_direction.x * _velocity, _direction.y * speed * _jumpHeight, _direction.z * _velocity) * Time.deltaTime);
     }
     private void ApplyRotation()
     {
@@ -51,27 +59,28 @@ public class PlayerController : MonoBehaviour
     }
     private void ApplyGravity()
     {
-        if (IsGrounded && _direction.y < 0.0f)
+        if (_characterController.isGrounded)
         {
-            _velocity = 0.0f;
+            _fallSpeed = 0.0f;
         }
         else
         {
-            _velocity += _gravity * gravityMultiplier * Time.deltaTime;
+            _fallSpeed += _gravity * gravityMultiplier * Time.deltaTime;
         }
-        _direction.y = _velocity;
-
-
+        _direction.y = _fallSpeed;
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        Debug.Log(context);
-        if (context.phase == InputActionPhase.Performed && IsGrounded)
+        if(context.phase == InputActionPhase.Started)
         {
-            _velocity += jumpPower;
+            _direction.y = jump;
+            _fallSpeed = jump;
         }
     }
 
-
-    private bool IsGrounded => _characterController.isGrounded;
+    public void Sprint(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed) { _velocity = speed * speedBoost; _jumpHeight = jumpBoost;  }
+        if(context.phase == InputActionPhase.Canceled) { _velocity = speed; _jumpHeight = 1.0f; }
+    }
 }
