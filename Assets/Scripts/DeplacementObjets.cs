@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class DeplacementObjet : MonoBehaviour
 {
     private CharacterController characterController;
@@ -16,11 +15,14 @@ public class DeplacementObjet : MonoBehaviour
         // Vérifie si le personnage est en collision avec cet objet
         if (hit.gameObject.CompareTag("Obstacle"))
         {
-            // Déplace l'objet en fonction de la direction dans laquelle le personnage le pousse
             Rigidbody rb = hit.collider.attachedRigidbody;
             if (rb != null && !rb.isKinematic)
             {
-                rb.velocity = hit.moveDirection * 5f;
+                // Calcule la force en fonction de la masse de l'objet
+                float force = 5f / rb.mass; // Ajustez 10f selon besoins
+
+                // Applique la force en fonction de la direction dans laquelle le personnage le pousse
+                rb.AddForce(hit.moveDirection * force, ForceMode.Impulse);
             }
         }
     }
