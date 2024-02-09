@@ -1041,11 +1041,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba11b4ceb377c047b9690fdb704abe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.05
   speed: 15
-  speedBoost: 2
+  speedBoost: 0
   jump: 3
-  jumpBoost: 1.2
+  jumpBoost: 0
+  smoothTime: 0.05
   gravityMultiplier: 1
 --- !u!114 &756026594
 MonoBehaviour:
