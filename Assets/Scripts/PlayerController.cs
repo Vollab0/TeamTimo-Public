@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         _velocity = speed;
+        _jumpHeight = 1.0f;
     }
 
     private void Update()
