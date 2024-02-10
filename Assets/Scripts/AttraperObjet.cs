@@ -46,7 +46,7 @@ public class AttraperObjets : MonoBehaviour
         }
     }
 
-    void LacherObjet()
+    public void LacherObjet()
     {
         // Détache l'objet du joueur et lui rend sa physique
         if (objetEnMain != null)

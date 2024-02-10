@@ -9,7 +9,10 @@ public class TeleportationObjet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Le joueur tombe !");
-            other.transform.position = new Vector3(0.0f, 5.5f, 0.0f); // Ne fonctionne pas...
+            other.GetComponent<CharacterController>().enabled = false;
+            other.GetComponent<AttraperObjets>().LacherObjet();
+            other.transform.position = new Vector3(0.0f, 5.5f, 0.0f);
+            other.GetComponent<CharacterController>().enabled = true;
         }
         else
         {

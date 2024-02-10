@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class DeplacementObjet : MonoBehaviour
+public class DeplacementObstacles : MonoBehaviour
 {
     private CharacterController characterController;
 
