@@ -1343,6 +1343,7 @@ MonoBehaviour:
   jumpBoost: 1
   smoothTime: 0.05
   gravityMultiplier: 1
+  coyoteTimeDuration: 0.05
 --- !u!114 &756026594
 MonoBehaviour:
   m_ObjectHideFlags: 0

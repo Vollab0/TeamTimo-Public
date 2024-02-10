@@ -17,14 +17,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpBoost = 2f;
     [SerializeField] private float smoothTime = 0.05f;
     [SerializeField] private float gravityMultiplier = 3.0f;
-    
+    [SerializeField] private float coyoteTimeDuration = 0.1f; //Autorise un leger retard pour le saut lors de la descente d'un rebord
+
+
 
     private float _currentVelocity;
     private float _gravity = -9.81f;
     private float _verticalVelocity;
     private float _velocity;
     private float _jumpHeight;
+    private float _coyoteTimeExpiration;
     private Vector3 _newDirection;
+    private bool _hasJumped; // Verifie si le joueur a deja sauté pour empêcher le double saut
 
 
 
@@ -47,6 +51,8 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded() && _verticalVelocity < 0.0f)
         {
             _verticalVelocity = -1.0f;
+            _coyoteTimeExpiration = Time.time + coyoteTimeDuration;
+            _hasJumped = false;
         }
         else
         {
@@ -80,10 +86,12 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-        if (!IsGrounded()) return;
-
-        _verticalVelocity += jump;
-    }
+        if ((IsGrounded() || Time.time <= _coyoteTimeExpiration) && !_hasJumped)
+        {
+            _hasJumped = true;
+            _verticalVelocity += jump;
+        }
+    }//Peut être amelioré avec un CoyoteTime
 
     public void Sprint(InputAction.CallbackContext context)
     {
@@ -107,9 +115,8 @@ public class PlayerController : MonoBehaviour
         _velocity = speed * speedBoost;
         _jumpHeight = jumpBoost;
     }
-    private bool IsGrounded() => _characterController.isGrounded;
 
-    //Optimisation possible du saut : le rendre moins punitif par rapport aux descentes de rebords
+    private bool IsGrounded() => _characterController.isGrounded;
 
 }
 
