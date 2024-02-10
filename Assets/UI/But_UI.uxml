@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/But_UI.uss?fileID=7433441132597879392&amp;guid=10c63d3bd6599ce42bbac899fc437e9d&amp;type=3#But_UI" />
+    <ui:VisualElement style="flex-grow: 1; align-items: center; justify-content: center;">
+        <ui:Label tabindex="-1" text="But !" parse-escape-sequences="true" display-tooltip-when-elided="true" name="textebut" class="AffichageBut" style="-unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Fonts/LilitaOne-Regular.ttf?fileID=12800000&amp;guid=cd350c7b66da05d4b9be2d09999511a3&amp;type=3#LilitaOne-Regular&apos;);" />
+    </ui:VisualElement>
+</ui:UXML>

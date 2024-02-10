@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Compteur.uss?fileID=7433441132597879392&amp;guid=ac1a3ffefcd39c04eb401307e0ad2c69&amp;type=3#Compteur" />
+    <ui:VisualElement style="flex-grow: 1; -unity-text-align: lower-left; justify-content: flex-end;">
+        <ui:VisualElement style="flex-grow: initial; justify-content: center; align-self: flex-end; flex-wrap: nowrap; white-space: normal; -unity-text-align: upper-center; flex-shrink: initial;">
+            <ui:Label tabindex="-1" text="Nombre de cube sur la plateforme :" parse-escape-sequences="true" display-tooltip-when-elided="true" style="width: 237px; height: 25px; align-self: flex-end; -unity-text-align: upper-center;" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="nbr" style="white-space: normal; width: 40px; align-self: flex-end;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

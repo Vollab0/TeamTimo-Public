@@ -17,6 +17,7 @@ public class TeleportationObjet : MonoBehaviour
         else
         {
             other.GetComponent<Rigidbody>().velocity = new Vector3(0.0f, 0.0f, 0.0f);
+            other.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
             other.transform.position = other.GetComponent<InitialisationPositionObjet>()._positionInitial;
         }
     }
