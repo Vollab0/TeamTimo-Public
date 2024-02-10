@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,8 +31,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 _newDirection;
     private bool _hasJumped; // Verifie si le joueur a deja sauté pour empêcher le double saut
 
-
-
+    //public override void OnNetworkSpawn()
+    //{
+    //    if (!IsOwner) Destroy(this);
+    //}//Ce script est executé seuleument pour le owner : si il ne l'est pas tous les players sont controllés par une seule personne
     private void Awake() // Se lance une fois à l'execution du script
     {
         _characterController = GetComponent<CharacterController>();
