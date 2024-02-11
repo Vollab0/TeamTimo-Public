@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -30,6 +31,9 @@ public class PlayerController : MonoBehaviour
     private float _coyoteTimeExpiration;
     private Vector3 _newDirection;
     private bool _hasJumped; // Verifie si le joueur a deja sauté pour empêcher le double saut
+    private bool _canSprint = true;
+
+    private bool IsGrounded() => _characterController.isGrounded;
 
     //public override void OnNetworkSpawn()
     //{
@@ -93,6 +97,7 @@ public class PlayerController : MonoBehaviour
         {
             _hasJumped = true;
             _verticalVelocity += jump;
+            StartCoroutine(JumpSmoke());
         }
     }//Peut être amelioré avec un CoyoteTime
 
@@ -100,12 +105,15 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            _canSprint = true;
             StartCoroutine(BoostCoroutine());
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
+            _canSprint = false;
             _velocity = speed;
             _jumpHeight = 1.0f;
+            GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
         }
     }
 
@@ -115,11 +123,25 @@ public class PlayerController : MonoBehaviour
         {
             yield return null; // Attendre un frame avant de vérifier à nouveau
         }
-        _velocity = speed * speedBoost;
-        _jumpHeight = jumpBoost;
+        if(_canSprint)
+        {
+            _velocity = speed * speedBoost;
+            _jumpHeight = jumpBoost;
+            GetComponentInChildren<VisualEffect>().SendEvent("StartSprint");
+        }
     }
 
-    private bool IsGrounded() => _characterController.isGrounded;
+    private IEnumerator JumpSmoke()
+    {
+        yield return new WaitForSeconds(0.1f);
+        while (!IsGrounded())
+        {
+            yield return null;
+        }
+        transform.Find("JumpSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("OnJump");
+    }
+
+    
 
 }
 
