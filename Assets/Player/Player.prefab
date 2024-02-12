@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 2533812220788718176}
   - component: {fileID: 7175505464480460101}
   m_Layer: 0
-  m_Name: JumpSmoke
+  m_Name: LandSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

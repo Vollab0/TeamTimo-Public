@@ -31,7 +31,9 @@ public class PlayerController : MonoBehaviour
     private float _coyoteTimeExpiration;
     private Vector3 _newDirection;
     private bool _hasJumped; // Verifie si le joueur a deja sauté pour empêcher le double saut
-    private bool _canSprint = true;
+    private bool _canSprint = true; // Atteste que le joueur a appuyé sur sprint (afin d'attendre de retomber au sol pour s'activer)
+    private bool _isSprint;
+    private bool _isFalling = false;
 
     private bool IsGrounded() => _characterController.isGrounded;
 
@@ -60,12 +62,17 @@ public class PlayerController : MonoBehaviour
             _verticalVelocity = -1.0f;
             _coyoteTimeExpiration = Time.time + coyoteTimeDuration;
             _hasJumped = false;
+            _isFalling = false;
         }
         else
         {
             _verticalVelocity += _gravity * gravityMultiplier * Time.deltaTime;
+            if(!_isFalling)
+            {
+                _isFalling = true;
+                StartCoroutine(LandSmoke());
+            } 
         }
-
         _direction.y = _verticalVelocity;
     }
 
@@ -97,7 +104,10 @@ public class PlayerController : MonoBehaviour
         {
             _hasJumped = true;
             _verticalVelocity += jump;
-            StartCoroutine(JumpSmoke());
+            if(!(transform.GetComponent<CharacterController>().velocity.x == 0.0f && transform.GetComponent<CharacterController>().velocity.z == 0.0f))
+            {
+                StartCoroutine(JumpSmoke());
+            }
         }
     }//Peut être amelioré avec un CoyoteTime
 
@@ -111,9 +121,9 @@ public class PlayerController : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             _canSprint = false;
+            _isSprint = false;
             _velocity = speed;
             _jumpHeight = 1.0f;
-            GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
         }
     }
 
@@ -125,23 +135,63 @@ public class PlayerController : MonoBehaviour
         }
         if(_canSprint)
         {
+            _isSprint = true;
             _velocity = speed * speedBoost;
             _jumpHeight = jumpBoost;
-            GetComponentInChildren<VisualEffect>().SendEvent("StartSprint");
+            StartCoroutine(SprintSmoke());
         }
     }
 
-    private IEnumerator JumpSmoke()
+    private IEnumerator SprintSmoke()
+    {
+        bool smokeActive = false;
+        while(_isSprint)
+        {
+            if(IsGrounded() && !smokeActive && transform.GetComponent<CharacterController>().velocity != new Vector3(0.0f, 0.0f, 0.0f))
+            {
+                transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StartSprint");
+                smokeActive = true;
+            }
+            else
+            {
+                if (IsGrounded() && smokeActive && transform.GetComponent<CharacterController>().velocity == new Vector3(0.0f, 0.0f, 0.0f)) //Desactive la fumée si le joueur n'avance pas
+                {
+                    transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+                    smokeActive = false;
+                } else
+                {
+                    if (!IsGrounded() && smokeActive) //Desactive la fumée si le joueur est en l'air
+                    {
+                        transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+                        smokeActive = false;
+                    }
+                }
+            }
+            yield return null;
+        }
+        if (smokeActive)
+        {
+            transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+        }
+    }
+    private IEnumerator LandSmoke()
     {
         yield return new WaitForSeconds(0.1f);
         while (!IsGrounded())
         {
             yield return null;
         }
-        transform.Find("JumpSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("OnJump");
+        transform.Find("LandSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("OnLand");
     }
 
-    
+    private IEnumerator JumpSmoke()
+    {
+        yield return null;
+        transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StartSprint");
+        yield return new WaitForSeconds(0.1f);
+        transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+    }
+
 
 }
 
