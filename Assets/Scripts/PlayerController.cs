@@ -32,8 +32,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 _newDirection;
     private bool _hasJumped; // Verifie si le joueur a deja sauté pour empêcher le double saut
     private bool _canSprint = true; // Atteste que le joueur a appuyé sur sprint (afin d'attendre de retomber au sol pour s'activer)
-    private bool _isSprint;
+    private bool _sprintActivated;
+    private bool _isSprinting;
     private bool _isFalling = false;
+    private bool _isJumping = false; // A Definir
+    private bool _isWalking;
+
 
     private bool IsGrounded() => _characterController.isGrounded;
 
@@ -53,6 +57,10 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
         ApplyRotation();
         ApplyMovement();
+
+        _isWalking = (_characterController.velocity != new Vector3(0.0f, 0.0f, 0.0f));
+        Debug.Log("Walking :" + _isWalking);
+        Debug.Log("Sprinting :" + _isSprinting);
     }
 
     private void ApplyGravity()
@@ -121,10 +129,20 @@ public class PlayerController : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             _canSprint = false;
-            _isSprint = false;
+            _sprintActivated = false;
             _velocity = speed;
             _jumpHeight = 1.0f;
         }
+    }
+
+    public bool[] GetState()
+    {
+        bool[] stateArray = new bool[4];
+        stateArray[0] = _isWalking;
+        stateArray[1] = _isSprinting;
+        stateArray[2] = _isJumping;
+        stateArray[3] = _isFalling;
+        return stateArray;
     }
 
     private IEnumerator BoostCoroutine() //Coroutine qui attend que le joueur retombe au sol avant d'activer le sprint
@@ -135,7 +153,7 @@ public class PlayerController : MonoBehaviour
         }
         if(_canSprint)
         {
-            _isSprint = true;
+            _sprintActivated = true;
             _velocity = speed * speedBoost;
             _jumpHeight = jumpBoost;
             StartCoroutine(SprintSmoke());
@@ -145,12 +163,13 @@ public class PlayerController : MonoBehaviour
     private IEnumerator SprintSmoke()
     {
         bool smokeActive = false;
-        while(_isSprint)
+        while(_sprintActivated)
         {
             if(IsGrounded() && !smokeActive && transform.GetComponent<CharacterController>().velocity != new Vector3(0.0f, 0.0f, 0.0f))
             {
                 transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StartSprint");
                 smokeActive = true;
+                _isSprinting = true;
             }
             else
             {
@@ -158,12 +177,14 @@ public class PlayerController : MonoBehaviour
                 {
                     transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
                     smokeActive = false;
+                    _isSprinting = false;
                 } else
                 {
                     if (!IsGrounded() && smokeActive) //Desactive la fumée si le joueur est en l'air
                     {
                         transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
                         smokeActive = false;
+                        //_isSprinting = false; <=============== A verifier plus tard================
                     }
                 }
             }
@@ -172,6 +193,7 @@ public class PlayerController : MonoBehaviour
         if (smokeActive)
         {
             transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+            _isSprinting = false;
         }
     }
     private IEnumerator LandSmoke()
