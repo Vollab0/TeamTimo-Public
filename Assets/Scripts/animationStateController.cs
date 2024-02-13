@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class AnimationStateController : MonoBehaviour
 {
 
     private Animator animator;
@@ -21,5 +21,6 @@ public class NewBehaviourScript : MonoBehaviour
         animator.SetBool("isSprinting", stateArray[1]);
         animator.SetBool("isJumping", stateArray[2]);
         animator.SetBool("isFalling", stateArray[3]);
+        animator.SetBool("isHolding", GetComponentInParent<AttraperObjets>().IsHolding());
     }
 }

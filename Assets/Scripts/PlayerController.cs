@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour
                     {
                         transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
                         smokeActive = false;
-                        //_isSprinting = false; <=============== A verifier plus tard================
+                        _isSprinting = false;
                     }
                 }
             }
@@ -196,6 +196,7 @@ public class PlayerController : MonoBehaviour
             _isSprinting = false;
         }
     }
+
     private IEnumerator LandSmoke()
     {
         yield return new WaitForSeconds(0.1f);

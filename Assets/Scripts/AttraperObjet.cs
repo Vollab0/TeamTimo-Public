@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class AttraperObjets : MonoBehaviour
 {
+    [SerializeField] private Vector3 offset = new Vector3(0.0f, 2f, 1.5f);
     private GameObject objetEnMain = null;
     private Rigidbody rbObjetEnMain = null;
 
@@ -37,7 +38,6 @@ public class AttraperObjets : MonoBehaviour
                 objetEnMain.transform.SetParent(transform);
 
                 // Ajuste la position de l'objet par rapport au joueur
-                Vector3 offset = new Vector3(0.0f, 2f, 1.5f); 
                 objetEnMain.transform.localPosition = offset;
 
                 rbObjetEnMain.isKinematic = true;
@@ -57,5 +57,10 @@ public class AttraperObjets : MonoBehaviour
             objetEnMain = null;
             rbObjetEnMain = null;
         }
+    }
+
+    public bool IsHolding()
+    {
+        return rbObjetEnMain != null;
     }
 }
