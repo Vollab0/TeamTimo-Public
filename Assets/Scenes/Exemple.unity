@@ -446,7 +446,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 126792542}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07038778, y: -0.024914615, z: 0.0017585959, w: 0.997207}
+  m_LocalRotation: {x: 0.07038777, y: -0.024914617, z: 0.0017585958, w: 0.997207}
   m_LocalPosition: {x: 0, y: 6.913, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -873,7 +873,7 @@ GameObject:
   - component: {fileID: 202213194}
   - component: {fileID: 202213193}
   m_Layer: 0
-  m_Name: PlateformeBalance
+  m_Name: Plateforme
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3616,7 +3616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3158879251097095464, guid: b0d034e2daf27c64790a05cb192301d4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.07038777
+      value: 0.070387766
       objectReference: {fileID: 0}
     - target: {fileID: 6444186657775919850, guid: b0d034e2daf27c64790a05cb192301d4, type: 3}
       propertyPath: m_Follow
@@ -3664,9 +3664,9 @@ SceneRoots:
   - {fileID: 1677821824}
   - {fileID: 711352267}
   - {fileID: 83079325}
-  - {fileID: 1308941514}
   - {fileID: 202213196}
   - {fileID: 138546562}
+  - {fileID: 1308941514}
   - {fileID: 1375682212}
   - {fileID: 401223981}
   - {fileID: 7212513116515303993}
