@@ -59,8 +59,6 @@ public class PlayerController : MonoBehaviour
         ApplyMovement();
 
         _isWalking = (_characterController.velocity != new Vector3(0.0f, 0.0f, 0.0f));
-        Debug.Log("Walking :" + _isWalking);
-        Debug.Log("Sprinting :" + _isSprinting);
     }
 
     private void ApplyGravity()
