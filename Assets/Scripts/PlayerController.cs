@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using Unity.Netcode;
@@ -12,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
+    private Vector3 _cameraForward;
+    private CinemachineFreeLook _virtualCamera;
 
     [SerializeField] private float speed = 15f;
     [SerializeField] private float speedBoost = 2f;
@@ -39,6 +42,7 @@ public class PlayerController : MonoBehaviour
     private bool _isWalking;
 
 
+
     private bool IsGrounded() => _characterController.isGrounded;
 
     //public override void OnNetworkSpawn()
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _velocity = speed;
         _jumpHeight = 1.0f;
+        _virtualCamera = GameObject.FindObjectOfType<CinemachineFreeLook>();
     }
 
     private void Update()
@@ -57,8 +62,6 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
         ApplyRotation();
         ApplyMovement();
-
-        _isWalking = (_characterController.velocity != new Vector3(0.0f, 0.0f, 0.0f));
     }
 
     private void ApplyGravity()
@@ -85,16 +88,21 @@ public class PlayerController : MonoBehaviour
     private void ApplyRotation()
     {
         if (_input.sqrMagnitude == 0) return;
-
-        var targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
-        var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
-        transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
+        Vector3 characterOrientation = new Vector3(_newDirection.x, 0.0f, _newDirection.z);
+        Quaternion targetRotation = Quaternion.LookRotation(characterOrientation);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.deltaTime);// Lissage de la rotation avec la fonction Slerp (Spherical Linear Interpolation)
     }
 
     private void ApplyMovement()
     {
+        _cameraForward = _characterController.transform.position - _virtualCamera.transform.position;
+        _cameraForward.y = 0f;
+        Quaternion cameraRotation = Quaternion.LookRotation(_cameraForward);
         _newDirection = new Vector3(_direction.x * _velocity * Time.deltaTime, _direction.y * speed * _jumpHeight *  Time.deltaTime, _direction.z * _velocity * Time.deltaTime);
+        _newDirection = cameraRotation * _newDirection;
         _characterController.Move(_newDirection);
+
+        _isWalking = (_characterController.velocity != new Vector3(0.0f, 0.0f, 0.0f));
     }
 
     public void Move(InputAction.CallbackContext context)
