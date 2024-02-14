@@ -205,7 +205,7 @@ CapsuleCollider:
   m_Radius: 1.04
   m_Height: 5.19
   m_Direction: 1
-  m_Center: {x: 0, y: 2.38, z: 0}
+  m_Center: {x: 0, y: 2.61, z: 0}
 --- !u!143 &7553996323917932445
 CharacterController:
   m_ObjectHideFlags: 0
@@ -231,7 +231,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 2.38, z: 0}
+  m_Center: {x: 0, y: 2.61, z: 0}
 --- !u!114 &7257455390904616440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,11 +244,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba11b4ceb377c047b9690fdb704abe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
   speed: 15
   speedBoost: 2
   jump: 4
   jumpBoost: 1
-  smoothTime: 0.05
+  smoothTime: 10
   gravityMultiplier: 1
   coyoteTimeDuration: 0.05
 --- !u!114 &3887887298164217098

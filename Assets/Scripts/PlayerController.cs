@@ -14,13 +14,13 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     private Vector3 _direction;
     private Vector3 _cameraForward;
-    private CinemachineFreeLook _virtualCamera;
 
+    [SerializeField] private CinemachineFreeLook playerCamera = null;
     [SerializeField] private float speed = 15f;
     [SerializeField] private float speedBoost = 2f;
-    [SerializeField] private float jump = 3.0f;
+    [SerializeField] private float jump = 4.0f;
     [SerializeField] private float jumpBoost = 2f;
-    [SerializeField] private float smoothTime = 0.05f;
+    [SerializeField] private float smoothTime = 10f;
     [SerializeField] private float gravityMultiplier = 3.0f;
     [SerializeField] private float coyoteTimeDuration = 0.1f; //Autorise un leger retard pour le saut lors de la descente d'un rebord
 
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _velocity = speed;
         _jumpHeight = 1.0f;
-        _virtualCamera = GameObject.FindObjectOfType<CinemachineFreeLook>();
+        //playerCamera = GameObject.FindObjectOfType<CinemachineFreeLook>();
     }
 
     private void Update()
@@ -88,6 +88,10 @@ public class PlayerController : MonoBehaviour
     private void ApplyRotation()
     {
         if (_input.sqrMagnitude == 0) return;
+        if(playerCamera == null)
+        {
+            Debug.Log("Aucune camera attribuée au joueur");
+        }
         Vector3 characterOrientation = new Vector3(_newDirection.x, 0.0f, _newDirection.z);
         Quaternion targetRotation = Quaternion.LookRotation(characterOrientation);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.deltaTime);// Lissage de la rotation avec la fonction Slerp (Spherical Linear Interpolation)
@@ -95,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        _cameraForward = _characterController.transform.position - _virtualCamera.transform.position;
+        _cameraForward = _characterController.transform.position - playerCamera.transform.position;
         _cameraForward.y = 0f;
         Quaternion cameraRotation = Quaternion.LookRotation(_cameraForward);
         _newDirection = new Vector3(_direction.x * _velocity * Time.deltaTime, _direction.y * speed * _jumpHeight *  Time.deltaTime, _direction.z * _velocity * Time.deltaTime);
