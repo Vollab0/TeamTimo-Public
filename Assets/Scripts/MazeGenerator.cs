@@ -13,9 +13,11 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private int _lobbyDepth;
 
     private MazeCell[,] _mazeGrid; //Tableau 2 dimensions
+    private GameObject _mazeParent;
 
     public void Generate()
     {
+        CreateMazeParent();
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
 
         for (int x = 0; x<_mazeWidth; x++)
@@ -23,18 +25,23 @@ public class MazeGenerator : MonoBehaviour
             for(int z = 0; z<_mazeDepth; z++)
             {
                 _mazeGrid[x,z] = Instantiate(_mazeCellPrefab, new Vector3(x,0,z), Quaternion.identity);
+                _mazeGrid[x, z].transform.SetParent(_mazeParent.transform);
             }
         }
+
+        MarkLobbyCellsVisited();
 
         GenerateMaze(null, _mazeGrid[0, 0]);
 
         AddLobby();
+        RandomExit();
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
     {
         currentCell.Visit();
         ClearWalls(previousCell, currentCell);
+
 
         MazeCell nextCell;
 
@@ -139,12 +146,24 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
+    private void MarkLobbyCellsVisited()
+    {
+        int startLobbyX = (_mazeWidth - _lobbyWidth) / 2;
+        int startLobbyZ = (_mazeDepth - _lobbyDepth) / 2;
+        for (int i = startLobbyX; i < _lobbyWidth + startLobbyX; i++)
+        {
+            for (int j = startLobbyZ; j < _lobbyDepth + startLobbyZ; j++)
+            {
+                _mazeGrid[i, j].Visit();
+            }
+        }
+    }
     private void AddLobby() //Suppression des cellules du milieu pour creer un looby
     {
         int startLobbyX = (_mazeWidth - _lobbyWidth) / 2;
         int startLobbyZ = (_mazeDepth - _lobbyDepth) / 2;
-        for(int i = startLobbyX; i <= _lobbyWidth + startLobbyX; i++) {
-            for(int j = startLobbyZ; j <= _lobbyDepth + startLobbyZ; j++)
+        for(int i = startLobbyX; i < _lobbyWidth + startLobbyX; i++) {
+            for(int j = startLobbyZ; j < _lobbyDepth + startLobbyZ; j++)
             {
                 _mazeGrid[i, j].ClearLeftWall();
                 _mazeGrid[i, j].ClearRightWall();
@@ -155,19 +174,54 @@ public class MazeGenerator : MonoBehaviour
                 {
                     _mazeGrid[i, j].AddLeftWall();
                 }
-                if (i == _lobbyWidth + startLobbyX)
+                if (i == _lobbyWidth + startLobbyX - 1)
                 {
                     _mazeGrid[i, j].AddRightWall();
                 }
                 if (j == startLobbyZ)
                 {
-                    _mazeGrid[i, j].AddFrontWall();
-                }
-                if (j == _lobbyDepth + startLobbyZ)
-                {
                     _mazeGrid[i, j].AddBackWall();
+                }
+                if (j == _lobbyDepth + startLobbyZ - 1)
+                {
+                    _mazeGrid[i, j].AddFrontWall();
                 }
             }
         }
     }
+
+    private void RandomExit()
+    {
+        int randomSide = Random.Range(1, 5);
+        if (randomSide == 1)
+        {
+            int randomCell = Random.Range(0, _mazeWidth - 1);
+            _mazeGrid[randomCell, 0].ClearBackWall();
+        }
+        else if(randomSide == 2) 
+        {
+            int randomCell = Random.Range(0, _mazeDepth - 1);
+            _mazeGrid[_mazeWidth-1, randomCell].ClearRightWall();
+        }
+        else if (randomSide == 3)
+        {
+            int randomCell = Random.Range(0, _mazeDepth - 1);
+            _mazeGrid[randomCell, _mazeDepth - 1].ClearFrontWall();
+        }
+        else
+        {
+            int randomCell = Random.Range(0, _mazeDepth - 1);
+            _mazeGrid[0 , randomCell].ClearLeftWall();
+        }
+    }
+
+    private void CreateMazeParent()
+    {
+        if (_mazeParent != null)
+        {
+            Destroy(_mazeParent);
+        }
+        _mazeParent = new GameObject("MazeWalls");
+    }
+
 }
