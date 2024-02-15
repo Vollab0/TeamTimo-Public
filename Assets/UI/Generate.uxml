@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="flex-grow: 1; justify-content: center;">
         <ui:Button text="Generer" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnGenerer" style="width: 200px; height: 70px;" />
+        <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BtnStart" style="width: 200px; height: 70px;" />
     </ui:VisualElement>
 </ui:UXML>

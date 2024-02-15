@@ -11,9 +11,13 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private int _mazeDepth;
     [SerializeField] private int _lobbyWidth;
     [SerializeField] private int _lobbyDepth;
+    [SerializeField] private int _cellSize;
 
     private MazeCell[,] _mazeGrid; //Tableau 2 dimensions
     private GameObject _mazeParent;
+
+    private Vector3 _repositioningOffset;
+
 
     public void Generate()
     {
@@ -24,8 +28,9 @@ public class MazeGenerator : MonoBehaviour
         {
             for(int z = 0; z<_mazeDepth; z++)
             {
-                _mazeGrid[x,z] = Instantiate(_mazeCellPrefab, new Vector3(x,0,z), Quaternion.identity);
-                _mazeGrid[x, z].transform.SetParent(_mazeParent.transform);
+                _mazeGrid[x,z] = Instantiate(_mazeCellPrefab, new Vector3(_cellSize*x, 0, _cellSize*z), Quaternion.identity);
+                _mazeGrid[x, z].SetIndices(x, z);
+                _mazeGrid[x,z].transform.SetParent(_mazeParent.transform);
             }
         }
 
@@ -33,8 +38,9 @@ public class MazeGenerator : MonoBehaviour
 
         GenerateMaze(null, _mazeGrid[0, 0]);
 
-        AddLobby();
-        RandomExit();
+        AddLobby();// Crée un lobby au centre du labyrinthe
+        RandomExit();// Met une sortie aléatoire
+        Repositioning(); //Recentre le labyrinthe au milieu de la map (0.0)
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
@@ -67,8 +73,8 @@ public class MazeGenerator : MonoBehaviour
 
     private IEnumerable<MazeCell> GetUnvisitedCells(MazeCell currentCell)
     {
-        int x = (int)currentCell.transform.position.x;
-        int z = (int)currentCell.transform.position.z;
+        int x = currentCell.GetIndices().Item1;
+        int z = currentCell.GetIndices().Item2;
 
         if (x+1< _mazeWidth)
         {
@@ -117,28 +123,28 @@ public class MazeGenerator : MonoBehaviour
             return; 
         }
 
-        if (previousCell.transform.position.x < currentCell.transform.position.x)
+        if (previousCell.GetIndices().Item1 < currentCell.GetIndices().Item1)
         {
             previousCell.ClearRightWall();
             currentCell.ClearLeftWall();
             return;
         }
 
-        if (previousCell.transform.position.x > currentCell.transform.position.x)
+        if (previousCell.GetIndices().Item1 > currentCell.GetIndices().Item1)
         {
             previousCell.ClearLeftWall();
             currentCell.ClearRightWall();
             return;
         }
 
-        if (previousCell.transform.position.z < currentCell.transform.position.z)
+        if (previousCell.GetIndices().Item2 < currentCell.GetIndices().Item2)
         {
             previousCell.ClearFrontWall();
             currentCell.ClearBackWall();
             return;
         }
 
-        if (previousCell.transform.position.z > currentCell.transform.position.z)
+        if (previousCell.GetIndices().Item2 > currentCell.GetIndices().Item2)
         {
             previousCell.ClearBackWall();
             currentCell.ClearFrontWall();
@@ -188,6 +194,20 @@ public class MazeGenerator : MonoBehaviour
                 }
             }
         }
+
+        //============= Ajout des 4 portes ==============
+
+        _mazeGrid[startLobbyX, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearLeftWall();
+        _mazeGrid[startLobbyX-1, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearRightWall();
+
+        _mazeGrid[startLobbyX + _lobbyWidth - 1, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearRightWall();
+        _mazeGrid[startLobbyX + _lobbyWidth, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearLeftWall();
+
+        _mazeGrid[(_mazeWidth-1)/2, _lobbyDepth + startLobbyZ-1].ClearFrontWall();
+        _mazeGrid[(_mazeWidth - 1) / 2, _lobbyDepth + startLobbyZ].ClearBackWall();
+
+        _mazeGrid[(_mazeWidth - 1)/ 2, startLobbyZ].ClearBackWall();
+        _mazeGrid[(_mazeWidth - 1) / 2, startLobbyZ-1].ClearFrontWall();
     }
 
     private void RandomExit()
@@ -222,6 +242,12 @@ public class MazeGenerator : MonoBehaviour
             Destroy(_mazeParent);
         }
         _mazeParent = new GameObject("MazeWalls");
+    }
+
+    private void Repositioning()
+    {
+        _repositioningOffset = new Vector3(_mazeWidth * _cellSize / 2, 0.0f, _mazeDepth * _cellSize /2);
+        _mazeParent.transform.position -= _repositioningOffset;
     }
 
 }

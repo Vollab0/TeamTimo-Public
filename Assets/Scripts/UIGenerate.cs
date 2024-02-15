@@ -5,7 +5,10 @@ using UnityEngine.UIElements;
 
 public class UIGenerate : MonoBehaviour
 {
-    [SerializeField] private MazeGenerator _mazeGenerator; 
+    [SerializeField] private MazeGenerator _mazeGenerator;
+    [SerializeField] private GameObject _camera;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _playerCamera;
     void Start()
     {
         // Récupérer la racine de l'élément visuel de votre document UI
@@ -13,9 +16,11 @@ public class UIGenerate : MonoBehaviour
 
         // Récupérer le bouton à partir de la racine en utilisant le sélecteur
         Button btnGenerer = root.Q<Button>("BtnGenerer");
+        Button btnStart = root.Q<Button>("BtnStart");
 
         // Ajouter un gestionnaire d'événements au bouton
         btnGenerer.clicked += OnBtnGenererClicked;
+        btnStart.clicked += OnBtnStartClicked;
     }
 
     // Méthode appelée lorsque le bouton est cliqué
@@ -23,5 +28,13 @@ public class UIGenerate : MonoBehaviour
     {
         // Mettez ici le code que vous souhaitez exécuter lorsque le bouton est cliqué
         _mazeGenerator.Generate();
+    }
+
+    void OnBtnStartClicked()
+    {
+        _camera.SetActive(false);
+        _player.SetActive(true);
+        _playerCamera.SetActive(true);
+        GetComponent<UIDocument>().gameObject.SetActive(false);
     }
 }

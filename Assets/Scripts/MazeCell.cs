@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,18 @@ public class MazeCell : MonoBehaviour
     [SerializeField] private GameObject _unvisitedBlock;
 
     public bool IsVisited { get; private set; }
+
+    private Tuple<int, int> indices;
+
+    public Tuple<int, int> GetIndices()
+    {
+        return indices;
+    }
+
+    public void SetIndices(int i, int j)
+    {
+        indices = new Tuple<int, int>(i, j);
+    }
 
     public void Visit()
     {
