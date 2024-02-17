@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Life : MonoBehaviour
 {
+
+    public HealthBar healthbar;
+
     float health;
     float maxHealth = 100f;
 
@@ -15,6 +18,10 @@ public class Life : MonoBehaviour
         health = maxHealth;
     }
 
+    void Start()
+    {
+        healthbar.SetHealth(health, maxHealth);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -27,7 +34,7 @@ public class Life : MonoBehaviour
             if (health < 0f)
                 health = maxHealth;
 
-            Debug.Log("Health:" +  health);
+            healthbar.SetHealth(health, maxHealth);
         }
     }
 }
