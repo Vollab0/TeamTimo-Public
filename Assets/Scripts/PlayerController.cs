@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _direction;
     private Vector3 _cameraForward;
 
-    [SerializeField] private CinemachineFreeLook playerCamera = null;
+    
     [SerializeField] private float speed = 15f;
     [SerializeField] private float speedBoost = 2f;
     [SerializeField] private float jump = 4.0f;
@@ -23,6 +24,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float smoothTime = 10f;
     [SerializeField] private float gravityMultiplier = 3.0f;
     [SerializeField] private float coyoteTimeDuration = 0.1f; //Autorise un leger retard pour le saut lors de la descente d'un rebord
+    [SerializeField] private bool _isThirdPerson = true;
+    public GameObject firstPersonCamera;
+    public GameObject thirdPersonCamera;
+    private GameObject playerCamera = null;
 
 
 
@@ -40,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private bool _isFalling = false;
     private bool _isJumping = false; // A Definir
     private bool _isWalking;
+    
 
 
 
@@ -54,6 +60,22 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _velocity = speed;
         _jumpHeight = 1.0f;
+
+        if (_isThirdPerson)
+        {
+            thirdPersonCamera.SetActive(true);
+            firstPersonCamera.SetActive(false);
+            playerCamera = thirdPersonCamera;
+        }
+        else
+        {
+            firstPersonCamera.SetActive(true);
+            thirdPersonCamera.SetActive(false);
+            playerCamera = firstPersonCamera;
+        }
+        
+        
+
         //playerCamera = GameObject.FindObjectOfType<CinemachineFreeLook>();
     }
 
@@ -142,6 +164,24 @@ public class PlayerController : MonoBehaviour
             _sprintActivated = false;
             _velocity = speed;
             _jumpHeight = 1.0f;
+        }
+    }
+
+    public void SwitchCamera()
+    {
+        if(_isThirdPerson)
+        {
+            firstPersonCamera.SetActive(true);
+            thirdPersonCamera.SetActive(false);
+            playerCamera = firstPersonCamera;
+            _isThirdPerson = false;
+        }
+        else
+        {
+            thirdPersonCamera.SetActive(true);
+            firstPersonCamera.SetActive(false); 
+            playerCamera = thirdPersonCamera;
+            _isThirdPerson = true;
         }
     }
 

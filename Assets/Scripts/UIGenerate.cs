@@ -8,7 +8,6 @@ public class UIGenerate : MonoBehaviour
     [SerializeField] private MazeGenerator _mazeGenerator;
     [SerializeField] private GameObject _camera;
     [SerializeField] private GameObject _player;
-    [SerializeField] private GameObject _playerCamera;
     void Start()
     {
         // Récupérer la racine de l'élément visuel de votre document UI
@@ -34,7 +33,6 @@ public class UIGenerate : MonoBehaviour
     {
         _camera.SetActive(false);
         _player.SetActive(true);
-        _playerCamera.SetActive(true);
         GetComponent<UIDocument>().gameObject.SetActive(false);
     }
 }
