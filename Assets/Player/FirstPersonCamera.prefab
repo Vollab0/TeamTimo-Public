@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 64981350442708765}
   - component: {fileID: 878195525618785301}
-  - component: {fileID: 5577989661371076604}
+  - component: {fileID: 8301863922977987596}
   m_Layer: 0
   m_Name: FirstPersonCamera
   m_TagString: Untagged
@@ -73,7 +73,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 7580557748507624238}
---- !u!114 &5577989661371076604
+--- !u!114 &8301863922977987596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,9 +99,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7580557748507624238}
   - component: {fileID: 8206988970130010666}
-  - component: {fileID: 1552598792948836684}
   - component: {fileID: 1545252307460604655}
-  - component: {fileID: 8745013432651290384}
+  - component: {fileID: 8424276317651406491}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -136,19 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1552598792948836684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6151468051836412371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Damping: 0
 --- !u!114 &1545252307460604655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +151,7 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 150
+    m_MaxSpeed: 100
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: 
@@ -189,7 +175,7 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 150
+    m_MaxSpeed: 100
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: 
@@ -211,7 +197,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0
---- !u!114 &8745013432651290384
+--- !u!114 &8424276317651406491
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -25,13 +25,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityMultiplier = 3.0f;
     [SerializeField] private float coyoteTimeDuration = 0.1f; //Autorise un leger retard pour le saut lors de la descente d'un rebord
     [SerializeField] private bool _isThirdPerson = true;
-    public GameObject firstPersonCamera;
-    public GameObject thirdPersonCamera;
-    private GameObject playerCamera = null;
+    public CinemachineVirtualCamera firstPersonCamera;
+    public CinemachineFreeLook thirdPersonCamera;
 
 
-
-    private float _currentVelocity;
     private float _gravity = -9.81f;
     private float _verticalVelocity;
     private float _velocity;
@@ -61,20 +58,17 @@ public class PlayerController : MonoBehaviour
         _velocity = speed;
         _jumpHeight = 1.0f;
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         if (_isThirdPerson)
         {
-            thirdPersonCamera.SetActive(true);
-            firstPersonCamera.SetActive(false);
-            playerCamera = thirdPersonCamera;
+            thirdPersonCamera.gameObject.SetActive(true);
         }
         else
         {
-            firstPersonCamera.SetActive(true);
-            thirdPersonCamera.SetActive(false);
-            playerCamera = firstPersonCamera;
+            firstPersonCamera.gameObject.SetActive(true);
         }
-        
-        
 
         //playerCamera = GameObject.FindObjectOfType<CinemachineFreeLook>();
     }
@@ -109,22 +103,34 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyRotation()
     {
-        if (_input.sqrMagnitude == 0) return;
-        if(playerCamera == null)
+        if (_isThirdPerson)
         {
-            Debug.Log("Aucune camera attribuée au joueur");
+            if (_input.sqrMagnitude == 0) return;
+            Vector3 characterOrientation = new Vector3(_newDirection.x, 0.0f, _newDirection.z);
+            Quaternion targetRotation = Quaternion.LookRotation(characterOrientation);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.deltaTime);// Lissage de la rotation avec la fonction Slerp (Spherical Linear Interpolation)
         }
-        Vector3 characterOrientation = new Vector3(_newDirection.x, 0.0f, _newDirection.z);
-        Quaternion targetRotation = Quaternion.LookRotation(characterOrientation);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.deltaTime);// Lissage de la rotation avec la fonction Slerp (Spherical Linear Interpolation)
+        else
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(_cameraForward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime* Time.deltaTime);
+        }
     }
 
     private void ApplyMovement()
     {
-        _cameraForward = _characterController.transform.position - playerCamera.transform.position;
+        if(_isThirdPerson)
+        {
+            _cameraForward = _characterController.transform.position - thirdPersonCamera.gameObject.transform.position;
+        } else
+        {
+            float cameraAngle = firstPersonCamera.State.RawOrientation.eulerAngles.y;
+            float angleInRadians = cameraAngle * Mathf.Deg2Rad;
+            _cameraForward = new Vector3(Mathf.Sin(angleInRadians), 0f, Mathf.Cos(angleInRadians));
+        }
         _cameraForward.y = 0f;
         Quaternion cameraRotation = Quaternion.LookRotation(_cameraForward);
-        _newDirection = new Vector3(_direction.x * _velocity * Time.deltaTime, _direction.y * speed * _jumpHeight *  Time.deltaTime, _direction.z * _velocity * Time.deltaTime);
+        _newDirection = new Vector3(_direction.x * _velocity * Time.deltaTime, _direction.y * speed * _jumpHeight * Time.deltaTime, _direction.z * _velocity * Time.deltaTime);
         _newDirection = cameraRotation * _newDirection;
         _characterController.Move(_newDirection);
 
@@ -171,16 +177,14 @@ public class PlayerController : MonoBehaviour
     {
         if(_isThirdPerson)
         {
-            firstPersonCamera.SetActive(true);
-            thirdPersonCamera.SetActive(false);
-            playerCamera = firstPersonCamera;
+            firstPersonCamera.gameObject.SetActive(true);
+            thirdPersonCamera.gameObject.SetActive(false);
             _isThirdPerson = false;
         }
         else
         {
-            thirdPersonCamera.SetActive(true);
-            firstPersonCamera.SetActive(false); 
-            playerCamera = thirdPersonCamera;
+            thirdPersonCamera.gameObject.SetActive(true);
+            firstPersonCamera.gameObject.SetActive(false);
             _isThirdPerson = true;
         }
     }
