@@ -3666,7 +3666,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257455390904616440, guid: 19d0b536e3eb6264b8c3e106e93bd4ef, type: 3}
       propertyPath: _isThirdPerson
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7257455390904616440, guid: 19d0b536e3eb6264b8c3e106e93bd4ef, type: 3}
       propertyPath: firstPersonCamera
