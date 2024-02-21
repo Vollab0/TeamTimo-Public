@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private int _lobbyWidth;
     [SerializeField] private int _lobbyDepth;
     [SerializeField] private int _cellSize;
+
+    public List<GameObject> mobs;//Pour le test
 
     private MazeCell[,] _mazeGrid; //Tableau 2 dimensions
     private GameObject _mazeParent;
@@ -41,6 +45,13 @@ public class MazeGenerator : MonoBehaviour
         AddLobby();// Crée un lobby au centre du labyrinthe
         RandomExit();// Met une sortie aléatoire
         Repositioning(); //Recentre le labyrinthe au milieu de la map (0.0)
+
+        GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        foreach(var m in mobs)
+        {
+            m.SetActive(true);
+        }
     }
 
     private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
