@@ -1876,6 +1876,12 @@ MonoBehaviour:
   _mazeGenerator: {fileID: 1684440688}
   _camera: {fileID: 1072199808}
   _player: {fileID: 940716623}
+  _ecranChargement: {fileID: 1113456821}
+  mobs:
+  - {fileID: 1537047678}
+  - {fileID: 467456337}
+  - {fileID: 1017608417}
+  - {fileID: 1417019939}
 --- !u!1001 &509228704
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3797,6 +3803,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4032784818553696, guid: 645e0ccb96eef934aa12bd4c02a4bd66, type: 3}
   m_PrefabInstance: {fileID: 1100710128}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1113456821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1113456823}
+  - component: {fileID: 1113456822}
+  m_Layer: 5
+  m_Name: UIChargement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1113456822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113456821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 6ace0e5b17ecadc4486a102e2af4949a, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: de2ce9f01cb9c9b459b8d46c980bfbe2, type: 3}
+  m_SortingOrder: 0
+--- !u!4 &1113456823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113456821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1144119559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5244,11 +5298,6 @@ MonoBehaviour:
   _lobbyWidth: 5
   _lobbyDepth: 5
   _cellSize: 25
-  mobs:
-  - {fileID: 1537047678}
-  - {fileID: 467456337}
-  - {fileID: 1017608417}
-  - {fileID: 1417019939}
 --- !u!4 &1684440689
 Transform:
   m_ObjectHideFlags: 0
@@ -6783,6 +6832,7 @@ SceneRoots:
   - {fileID: 1432813416}
   - {fileID: 1684440689}
   - {fileID: 496426676}
+  - {fileID: 1113456823}
   - {fileID: 1870102123}
   - {fileID: 1537047682}
   - {fileID: 467456342}

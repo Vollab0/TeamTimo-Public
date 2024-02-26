@@ -8,25 +8,29 @@ public class UIGenerate : MonoBehaviour
     [SerializeField] private MazeGenerator _mazeGenerator;
     [SerializeField] private GameObject _camera;
     [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _ecranChargement;
+    public List<GameObject> mobs;//Pour le test
+
     void Start()
     {
-        // Récupérer la racine de l'élément visuel de votre document UI
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
-
-        // Récupérer le bouton à partir de la racine en utilisant le sélecteur
         Button btnGenerer = root.Q<Button>("BtnGenerer");
         Button btnStart = root.Q<Button>("BtnStart");
 
-        // Ajouter un gestionnaire d'événements au bouton
         btnGenerer.clicked += OnBtnGenererClicked;
         btnStart.clicked += OnBtnStartClicked;
     }
 
-    // Méthode appelée lorsque le bouton est cliqué
     void OnBtnGenererClicked()
     {
-        // Mettez ici le code que vous souhaitez exécuter lorsque le bouton est cliqué
-        _mazeGenerator.Generate();
+        _ecranChargement.SetActive(true);
+        StartCoroutine(GenerateMazeCoroutine());
+    }
+
+    IEnumerator GenerateMazeCoroutine()
+    {
+        yield return StartCoroutine(_mazeGenerator.Generate());
+        _ecranChargement.SetActive(false);
     }
 
     void OnBtnStartClicked()
@@ -34,5 +38,11 @@ public class UIGenerate : MonoBehaviour
         _camera.SetActive(false);
         _player.SetActive(true);
         GetComponent<UIDocument>().gameObject.SetActive(false);
+
+        foreach (var m in mobs)
+        {
+            m.SetActive(true);
+        }
+
     }
 }

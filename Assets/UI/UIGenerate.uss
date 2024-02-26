@@ -1,0 +1,19 @@
+.button {
+    background-color: rgb(125, 125, 125);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    width: 200px;
+    height: 70px;
+}
+
+.button:hover {
+    background-color: rgb(188, 188, 188);
+    color: rgb(0, 0, 0);
+    width: 220px;
+    height: 75px;
+    transition-property: background-color, width, height;
+    transition-duration: 0.1s, 0.1s, 0s;
+    transition-timing-function: ease-in, ease-in, ease-in;
+}

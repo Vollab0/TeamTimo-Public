@@ -15,50 +15,42 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private int _lobbyDepth;
     [SerializeField] private int _cellSize;
 
-    public List<GameObject> mobs;//Pour le test
-
     private MazeCell[,] _mazeGrid; //Tableau 2 dimensions
     private GameObject _mazeParent;
 
     private Vector3 _repositioningOffset;
 
 
-    public void Generate()
+    public IEnumerator Generate()
     {
         CreateMazeParent();
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
 
-        for (int x = 0; x<_mazeWidth; x++)
+        for (int x = 0; x < _mazeWidth; x++)
         {
-            for(int z = 0; z<_mazeDepth; z++)
+            for (int z = 0; z < _mazeDepth; z++)
             {
-                _mazeGrid[x,z] = Instantiate(_mazeCellPrefab, new Vector3(_cellSize*x, 0, _cellSize*z), Quaternion.identity);
+                _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, new Vector3(_cellSize * x, 0, _cellSize * z), Quaternion.identity);
                 _mazeGrid[x, z].SetIndices(x, z);
-                _mazeGrid[x,z].transform.SetParent(_mazeParent.transform);
+                _mazeGrid[x, z].transform.SetParent(_mazeParent.transform);
             }
         }
 
         MarkLobbyCellsVisited();
 
-        GenerateMaze(null, _mazeGrid[0, 0]);
+        yield return StartCoroutine(GenerateMaze(null, _mazeGrid[0, 0]));
 
-        AddLobby();// Crée un lobby au centre du labyrinthe
-        RandomExit();// Met une sortie aléatoire
-        Repositioning(); //Recentre le labyrinthe au milieu de la map (0.0)
+        AddLobby();
+        RandomExit();
+        Repositioning();
 
         GetComponent<NavMeshSurface>().BuildNavMesh();
-
-        foreach(var m in mobs)
-        {
-            m.SetActive(true);
-        }
     }
 
-    private void GenerateMaze(MazeCell previousCell, MazeCell currentCell)
+    private IEnumerator GenerateMaze(MazeCell previousCell, MazeCell currentCell)
     {
         currentCell.Visit();
         ClearWalls(previousCell, currentCell);
-
 
         MazeCell nextCell;
 
@@ -68,11 +60,9 @@ public class MazeGenerator : MonoBehaviour
 
             if (nextCell != null)
             {
-                GenerateMaze(currentCell, nextCell);
+                yield return StartCoroutine(GenerateMaze(currentCell, nextCell));
             }
         } while (nextCell != null);
-
-        
     }
 
     private MazeCell GetNextUnvisitedCell(MazeCell currentCell)
