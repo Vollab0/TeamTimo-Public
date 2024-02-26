@@ -8,7 +8,15 @@ public class AttraperObjets : MonoBehaviour
     [SerializeField] private Vector3 offset = new Vector3(0.0f, 2f, 1.5f);
     private GameObject objetEnMain = null;
     private Rigidbody rbObjetEnMain = null;
+    private GameObject highlightedObject;
+    public float detectionRange = 2f;
 
+    public Material outlineMaterial;
+
+    public void Update()
+    {
+        Outliner();
+    }
     public void AttraperObjet(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -26,7 +34,7 @@ public class AttraperObjets : MonoBehaviour
 
     void RamasserObjet()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 2f); // Crée une sphere de rayon 2 centrée sur le joueur et renvoie tous les colliders à l'interieur
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange); // Crée une sphere de rayon 2 centrée sur le joueur et renvoie tous les colliders à l'interieur
         foreach (Collider col in colliders)
         {
             // Si l'objet est ramassable
@@ -41,6 +49,7 @@ public class AttraperObjets : MonoBehaviour
                 objetEnMain.transform.localPosition = offset;
 
                 rbObjetEnMain.isKinematic = true;
+                RemoveOutline(objetEnMain);
                 break; // Sort de la boucle après avoir trouvé le premier objet ramassable
             }
         }
@@ -62,5 +71,67 @@ public class AttraperObjets : MonoBehaviour
     public bool IsHolding()
     {
         return rbObjetEnMain != null;
+    }
+
+    private void Outliner()
+    {
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange);
+
+        // Réinitialise l'objet mis en surbrillance
+        if (highlightedObject != null)
+        {
+            RemoveOutline(highlightedObject);
+            highlightedObject = null;
+        }
+
+        // Parcourt les objets détectés
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject != objetEnMain)
+            {
+                // Vérifie si le collider est un objet ramassable
+                if (collider.CompareTag("Ramassable"))
+                {
+                    // Applique l'effet outliner à l'objet
+                    AddOutline(collider.gameObject);
+                    highlightedObject = collider.gameObject;
+                }
+            }
+                
+        }
+    }
+
+    // Ajoute l'effet outliner à l'objet spécifié
+    private void AddOutline(GameObject obj)
+    {
+        Renderer renderer = obj.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Material[] materials = renderer.materials;
+            Material[] newMaterials = new Material[2];
+            for (int i = 0; i < materials.Length; i++)
+            {
+                newMaterials[i] = materials[i];
+            }
+            newMaterials[materials.Length] = outlineMaterial;
+            renderer.materials = newMaterials;
+        }
+    }
+
+    // Supprime l'effet outliner de l'objet spécifié
+    private void RemoveOutline(GameObject obj)
+    {
+        Renderer renderer = obj.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Material[] materials = renderer.materials;
+            Material[] newMaterials = new Material[1];
+            for (int i = 0; i < newMaterials.Length; i++)
+            {
+                newMaterials[i] = materials[i];
+            }
+            renderer.materials = newMaterials;
+        }
     }
 }

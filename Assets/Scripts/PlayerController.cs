@@ -269,6 +269,5 @@ public class PlayerController : MonoBehaviour
         transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
     }
 
-
 }
 
