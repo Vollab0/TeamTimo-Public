@@ -5,6 +5,7 @@ using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.PlayerLoop;
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -14,9 +15,11 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private int _lobbyWidth;
     [SerializeField] private int _lobbyDepth;
     [SerializeField] private int _cellSize;
+    [SerializeField] private int _nbrRooms;
 
     private MazeCell[,] _mazeGrid; //Tableau 2 dimensions
     private GameObject _mazeParent;
+    public int[][] _rooms;
 
     private Vector3 _repositioningOffset;
 
@@ -24,7 +27,32 @@ public class MazeGenerator : MonoBehaviour
     public IEnumerator Generate()
     {
         CreateMazeParent();
+
+        Initialisation();
+
+        MarkLobbyCellsVisited();
+
+        LocateRooms();
+
+        MarkRoomsCellsVisited(_rooms);
+
+        yield return StartCoroutine(GenerateMaze(null, _mazeGrid[0, 0]));
+
+        AddLobby();
+
+        AddRooms();
+
+        RandomExit();
+
+        Repositioning();
+
+        GetComponent<NavMeshSurface>().BuildNavMesh();
+    }
+
+    private void Initialisation()
+    {
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
+        _rooms = new int[_nbrRooms][];
 
         for (int x = 0; x < _mazeWidth; x++)
         {
@@ -35,16 +63,6 @@ public class MazeGenerator : MonoBehaviour
                 _mazeGrid[x, z].transform.SetParent(_mazeParent.transform);
             }
         }
-
-        MarkLobbyCellsVisited();
-
-        yield return StartCoroutine(GenerateMaze(null, _mazeGrid[0, 0]));
-
-        AddLobby();
-        RandomExit();
-        Repositioning();
-
-        GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     private IEnumerator GenerateMaze(MazeCell previousCell, MazeCell currentCell)
@@ -117,6 +135,7 @@ public class MazeGenerator : MonoBehaviour
             }
         }
     }
+
     private void ClearWalls(MazeCell previousCell, MazeCell currentCell)
     {
         if (previousCell == null)
@@ -165,6 +184,7 @@ public class MazeGenerator : MonoBehaviour
             }
         }
     }
+
     private void AddLobby() //Suppression des cellules du milieu pour creer un looby
     {
         int startLobbyX = (_mazeWidth - _lobbyWidth) / 2;
@@ -249,6 +269,126 @@ public class MazeGenerator : MonoBehaviour
     {
         _repositioningOffset = new Vector3(_mazeWidth * _cellSize / 2, 0.0f, _mazeDepth * _cellSize /2);
         _mazeParent.transform.position -= _repositioningOffset;
+    }
+
+    private void LocateRooms()
+    {
+        for (int i = 0; i < _nbrRooms; i++)
+        {
+            _rooms[i] = LocateRoom(5, 5);
+        }
+    }
+
+    private int[] LocateRoom(int width, int depth)
+    {
+        int startX;
+        int startZ;
+        int minDistanceFromLobby = 20;
+        int minDistanceBetweenRooms = 15;
+
+        // Générer des coordonnées de salle jusqu'à ce qu'elles soient à une distance adéquate du lobby et des autres salles
+        do
+        {
+            startX = Random.Range(1, _mazeWidth - width - 1);
+            startZ = Random.Range(1, _mazeDepth - depth - 1);
+        } while (DistanceToLobby(startX, startZ) < minDistanceFromLobby || DistanceToClosestRoom(startX, startZ) < minDistanceBetweenRooms);
+
+        return new int[] { startX, startZ, width, depth };
+    }
+
+    private void AddRooms()
+    {
+        foreach (var room in _rooms)
+        {
+            AddRoom(room[0], room[1], room[2], room[3]);
+        }
+    }
+
+    private void AddRoom(int startX, int startZ, int width, int depth)
+    {
+        
+        for (int i = startX; i < startX + width; i++)
+        {
+            for (int j = startZ; j < startZ + depth; j++)
+            {
+                _mazeGrid[i, j].ClearLeftWall();
+                _mazeGrid[i, j].ClearRightWall();
+                _mazeGrid[i, j].ClearFrontWall();
+                _mazeGrid[i, j].ClearBackWall();
+
+                if (i == startX)
+                {
+                    _mazeGrid[i, j].AddLeftWall();
+                }
+                if (i == startX + width - 1)
+                {
+                    _mazeGrid[i, j].AddRightWall();
+                }
+                if (j == startZ)
+                {
+                    _mazeGrid[i, j].AddBackWall();
+                }
+                if (j == startZ + depth - 1)
+                {
+                    _mazeGrid[i, j].AddFrontWall();
+                }
+            }
+        }
+
+        
+        _mazeGrid[startX, startZ + (depth / 2)].ClearLeftWall();
+        _mazeGrid[startX - 1, startZ + (depth / 2)].ClearRightWall();
+
+        _mazeGrid[startX + width - 1, startZ + (depth / 2)].ClearRightWall();
+        _mazeGrid[startX + width, startZ + (depth / 2)].ClearLeftWall();
+
+        _mazeGrid[(startX + (width / 2)), startZ + depth - 1].ClearFrontWall();
+        _mazeGrid[(startX + (width / 2)), startZ + depth].ClearBackWall();
+
+        _mazeGrid[(startX + (width / 2)), startZ].ClearBackWall();
+        _mazeGrid[(startX + (width / 2)), startZ - 1].ClearFrontWall();
+
+    }
+
+    private float DistanceToLobby(int x, int z)
+    {
+        int lobbyX = (_mazeWidth - _lobbyWidth) / 2;
+        int lobbyZ = (_mazeDepth - _lobbyDepth) / 2;
+        return Mathf.Sqrt(Mathf.Pow(x - lobbyX, 2) + Mathf.Pow(z - lobbyZ, 2));
+    }
+
+    private float DistanceToClosestRoom(int x, int z)
+    {
+        float minDistance = float.MaxValue;
+
+        foreach (var room in _rooms)
+        {
+            if (room == null)
+                continue;
+
+            float distance = Mathf.Sqrt(Mathf.Pow(x - room[0], 2) + Mathf.Pow(z - room[1], 2));
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+            }
+        }
+
+        return minDistance;
+    }
+
+    private void MarkRoomsCellsVisited(int[][] rooms)
+    {
+        foreach (var room in rooms)
+        {
+            if (room == null) continue;
+            for (int i = room[0]; i < room[2] + room[0]; i++)
+            {
+                for (int j = room[1]; j < room[3] + room[1]; j++)
+                {
+                    _mazeGrid[i, j].Visit();
+                }
+            }
+        }
     }
 
 }

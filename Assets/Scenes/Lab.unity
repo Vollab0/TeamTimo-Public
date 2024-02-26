@@ -4574,7 +4574,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5bf5427e0d41c6747a35942ff47245f9, type: 2}
+  - {fileID: 2100000, guid: f6e87e9f9a11fdd4682cfbac67bb4c52, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5298,6 +5298,7 @@ MonoBehaviour:
   _lobbyWidth: 5
   _lobbyDepth: 5
   _cellSize: 25
+  _nbrRooms: 5
 --- !u!4 &1684440689
 Transform:
   m_ObjectHideFlags: 0
