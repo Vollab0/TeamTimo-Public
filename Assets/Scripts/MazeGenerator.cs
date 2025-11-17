@@ -23,6 +23,12 @@ public class MazeGenerator : MonoBehaviour
 
     private Vector3 _repositioningOffset;
 
+    void Start()
+    {
+        // Lance la gÃ©nÃ©ration du labyrinthe au dÃ©but du jeu
+        StartCoroutine(Generate());
+    }
+
 
     public IEnumerator Generate()
     {
@@ -46,7 +52,6 @@ public class MazeGenerator : MonoBehaviour
 
         Repositioning();
 
-        GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     private void Initialisation()
@@ -267,7 +272,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void Repositioning()
     {
-        _repositioningOffset = new Vector3(_mazeWidth * _cellSize / 2, 0.0f, _mazeDepth * _cellSize /2);
+        _repositioningOffset = new Vector3((_mazeWidth-2) * _cellSize / 2, 0.0f, _mazeDepth * _cellSize /2);
         _mazeParent.transform.position -= _repositioningOffset;
     }
 
@@ -286,7 +291,7 @@ public class MazeGenerator : MonoBehaviour
         int minDistanceFromLobby = 20;
         int minDistanceBetweenRooms = 15;
 
-        // Générer des coordonnées de salle jusqu'à ce qu'elles soient à une distance adéquate du lobby et des autres salles
+        // Gï¿½nï¿½rer des coordonnï¿½es de salle jusqu'ï¿½ ce qu'elles soient ï¿½ une distance adï¿½quate du lobby et des autres salles
         do
         {
             startX = Random.Range(1, _mazeWidth - width - 1);

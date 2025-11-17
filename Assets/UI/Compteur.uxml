@@ -1,9 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Compteur.uss?fileID=7433441132597879392&amp;guid=ac1a3ffefcd39c04eb401307e0ad2c69&amp;type=3#Compteur" />
-    <ui:VisualElement style="flex-grow: 1; -unity-text-align: lower-left; justify-content: flex-start;">
-        <ui:VisualElement style="flex-grow: initial; justify-content: center; align-self: auto; flex-wrap: nowrap; white-space: normal; -unity-text-align: upper-center; flex-shrink: initial; flex-direction: row; width: 327px; align-items: auto;">
-            <ui:Label tabindex="-1" text="Nombre de cube sur la plateforme : " parse-escape-sequences="true" display-tooltip-when-elided="true" style="width: 264px; height: 25px; align-self: center; -unity-text-align: upper-center; -unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Fonts/LilitaOne-Regular.ttf?fileID=12800000&amp;guid=cd350c7b66da05d4b9be2d09999511a3&amp;type=3#LilitaOne-Regular&apos;);" />
-            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="nbr" style="white-space: normal; width: 45px; align-self: center; color: rgb(76, 162, 91); font-size: 14px; -unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Fonts/LilitaOne-Regular.ttf?fileID=12800000&amp;guid=cd350c7b66da05d4b9be2d09999511a3&amp;type=3#LilitaOne-Regular&apos;); height: 27px; -unity-text-align: middle-left;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-</ui:UXML>
