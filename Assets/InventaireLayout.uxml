@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/InventaireStyle.uss?fileID=7433441132597879392&amp;guid=05a9fa4b91c1fff4aaea24c36609c361&amp;type=3#InventaireStyle" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement name="Container" class="hotbar-container" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

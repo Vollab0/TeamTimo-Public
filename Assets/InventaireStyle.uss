@@ -1,0 +1,39 @@
+/* Le conteneur principal (la barre en bas) */
+.hotbar-container {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    height: 100px;
+    flex-direction: row; /* Aligne les slots horizontalement */
+    justify-content: center; /* Centre la barre */
+    align-items: center;
+}
+
+/* Le style d'un Slot (Carré gris avec bordure) */
+.slot {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    background-color: rgba(0, 0, 0, 0.5); /* Gris transparent */
+    border-width: 2px;
+    border-color: rgb(150, 150, 150); /* Bordure grise */
+    border-radius: 4px; /* Coins légèrement arrondis */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Effet quand on a un objet dedans */
+.slot-icon {
+    width: 80%;
+    height: 80%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Le style quand un slot est SÉLECTIONNÉ */
+.slot-actif {
+    border-color: rgb(255, 215, 0); /* Jaune Or */
+    border-width: 4px;              /* Bordure plus épaisse */
+    background-color: rgba(255, 215, 0, 0.2); /* Fond légèrement jaune */
+    scale: 1.1;                     /* Le slot grossit un tout petit peu */
+    transition: all 0.1s ease-out;  /* Animation fluide */
+}
