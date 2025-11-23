@@ -81,6 +81,7 @@ public class MazeGenerator : MonoBehaviour
                 _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, new Vector3(_cellSize * x, 0, _cellSize * z), Quaternion.identity);
                 _mazeGrid[x, z].SetIndices(x, z);
                 _mazeGrid[x, z].transform.SetParent(_mazeParent.transform);
+
             }
         }
     }
