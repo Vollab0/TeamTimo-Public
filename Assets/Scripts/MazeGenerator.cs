@@ -29,6 +29,21 @@ public class MazeGenerator : MonoBehaviour
         StartCoroutine(Generate());
     }
 
+    public int GetCellSize()
+    {
+        return _cellSize;
+    }
+
+    public int GetMazeWidth()
+    {
+        return _mazeWidth;
+    }
+
+    public int GetMazeDepth()
+    {
+        return _mazeDepth;
+    }
+
 
     public IEnumerator Generate()
     {
