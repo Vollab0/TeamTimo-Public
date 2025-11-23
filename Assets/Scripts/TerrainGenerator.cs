@@ -18,6 +18,7 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header("Densité de la Végétation")]
     [Range(0, 1)] public float treeDensity = 0.02f; // Chance qu'un arbre apparaisse
+    public float treeScaleFactor = 1f;
     public int detailResolutionPerPatch = 16; // Qualité de l'herbe (défaut 16 ou 32)
 
     [Header("Paramètres de Fusion (Lobby)")]
@@ -243,8 +244,8 @@ public class TerrainGenerator : MonoBehaviour
                         TreeInstance tree = new TreeInstance();
                         tree.position = new Vector3(normX + offsetX, heightMap[z, x], normZ + offsetZ);
                         tree.prototypeIndex = 0;
-                        tree.widthScale = 1f;
-                        tree.heightScale = 1f;
+                        tree.widthScale = treeScaleFactor;
+                        tree.heightScale = treeScaleFactor;
                         tree.color = Color.white;
                         tree.lightmapColor = Color.white;
                         trees.Add(tree);
@@ -265,7 +266,7 @@ public class TerrainGenerator : MonoBehaviour
                 for (int x = 0; x < detailRes; x++)
                 {
                     // On force l'herbe partout, sans bruit ni blending, juste pour tester
-                    detailMap[z, x] = 100000; // brins par case
+                    detailMap[z, x] = 1000000; // brins par case
                 }
             }
             tData.SetDetailLayer(0, 0, 0, detailMap);
