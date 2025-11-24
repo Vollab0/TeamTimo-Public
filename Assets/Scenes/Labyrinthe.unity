@@ -1341,12 +1341,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
   _mazeCellPrefab: {fileID: 224140528872204935, guid: 1ef0988d70ca8e44b95d46c897a53bab, type: 3}
+  _pillarPrefab: {fileID: 562343704694076899, guid: 8273b8a1cc246a9419e7f77d4bca585f, type: 3}
   _mazeWidth: 20
   _mazeDepth: 20
+  _cellSize: 50
   _lobbyWidth: 8
   _lobbyDepth: 8
-  _cellSize: 50
-  _nbrRooms: 0
+  _nbrRooms: 4
+  _roomWidth: 2
+  _roomDepth: 2
+  _slowMotion: 0
+  _stepDelay: 0.05
 --- !u!1 &551173264
 GameObject:
   m_ObjectHideFlags: 0
