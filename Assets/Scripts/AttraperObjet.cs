@@ -1,186 +1,175 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Linq; // Nécessaire pour List<T>.ToList()
+using System.Linq;
 
 public class AttraperObjets : MonoBehaviour
 {
-    // Références pour l'inventaire
-    [Header("Déploiement")]
-    [SerializeField] private SlotSelection slotSelection;
-    [SerializeField] private InventaireUI inventaireUI;
-    [SerializeField] private Transform pointDeDeployment;
+    [Header("Références TPS")]
+    // C'est l'objet vide que tu as créé DANS ton joueur (au niveau du ventre/main)
+    [SerializeField] private Transform porteObjet;
 
-    [Header("Inventaire")]
-    [SerializeField] private InventaireUI inventaire; // Glissez ici l'objet SystèmeInventaire !
+    // On garde la caméra JUSTE pour savoir où viser quand on jette
+    [SerializeField] private Camera playerCamera;
 
-    // Paramètres physiques (conservés pour la tenue d'objet si l'inventaire est plein)
-    [Header("Physique")]
-    [SerializeField] private Vector3 offset = new Vector3(0.0f, 2f, 1.5f);
+    [Header("Ajustements")]
+    // Règle ça à 0,0,0 pour commencer, puis ajuste si l'objet est trop haut/bas
+    // Remplacez X, Y, Z par vos chiffres. N'oubliez pas le 'f' après les nombres décimaux.
+    [SerializeField] public Vector3 offsetMain = new Vector3(0f, 1.5f, 2f);
+    [SerializeField] private Vector3 rotationMain = Vector3.zero;
+
+    // Références automatisées
+    private SlotSelection slotSelection;
+    private InventaireUI inventaireUI;
+    private CharacterController characterController;
+
+    [Header("Paramètres")]
     [SerializeField] public float detectionRange = 2f;
     [SerializeField] public Material outlineMaterial;
 
-    private GameObject objetEnMain = null;
-    private Rigidbody rbObjetEnMain = null;
+    // --- VARIABLES INTERNES ---
+    private GameObject objetVisuelEnMain = null;
     private GameObject highlightedObject = null;
-    private CharacterController characterController;
+    private int indexSlotPrecedent = -1;
 
     private void Start()
     {
         TryGetComponent<CharacterController>(out characterController);
+
+        if (playerCamera == null) playerCamera = Camera.main;
+
+        GameObject systeme = GameObject.Find("SystemeInventaire");
+        if (systeme != null)
+        {
+            slotSelection = systeme.GetComponent<SlotSelection>();
+            inventaireUI = systeme.GetComponent<InventaireUI>();
+        }
     }
 
-    public void Update()
+    private void Update()
     {
         Outliner();
+        VerifierChangementDeSlot();
     }
+
+    // --- LOGIQUE VISUELLE ---
+
+    private void VerifierChangementDeSlot()
+    {
+        if (slotSelection == null) return;
+
+        if (slotSelection.slotActif != indexSlotPrecedent)
+        {
+            indexSlotPrecedent = slotSelection.slotActif;
+            MettreAJourVisuelMain();
+        }
+    }
+
+    public void MettreAJourVisuelMain()
+    {
+        // 1. Nettoyage
+        if (objetVisuelEnMain != null)
+        {
+            Destroy(objetVisuelEnMain);
+            objetVisuelEnMain = null;
+        }
+
+        // 2. Récupération Données
+        ItemData item = inventaireUI.GetItemData(slotSelection.slotActif);
+
+        // 3. Création Visuelle
+        if (item != null && item.prefab != null)
+        {
+            // --- CHANGEMENT TPS ---
+            // On instancie l'objet sur le PORTE-OBJET (Le joueur)
+            // Donc l'objet bougera avec le joueur, pas la caméra.
+            objetVisuelEnMain = Instantiate(item.prefab, porteObjet);
+
+            // Position locale (par rapport au joueur)
+            objetVisuelEnMain.transform.localPosition = offsetMain;
+            objetVisuelEnMain.transform.localRotation = Quaternion.Euler(rotationMain);
+
+            // Désactivation Physique
+            Rigidbody rb = objetVisuelEnMain.GetComponent<Rigidbody>();
+            if (rb) rb.isKinematic = true;
+
+            Collider col = objetVisuelEnMain.GetComponent<Collider>();
+            if (col) col.enabled = false;
+        }
+    }
+
+    // --- LOGIQUE D'ACTION (TOUCHE E) ---
 
     public void AttraperObjet(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            // 1. Si on tient déjà un objet, on le lâche.
-            if (objetEnMain != null)
+            // 1. Ramasser
+            if (TenterRamassage()) return;
+
+            // 2. Jeter
+            if (objetVisuelEnMain != null)
             {
-                LacherObjet();
-                return; // ON S'ARRÊTE ICI.
-            }
-
-            // 2. On essaie d'interagir avec le monde (Stocker OU Tenir physiquement)
-            // La fonction RamasserObjet() retourne VRAI si elle a fait une action.
-            if (RamasserObjet())
-            {
-                // Une action a été faite dans le monde (stockage ou tenue),
-                // DONC on ne doit pas déployer depuis l'inventaire.
-                return; // ON S'ARRÊTE ICI.
-            }
-
-            // 3. Si on arrive ici, c'est qu'on ne tient rien ET qu'on n'a rien ramassé dans le monde.
-            // ALORS on essaie de déployer l'objet actif du slot.
-            EquiperObjetDepuisSlot();
-        }
-    }
-
-    // AJOUTEZ CETTE FONCTION À LA FIN DU SCRIPT !
-    void EquiperObjetDepuisSlot()
-    {
-        // Ne pas continuer si les références ne sont pas faites
-        if (slotSelection == null || inventaireUI == null) return;
-
-        // 1. Récupérer l'ItemData et le retirer de l'inventaire
-        int indexActif = slotSelection.slotActif;
-        ItemData donneesADeployer = inventaireUI.RetirerObjet(indexActif); // Nécessite la fonction RetirerObjet dans InventaireUI
-
-        if (donneesADeployer != null)
-        {
-            // 2. Charger le Prefab depuis le dossier Resources (le nom du prefab doit être le nom du ScriptableObject)
-            string prefabName = donneesADeployer.name;
-            GameObject prefab = Resources.Load<GameObject>(prefabName);
-
-            if (prefab != null)
-            {
-                // 3. Instancier l'objet 3D et l'attraper
-                GameObject nouvelObjet = Instantiate(prefab, pointDeDeployment.position, Quaternion.identity, transform);
-
-                // Reprise de la logique d'attrapage physique
-                objetEnMain = nouvelObjet;
-                rbObjetEnMain = nouvelObjet.GetComponent<Rigidbody>();
-
-                if (rbObjetEnMain != null)
-                {
-                    rbObjetEnMain.isKinematic = true;
-                    objetEnMain.transform.localPosition = offset;
-                    objetEnMain.transform.localRotation = Quaternion.identity;
-                }
+                JeterObjet();
             }
         }
     }
 
-    // ATTENTION : Changer 'void' en 'public bool'
-    public bool RamasserObjet()
+    private bool TenterRamassage()
     {
-        // Si rien n'est visé, on retourne immédiatement Faux
         if (highlightedObject == null) return false;
 
-        // On récupère les composants nécessaires sur l'objet ciblé
         ItemWorld itemWorld = highlightedObject.GetComponent<ItemWorld>();
-        Rigidbody rb = highlightedObject.GetComponent<Rigidbody>();
 
-        // --- LOGIQUE INVENTAIRE (Priorité) ---
-        if (itemWorld != null && itemWorld.donnees != null && inventaire != null)
+        if (itemWorld != null && itemWorld.donnees != null)
         {
-            // Tente d'ajouter à l'inventaire
-            bool aEteAjoute = inventaire.AjouterObjet(itemWorld.donnees);
+            bool aEteAjoute = inventaireUI.AjouterObjet(itemWorld.donnees);
 
             if (aEteAjoute)
             {
-                // Succès : Détruit l'objet physique et retourne Vrai
                 RemoveOutline(highlightedObject);
                 Destroy(highlightedObject);
                 highlightedObject = null;
-                return true; // <--- SUCCÈS : Stockage effectué
+
+                MettreAJourVisuelMain();
+                return true;
             }
         }
-
-        // --- LOGIQUE DE TENUE PHYSIQUE (Si l'inventaire est plein ou l'objet n'a pas ItemData) ---
-        if (rb != null)
-        {
-            // ... (votre code existant pour la tenue physique) ...
-
-            RemoveOutline(objetEnMain);
-            highlightedObject = null;
-            return true; // <--- SUCCÈS : Tenue physique effectuée
-        }
-
-        // Si aucune action n'a eu lieu (rien trouvé, inventaire plein + pas de Rigidbody, etc.)
-        return false; // <--- ÉCHEC : Aucune action effectuée
+        return false;
     }
 
-    // La logique de lâcher doit rester pour les objets TENUS physiquement
-    public void LacherObjet()
+    private void JeterObjet()
     {
-        if (objetEnMain == null) return;
+        inventaireUI.RetirerObjet(slotSelection.slotActif);
 
-        try
-        {
-            objetEnMain.transform.SetParent(null);
-            rbObjetEnMain.isKinematic = false;
+        // On détache l'objet du joueur
+        objetVisuelEnMain.transform.SetParent(null);
 
-            CharacterController cc = GetComponent<CharacterController>();
-            if (cc != null)
-            {
-                rbObjetEnMain.linearVelocity = cc.velocity;
-            }
-        }
-        catch (System.Exception e)
+        // Réactivation Physique
+        Rigidbody rb = objetVisuelEnMain.GetComponent<Rigidbody>();
+        if (rb)
         {
-            Debug.LogError($"Erreur en lâchant l'objet : {e.Message}");
+            rb.isKinematic = false;
+
+            // ASTUCE TPS : On lance dans la direction de la CAMÉRA (pour viser)
+            // Même si l'objet part du corps.
+            Vector3 directionLancer = playerCamera.transform.forward;
+            rb.AddForce(directionLancer * 10f, ForceMode.Impulse); // J'ai augmenté la force un peu
+
+            if (characterController != null) rb.linearVelocity += characterController.velocity;
         }
-        finally
-        {
-            objetEnMain = null;
-            rbObjetEnMain = null;
-        }
+
+        Collider col = objetVisuelEnMain.GetComponent<Collider>();
+        if (col) col.enabled = true;
+
+        objetVisuelEnMain = null;
+
+        MettreAJourVisuelMain();
     }
 
-    // --- Fonctions utilitaires Outliner (non modifiées) ---
-    public bool IsHolding()
-    {
-        return objetEnMain != null;
-    }
-
+    // --- OUTLINER (Inchangé) ---
     private void Outliner()
     {
-        if (objetEnMain != null)
-        {
-            if (highlightedObject != null)
-            {
-                RemoveOutline(highlightedObject);
-                highlightedObject = null;
-            }
-            return;
-        }
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange);
         GameObject objetAViser = null;
         float distanceMin = float.MaxValue;
@@ -200,43 +189,39 @@ public class AttraperObjets : MonoBehaviour
 
         if (objetAViser != highlightedObject)
         {
-            if (highlightedObject != null)
-            {
-                RemoveOutline(highlightedObject);
-            }
-
-            if (objetAViser != null)
-            {
-                AddOutline(objetAViser);
-            }
+            if (highlightedObject != null) RemoveOutline(highlightedObject);
+            if (objetAViser != null) AddOutline(objetAViser);
             highlightedObject = objetAViser;
         }
     }
 
     private void AddOutline(GameObject obj)
     {
-        Renderer renderer = obj.GetComponent<Renderer>();
-        if (renderer == null) return;
-
-        var materials = new List<Material>(renderer.materials);
-
-        if (!materials.Contains(outlineMaterial))
-        {
-            materials.Add(outlineMaterial);
-            renderer.materials = materials.ToArray();
-        }
+        Renderer r = obj.GetComponent<Renderer>();
+        if (r == null) return;
+        var m = new List<Material>(r.materials);
+        if (!m.Contains(outlineMaterial)) { m.Add(outlineMaterial); r.materials = m.ToArray(); }
     }
 
     private void RemoveOutline(GameObject obj)
     {
-        Renderer renderer = obj.GetComponent<Renderer>();
-        if (renderer == null) return;
+        Renderer r = obj.GetComponent<Renderer>();
+        if (r == null) return;
+        var m = new List<Material>(r.materials);
+        if (m.Remove(outlineMaterial)) r.materials = m.ToArray();
+    }
 
-        var materials = new List<Material>(renderer.materials);
+    // Fonctions pour les autres scripts
+    public bool IsHolding()
+    {
+        return objetVisuelEnMain != null;
+    }
 
-        if (materials.Remove(outlineMaterial))
+    public void LacherObjet()
+    {
+        if (objetVisuelEnMain != null)
         {
-            renderer.materials = materials.ToArray();
+            JeterObjet();
         }
     }
 }

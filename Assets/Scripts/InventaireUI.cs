@@ -103,4 +103,11 @@ public class InventaireUI : MonoBehaviour
         // Si le slot était vide, on retourne null.
         return null;
     }
+    // Ajoute cette fonction pour permettre à AttraperObjet de voir l'item
+    // sans le retirer de l'inventaire
+    public ItemData GetItemData(int index)
+    {
+        if (index < 0 || index >= contenuInventaire.Length) return null;
+        return contenuInventaire[index];
+    }
 }
