@@ -441,7 +441,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -28.46609, y: 0, z: -15.86721}
-  m_LocalScale: {x: 1000, y: 1, z: 1000}
+  m_LocalScale: {x: 200, y: 1, z: 200}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 550989753}
@@ -541,18 +541,23 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 550989752}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89a8b5b5aff726b4a927a40efa5af969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
-  _mazeCellPrefab: {fileID: 224140528872204935, guid: a9b8c7f47f1ef904bb73dd5b42884f65, type: 3}
+  _mazeCellPrefab: {fileID: 224140528872204935, guid: 1ef0988d70ca8e44b95d46c897a53bab, type: 3}
+  _pillarPrefab: {fileID: 562343704694076899, guid: 8273b8a1cc246a9419e7f77d4bca585f, type: 3}
   _mazeWidth: 20
   _mazeDepth: 20
+  _cellSize: 50
   _lobbyWidth: 8
   _lobbyDepth: 8
-  _cellSize: 50
-  _nbrRooms: 0
+  _nbrRooms: 4
+  _roomWidth: 2
+  _roomDepth: 2
+  _slowMotion: 1
+  _stepDelay: 0.5
 --- !u!1001 &563686413
 PrefabInstance:
   m_ObjectHideFlags: 0

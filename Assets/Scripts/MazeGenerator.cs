@@ -1,415 +1,301 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.AI.Navigation;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.PlayerLoop;
 
 public class MazeGenerator : MonoBehaviour
 {
+    [Header("Prefabs")]
     [SerializeField] private MazeCell _mazeCellPrefab;
-    [SerializeField] private int _mazeWidth;
-    [SerializeField] private int _mazeDepth;
-    [SerializeField] private int _lobbyWidth;
-    [SerializeField] private int _lobbyDepth;
-    [SerializeField] private int _cellSize;
-    [SerializeField] private int _nbrRooms;
+    [SerializeField] private GameObject _pillarPrefab;
 
-    private MazeCell[,] _mazeGrid; //Tableau 2 dimensions
+    [Header("Dimensions Maze")]
+    [SerializeField] private int _mazeWidth = 20;
+    [SerializeField] private int _mazeDepth = 20;
+    [SerializeField] private int _cellSize = 4;
+
+    [Header("Lobby Settings")]
+    [SerializeField] private int _lobbyWidth = 6;
+    [SerializeField] private int _lobbyDepth = 6;
+
+    [Header("Rooms Settings")]
+    [SerializeField] private int _nbrRooms = 3;
+    // MODIFICATION ICI : Dimensions fixes
+    [SerializeField] private int _roomWidth = 4; 
+    [SerializeField] private int _roomDepth = 4; 
+
+    [Header("Debug")]
+    [SerializeField] private bool _slowMotion = false;
+    [Range(0.01f, 1f)] 
+    [SerializeField] private float _stepDelay = 0.05f; 
+
+    private MazeCell[,] _mazeGrid;
     private GameObject _mazeParent;
-    public int[][] _rooms;
+    private List<RectInt> _roomsRects = new List<RectInt>(); 
 
-    private Vector3 _repositioningOffset;
+    // --- GETTERS ---
+    public int GetMazeWidth() { return _mazeWidth; }
+    public int GetMazeDepth() { return _mazeDepth; }
+    public int GetCellSize() { return _cellSize; }
+    // ---------------
 
     void Start()
     {
-        // Lance la génération du labyrinthe au début du jeu
         StartCoroutine(Generate());
     }
 
-    public int GetCellSize()
-    {
-        return _cellSize;
-    }
-
-    public int GetMazeWidth()
-    {
-        return _mazeWidth;
-    }
-
-    public int GetMazeDepth()
-    {
-        return _mazeDepth;
-    }
-
-
     public IEnumerator Generate()
     {
-        CreateMazeParent();
+        // 1. Création et Parentage
+        if (_mazeParent != null) Destroy(_mazeParent);
+        _mazeParent = new GameObject("MazeEnvironment");
+        _mazeParent.transform.SetParent(this.transform); 
+        _mazeParent.transform.localPosition = Vector3.zero;
 
         Initialisation();
+        DefineRooms();
+        
+        CarveAllRooms(); 
+        
+        GeneratePillars();
 
-        MarkLobbyCellsVisited();
+        yield return StartCoroutine(GenerateMazePath(null, _mazeGrid[0, 0]));
 
-        LocateRooms();
+        ConnectRoomsToMaze();
+        CreateRandomExit();
 
-        MarkRoomsCellsVisited(_rooms);
-
-        yield return StartCoroutine(GenerateMaze(null, _mazeGrid[0, 0]));
-
-        AddLobby();
-
-        AddRooms();
-
-        RandomExit();
-
-        Repositioning();
-
+        // 2. Centrage
+        CenterMaze();
     }
 
     private void Initialisation()
     {
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
-        _rooms = new int[_nbrRooms][];
 
         for (int x = 0; x < _mazeWidth; x++)
         {
             for (int z = 0; z < _mazeDepth; z++)
             {
-                _mazeGrid[x, z] = Instantiate(_mazeCellPrefab, new Vector3(_cellSize * x, 0, _cellSize * z), Quaternion.identity);
-                _mazeGrid[x, z].SetIndices(x, z);
-                _mazeGrid[x, z].transform.SetParent(_mazeParent.transform);
+                Vector3 pos = new Vector3(x * _cellSize, 0, z * _cellSize);
+                MazeCell cell = Instantiate(_mazeCellPrefab, pos, Quaternion.identity, _mazeParent.transform);
+                cell.name = $"Cell_{x}_{z}";
+                cell.SetIndices(x, z);
+                _mazeGrid[x, z] = cell;
 
+                cell.SetWallState("right", true);
+                cell.SetWallState("front", true);
+                cell.SetWallState("left", x == 0); 
+                cell.SetWallState("back", z == 0); 
             }
         }
     }
 
-    private IEnumerator GenerateMaze(MazeCell previousCell, MazeCell currentCell)
+    private void CenterMaze()
     {
-        currentCell.Visit();
-        ClearWalls(previousCell, currentCell);
-
-        MazeCell nextCell;
-
-        do
-        {
-            nextCell = GetNextUnvisitedCell(currentCell);
-
-            if (nextCell != null)
-            {
-                yield return StartCoroutine(GenerateMaze(currentCell, nextCell));
-            }
-        } while (nextCell != null);
+        float centerX = (_mazeWidth - 1) * _cellSize / 2f;
+        float centerZ = (_mazeDepth - 1) * _cellSize / 2f;
+        _mazeParent.transform.localPosition = new Vector3(-centerX, 0, -centerZ);
     }
 
-    private MazeCell GetNextUnvisitedCell(MazeCell currentCell)
+    private void DefineRooms()
     {
-        var univisitedCells = GetUnvisitedCells(currentCell);
+        _roomsRects.Clear();
 
-        return univisitedCells.OrderBy(_ => Random.Range(1, 10)).FirstOrDefault(); //A comprendre
-    }
+        // Lobby
+        int lx = (_mazeWidth - _lobbyWidth) / 2;
+        int lz = (_mazeDepth - _lobbyDepth) / 2;
+        _roomsRects.Add(new RectInt(lx, lz, _lobbyWidth, _lobbyDepth));
 
-    private IEnumerable<MazeCell> GetUnvisitedCells(MazeCell currentCell)
-    {
-        int x = currentCell.GetIndices().Item1;
-        int z = currentCell.GetIndices().Item2;
-
-        if (x+1< _mazeWidth)
-        {
-            MazeCell cellToRight = _mazeGrid[x+1,z];
-
-            if(cellToRight.IsVisited == false)
-            {
-                yield return cellToRight;
-            }
-        }
-
-        if (z+1< _mazeDepth)
-        {
-            MazeCell cellToFront = _mazeGrid[x, z+1];
-
-            if (cellToFront.IsVisited == false)
-            {
-                yield return cellToFront;
-            }
-        }
-
-        if (x - 1 >= 0)
-        {
-            MazeCell cellToLeft = _mazeGrid[x - 1, z];
-
-            if (cellToLeft.IsVisited == false)
-            {
-                yield return cellToLeft;
-            }
-        }
-
-        if (z - 1 >= 0)
-        {
-            MazeCell cellToBack = _mazeGrid[x, z - 1];
-
-            if (cellToBack.IsVisited == false)
-            {
-                yield return cellToBack;
-            }
-        }
-    }
-
-    private void ClearWalls(MazeCell previousCell, MazeCell currentCell)
-    {
-        if (previousCell == null)
-        {
-            return; 
-        }
-
-        if (previousCell.GetIndices().Item1 < currentCell.GetIndices().Item1)
-        {
-            previousCell.ClearRightWall();
-            currentCell.ClearLeftWall();
-            return;
-        }
-
-        if (previousCell.GetIndices().Item1 > currentCell.GetIndices().Item1)
-        {
-            previousCell.ClearLeftWall();
-            currentCell.ClearRightWall();
-            return;
-        }
-
-        if (previousCell.GetIndices().Item2 < currentCell.GetIndices().Item2)
-        {
-            previousCell.ClearFrontWall();
-            currentCell.ClearBackWall();
-            return;
-        }
-
-        if (previousCell.GetIndices().Item2 > currentCell.GetIndices().Item2)
-        {
-            previousCell.ClearBackWall();
-            currentCell.ClearFrontWall();
-            return;
-        }
-    }
-
-    private void MarkLobbyCellsVisited()
-    {
-        int startLobbyX = (_mazeWidth - _lobbyWidth) / 2;
-        int startLobbyZ = (_mazeDepth - _lobbyDepth) / 2;
-        for (int i = startLobbyX; i < _lobbyWidth + startLobbyX; i++)
-        {
-            for (int j = startLobbyZ; j < _lobbyDepth + startLobbyZ; j++)
-            {
-                _mazeGrid[i, j].Visit();
-            }
-        }
-    }
-
-    private void AddLobby() //Suppression des cellules du milieu pour creer un looby
-    {
-        int startLobbyX = (_mazeWidth - _lobbyWidth) / 2;
-        int startLobbyZ = (_mazeDepth - _lobbyDepth) / 2;
-        for(int i = startLobbyX; i < _lobbyWidth + startLobbyX; i++) {
-            for(int j = startLobbyZ; j < _lobbyDepth + startLobbyZ; j++)
-            {
-                _mazeGrid[i, j].ClearLeftWall();
-                _mazeGrid[i, j].ClearRightWall();
-                _mazeGrid[i, j].ClearFrontWall();
-                _mazeGrid[i, j].ClearBackWall();
-
-                if (i == startLobbyX)
-                {
-                    _mazeGrid[i, j].AddLeftWall();
-                }
-                if (i == _lobbyWidth + startLobbyX - 1)
-                {
-                    _mazeGrid[i, j].AddRightWall();
-                }
-                if (j == startLobbyZ)
-                {
-                    _mazeGrid[i, j].AddBackWall();
-                }
-                if (j == _lobbyDepth + startLobbyZ - 1)
-                {
-                    _mazeGrid[i, j].AddFrontWall();
-                }
-            }
-        }
-
-        //============= Ajout des 4 portes ==============
-
-        _mazeGrid[startLobbyX, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearLeftWall();
-        _mazeGrid[startLobbyX-1, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearRightWall();
-
-        _mazeGrid[startLobbyX + _lobbyWidth - 1, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearRightWall();
-        _mazeGrid[startLobbyX + _lobbyWidth, startLobbyZ + ((_lobbyDepth - 1) / 2)].ClearLeftWall();
-
-        _mazeGrid[(_mazeWidth-1)/2, _lobbyDepth + startLobbyZ-1].ClearFrontWall();
-        _mazeGrid[(_mazeWidth - 1) / 2, _lobbyDepth + startLobbyZ].ClearBackWall();
-
-        _mazeGrid[(_mazeWidth - 1)/ 2, startLobbyZ].ClearBackWall();
-        _mazeGrid[(_mazeWidth - 1) / 2, startLobbyZ-1].ClearFrontWall();
-    }
-
-    private void RandomExit()
-    {
-        int randomSide = Random.Range(1, 5);
-        if (randomSide == 1)
-        {
-            int randomCell = Random.Range(0, _mazeWidth - 1);
-            _mazeGrid[randomCell, 0].ClearBackWall();
-        }
-        else if(randomSide == 2) 
-        {
-            int randomCell = Random.Range(0, _mazeDepth - 1);
-            _mazeGrid[_mazeWidth-1, randomCell].ClearRightWall();
-        }
-        else if (randomSide == 3)
-        {
-            int randomCell = Random.Range(0, _mazeDepth - 1);
-            _mazeGrid[randomCell, _mazeDepth - 1].ClearFrontWall();
-        }
-        else
-        {
-            int randomCell = Random.Range(0, _mazeDepth - 1);
-            _mazeGrid[0 , randomCell].ClearLeftWall();
-        }
-    }
-
-    private void CreateMazeParent()
-    {
-        if (_mazeParent != null)
-        {
-            Destroy(_mazeParent);
-        }
-        _mazeParent = new GameObject("MazeWalls");
-    }
-
-    private void Repositioning()
-    {
-        _repositioningOffset = new Vector3((_mazeWidth-2) * _cellSize / 2, 0.0f, _mazeDepth * _cellSize /2);
-        _mazeParent.transform.position -= _repositioningOffset;
-    }
-
-    private void LocateRooms()
-    {
+        // Autres salles
         for (int i = 0; i < _nbrRooms; i++)
         {
-            _rooms[i] = LocateRoom(5, 5);
-        }
-    }
-
-    private int[] LocateRoom(int width, int depth)
-    {
-        int startX;
-        int startZ;
-        int minDistanceFromLobby = 20;
-        int minDistanceBetweenRooms = 15;
-
-        // G�n�rer des coordonn�es de salle jusqu'� ce qu'elles soient � une distance ad�quate du lobby et des autres salles
-        do
-        {
-            startX = Random.Range(1, _mazeWidth - width - 1);
-            startZ = Random.Range(1, _mazeDepth - depth - 1);
-        } while (DistanceToLobby(startX, startZ) < minDistanceFromLobby || DistanceToClosestRoom(startX, startZ) < minDistanceBetweenRooms);
-
-        return new int[] { startX, startZ, width, depth };
-    }
-
-    private void AddRooms()
-    {
-        foreach (var room in _rooms)
-        {
-            AddRoom(room[0], room[1], room[2], room[3]);
-        }
-    }
-
-    private void AddRoom(int startX, int startZ, int width, int depth)
-    {
-        
-        for (int i = startX; i < startX + width; i++)
-        {
-            for (int j = startZ; j < startZ + depth; j++)
+            for (int attempt = 0; attempt < 50; attempt++)
             {
-                _mazeGrid[i, j].ClearLeftWall();
-                _mazeGrid[i, j].ClearRightWall();
-                _mazeGrid[i, j].ClearFrontWall();
-                _mazeGrid[i, j].ClearBackWall();
+                // MODIFICATION ICI : Utilisation des tailles fixes
+                int w = _roomWidth;
+                int h = _roomDepth;
+                
+                // On vérifie qu'il y a la place de poser la salle
+                if (_mazeWidth - w - 1 <= 1 || _mazeDepth - h - 1 <= 1) continue;
 
-                if (i == startX)
+                int rx = Random.Range(1, _mazeWidth - w - 1);
+                int rz = Random.Range(1, _mazeDepth - h - 1);
+                RectInt newRoom = new RectInt(rx, rz, w, h);
+
+                if (IsRoomValid(newRoom))
                 {
-                    _mazeGrid[i, j].AddLeftWall();
-                }
-                if (i == startX + width - 1)
-                {
-                    _mazeGrid[i, j].AddRightWall();
-                }
-                if (j == startZ)
-                {
-                    _mazeGrid[i, j].AddBackWall();
-                }
-                if (j == startZ + depth - 1)
-                {
-                    _mazeGrid[i, j].AddFrontWall();
-                }
-            }
-        }
-
-        
-        _mazeGrid[startX, startZ + (depth / 2)].ClearLeftWall();
-        _mazeGrid[startX - 1, startZ + (depth / 2)].ClearRightWall();
-
-        _mazeGrid[startX + width - 1, startZ + (depth / 2)].ClearRightWall();
-        _mazeGrid[startX + width, startZ + (depth / 2)].ClearLeftWall();
-
-        _mazeGrid[(startX + (width / 2)), startZ + depth - 1].ClearFrontWall();
-        _mazeGrid[(startX + (width / 2)), startZ + depth].ClearBackWall();
-
-        _mazeGrid[(startX + (width / 2)), startZ].ClearBackWall();
-        _mazeGrid[(startX + (width / 2)), startZ - 1].ClearFrontWall();
-
-    }
-
-    private float DistanceToLobby(int x, int z)
-    {
-        int lobbyX = (_mazeWidth - _lobbyWidth) / 2;
-        int lobbyZ = (_mazeDepth - _lobbyDepth) / 2;
-        return Mathf.Sqrt(Mathf.Pow(x - lobbyX, 2) + Mathf.Pow(z - lobbyZ, 2));
-    }
-
-    private float DistanceToClosestRoom(int x, int z)
-    {
-        float minDistance = float.MaxValue;
-
-        foreach (var room in _rooms)
-        {
-            if (room == null)
-                continue;
-
-            float distance = Mathf.Sqrt(Mathf.Pow(x - room[0], 2) + Mathf.Pow(z - room[1], 2));
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-            }
-        }
-
-        return minDistance;
-    }
-
-    private void MarkRoomsCellsVisited(int[][] rooms)
-    {
-        foreach (var room in rooms)
-        {
-            if (room == null) continue;
-            for (int i = room[0]; i < room[2] + room[0]; i++)
-            {
-                for (int j = room[1]; j < room[3] + room[1]; j++)
-                {
-                    _mazeGrid[i, j].Visit();
+                    _roomsRects.Add(newRoom);
+                    break;
                 }
             }
         }
     }
 
+    private bool IsRoomValid(RectInt room)
+    {
+        foreach (var existing in _roomsRects)
+        {
+            RectInt expanded = new RectInt(existing.x - 2, existing.y - 2, existing.width + 4, existing.height + 4);
+            if (expanded.Overlaps(room)) return false;
+        }
+        return true;
+    }
+
+    private void CarveAllRooms()
+    {
+        foreach (var room in _roomsRects)
+        {
+            for (int x = room.x; x < room.x + room.width; x++)
+            {
+                for (int z = room.y; z < room.y + room.height; z++)
+                {
+                    if (x >= _mazeWidth || z >= _mazeDepth) continue;
+
+                    MazeCell current = _mazeGrid[x, z];
+                    current.Visit();
+
+                    current.SetWallState("right", false);
+                    current.SetWallState("front", false);
+                    if (x == 0) current.SetWallState("left", false);
+                    if (z == 0) current.SetWallState("back", false);
+
+                    if (x > 0) _mazeGrid[x - 1, z].SetWallState("right", false);
+                    if (z > 0) _mazeGrid[x, z - 1].SetWallState("front", false);
+                }
+            }
+
+            for (int x = room.x; x < room.x + room.width; x++)
+            {
+                if (room.y > 0) _mazeGrid[x, room.y - 1].SetWallState("front", true);
+                else _mazeGrid[x, 0].SetWallState("back", true);
+                
+                _mazeGrid[x, room.y + room.height - 1].SetWallState("front", true);
+            }
+            for (int z = room.y; z < room.y + room.height; z++)
+            {
+                if (room.x > 0) _mazeGrid[room.x - 1, z].SetWallState("right", true);
+                else _mazeGrid[0, z].SetWallState("left", true);
+
+                _mazeGrid[room.x + room.width - 1, z].SetWallState("right", true);
+            }
+        }
+    }
+
+    private void GeneratePillars()
+    {
+        GameObject pillarsParent = new GameObject("Pillars");
+        pillarsParent.transform.SetParent(_mazeParent.transform);
+        float offset = _cellSize / 2f;
+
+        for (int x = 0; x <= _mazeWidth; x++)
+        {
+            for (int z = 0; z <= _mazeDepth; z++)
+            {
+                if (IsPointInsideAnyRoom(x, z)) continue;
+
+                Vector3 pos = new Vector3(x * _cellSize - offset, 0, z * _cellSize - offset);
+                Instantiate(_pillarPrefab, pos, Quaternion.identity, pillarsParent.transform);
+            }
+        }
+    }
+
+    private bool IsPointInsideAnyRoom(int x, int z)
+    {
+        foreach (var room in _roomsRects)
+        {
+            if (x > room.x && x < room.x + room.width && 
+                z > room.y && z < room.y + room.height) 
+                return true;
+        }
+        return false;
+    }
+
+    private IEnumerator GenerateMazePath(MazeCell previous, MazeCell current)
+    {
+        current.Visit();
+        RemoveWallBetween(previous, current);
+
+        if (_slowMotion) yield return new WaitForSeconds(_stepDelay);
+
+        while (true)
+        {
+            MazeCell next = GetRandomUnvisitedNeighbor(current);
+            if (next != null)
+            {
+                yield return StartCoroutine(GenerateMazePath(current, next));
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    private MazeCell GetRandomUnvisitedNeighbor(MazeCell cell)
+    {
+        var (x, z) = cell.GetIndices();
+        List<MazeCell> neighbors = new List<MazeCell>();
+
+        if (x + 1 < _mazeWidth && !_mazeGrid[x + 1, z].IsVisited) neighbors.Add(_mazeGrid[x + 1, z]);
+        if (x - 1 >= 0 && !_mazeGrid[x - 1, z].IsVisited) neighbors.Add(_mazeGrid[x - 1, z]);
+        if (z + 1 < _mazeDepth && !_mazeGrid[x, z + 1].IsVisited) neighbors.Add(_mazeGrid[x, z + 1]);
+        if (z - 1 >= 0 && !_mazeGrid[x, z - 1].IsVisited) neighbors.Add(_mazeGrid[x, z - 1]);
+
+        if (neighbors.Count == 0) return null;
+        return neighbors[Random.Range(0, neighbors.Count)];
+    }
+
+    private void RemoveWallBetween(MazeCell a, MazeCell b)
+    {
+        if (a == null || b == null) return;
+        var (ax, az) = a.GetIndices();
+        var (bx, bz) = b.GetIndices();
+
+        if (bx > ax) a.SetWallState("right", false);
+        else if (bx < ax) b.SetWallState("right", false);
+        else if (bz > az) a.SetWallState("front", false);
+        else if (bz < az) b.SetWallState("front", false);
+    }
+
+    private void ConnectRoomsToMaze()
+    {
+        for (int i = 0; i < _roomsRects.Count; i++)
+        {
+            RectInt room = _roomsRects[i];
+            
+            if (i == 0) // LOBBY
+            {
+                int midX = room.x + room.width / 2;
+                int midZ = room.y + room.height / 2;
+
+                if (room.y + room.height < _mazeDepth)
+                    _mazeGrid[midX, room.y + room.height - 1].SetWallState("front", false);
+
+                if (room.y > 0) 
+                    _mazeGrid[midX, room.y - 1].SetWallState("front", false);
+                else 
+                    _mazeGrid[midX, 0].SetWallState("back", false);
+
+                if (room.x + room.width < _mazeWidth)
+                    _mazeGrid[room.x + room.width - 1, midZ].SetWallState("right", false);
+
+                if (room.x > 0)
+                    _mazeGrid[room.x - 1, midZ].SetWallState("right", false);
+                else
+                    _mazeGrid[0, midZ].SetWallState("left", false);
+            }
+            else // AUTRES SALLES
+            {
+                int doorX = room.x + room.width / 2;
+                int doorZ = room.y + room.height - 1; 
+                if (doorZ + 1 < _mazeDepth) 
+                    _mazeGrid[doorX, doorZ].SetWallState("front", false);
+            }
+        }
+    }
+
+    private void CreateRandomExit()
+    {
+        int randZ = Random.Range(0, _mazeDepth);
+        _mazeGrid[_mazeWidth - 1, randZ].SetWallState("right", false);
+    }
 }

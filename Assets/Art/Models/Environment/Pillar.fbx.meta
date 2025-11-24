@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: d1a43c210762641408b50052162cbe75
+guid: 70917d6fd5bfefd46b7555dd04ed4bd5
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mur_face
-    second: {fileID: 2100000, guid: 3205c0d3c6068cf4686c62d9f5d41748, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
