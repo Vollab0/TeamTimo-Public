@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.5849056, g: 0.5680647, b: 0.4911, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.003
@@ -1305,7 +1305,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 540709025}
-  - component: {fileID: 540709026}
+  - component: {fileID: 540709027}
   m_Layer: 0
   m_Name: Maze
   m_TagString: Untagged
@@ -1328,7 +1328,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &540709026
+--- !u!114 &540709027
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1337,21 +1337,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 540709023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89a8b5b5aff726b4a927a40efa5af969, type: 3}
+  m_Script: {fileID: 11500000, guid: 926f55cdf15173c4da0c41a894a74281, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
+  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator1
   _mazeCellPrefab: {fileID: 224140528872204935, guid: 1ef0988d70ca8e44b95d46c897a53bab, type: 3}
   _pillarPrefab: {fileID: 562343704694076899, guid: 8273b8a1cc246a9419e7f77d4bca585f, type: 3}
-  _mazeWidth: 20
-  _mazeDepth: 20
+  _mazeWidth: 50
+  _mazeDepth: 50
   _cellSize: 50
   _lobbyWidth: 8
   _lobbyDepth: 8
-  _nbrRooms: 4
   _roomWidth: 2
   _roomDepth: 2
+  _interZoneDoors: 2
+  _doorsPerLobbySide: 1
+  _doorsPerRoom: 1
   _slowMotion: 0
-  _stepDelay: 0.05
+  _stepDelay: 0.01
+  _showZoneColors: 0
 --- !u!1 &551173264
 GameObject:
   m_ObjectHideFlags: 0
@@ -3377,7 +3380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainGenerator
   manualCenterData: {fileID: 15600000, guid: 368e4dcd52792b04781b1603381e262b, type: 2}
-  mazeGenerator: {fileID: 540709026}
+  mazeGenerator: {fileID: 540709027}
   grassLayer: {fileID: 8574412962073106934, guid: 3e5d7ea7ba2bd1e4489a01d4dd71d6dd, type: 2}
   grassDetailTexture: {fileID: 2800000, guid: 37d71d16f9328d44aaed298cc47c2a0c, type: 3}
   treePrefab: {fileID: 2275399831387296705, guid: 80134143588e09c4892e00879262fce3, type: 3}
