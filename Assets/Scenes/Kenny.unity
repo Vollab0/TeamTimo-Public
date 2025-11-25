@@ -1322,14 +1322,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
-    - target: {fileID: 5030614426318439040, guid: 43916aa47c9a828499358fce6f8cc85d, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5030614426318439040, guid: 43916aa47c9a828499358fce6f8cc85d, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 2a6ce291e4941494e9d01ecf3c617158, type: 2}
     - target: {fileID: 8653935280991009466, guid: 43916aa47c9a828499358fce6f8cc85d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.50613
@@ -1427,18 +1419,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7859042824300598725, guid: df646d83a2f28384baef54b195e0919f, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7859042824300598725, guid: df646d83a2f28384baef54b195e0919f, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 0afa7ed089da79b4e8f62f21cf59ab10, type: 2}
-    - target: {fileID: 7859042824300598725, guid: df646d83a2f28384baef54b195e0919f, type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 0afa7ed089da79b4e8f62f21cf59ab10, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

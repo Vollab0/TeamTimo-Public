@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
 
     private float _gravity = -9.81f;
+    private float _potionSpeedMultiplier = 1f;
     private float _verticalVelocity;
     private float _velocity;
     private float _jumpHeight;
@@ -139,19 +140,29 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        if(_isThirdPerson)
+        if (_isThirdPerson)
         {
             _cameraForward = _characterController.transform.position - thirdPersonCamera.gameObject.transform.position;
-        } else // Pour la vue à la première personne
+        }
+        else // Pour la vue à la première personne
         {
             float cameraAngle = firstPersonCamera.State.RawOrientation.eulerAngles.y;
             float angleInRadians = cameraAngle * Mathf.Deg2Rad;
             _cameraForward = new Vector3(Mathf.Sin(angleInRadians), 0f, Mathf.Cos(angleInRadians));
         }
+
         _cameraForward.y = 0f;
         Quaternion cameraRotation = Quaternion.LookRotation(_cameraForward);
-        _newDirection = new Vector3(_direction.x * _velocity * Time.deltaTime, _direction.y * speed * _jumpHeight * Time.deltaTime, _direction.z * _velocity * Time.deltaTime);
-        _newDirection = cameraRotation * _newDirection;
+
+        // --- CORRECTION ICI ---
+        _newDirection = new Vector3(
+             _direction.x * _velocity * _potionSpeedMultiplier * Time.deltaTime,
+             _direction.y * speed * _jumpHeight * Time.deltaTime,
+             _direction.z * _velocity * _potionSpeedMultiplier * Time.deltaTime
+        ); // On ferme bien la parenthèse et on met le point virgule ici
+
+        _newDirection = cameraRotation * _newDirection; // Ceci doit être sur une nouvelle ligne
+
         _characterController.Move(_newDirection);
         _isWalking = _input.sqrMagnitude > 0.01f;
     }
@@ -287,5 +298,23 @@ public class PlayerController : MonoBehaviour
         transform.Find("JumpSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("OnJump");
     }
 
+    // PARTIE BOOST VITESSE -----------------------------------------------------------------
+    public void ActiverBoostVitesse(float multiplicateur, float duree)
+    {
+        StartCoroutine(RoutinePotionVitesse(multiplicateur, duree));
+    }
+
+    private IEnumerator RoutinePotionVitesse(float mult, float time)
+    {
+        _potionSpeedMultiplier = mult; // On applique le multiplicateur
+        Debug.Log("⚡ Potion bue : Vitesse augmentée !");
+
+        yield return new WaitForSeconds(time); // On attend la durée de la potion
+
+        _potionSpeedMultiplier = 1f; // On remet la vitesse normale
+        Debug.Log("🐌 Fin de l'effet de la potion.");
+    }
+
+    // FIN PARTIE BOOST VITESSE --------------------------------------------------------------
 }
 

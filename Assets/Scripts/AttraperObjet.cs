@@ -6,15 +6,10 @@ using System.Linq;
 public class AttraperObjets : MonoBehaviour
 {
     [Header("Références TPS")]
-    // C'est l'objet vide que tu as créé DANS ton joueur (au niveau du ventre/main)
-    [SerializeField] private Transform porteObjet;
-
-    // On garde la caméra JUSTE pour savoir où viser quand on jette
+    [SerializeField] private Transform porteObjet; // L'objet vide DANS le joueur
     [SerializeField] private Camera playerCamera;
 
     [Header("Ajustements")]
-    // Règle ça à 0,0,0 pour commencer, puis ajuste si l'objet est trop haut/bas
-    // Remplacez X, Y, Z par vos chiffres. N'oubliez pas le 'f' après les nombres décimaux.
     [SerializeField] public Vector3 offsetMain = new Vector3(0f, 1.5f, 2f);
     [SerializeField] private Vector3 rotationMain = Vector3.zero;
 
@@ -80,16 +75,13 @@ public class AttraperObjets : MonoBehaviour
         // 3. Création Visuelle
         if (item != null && item.prefab != null)
         {
-            // --- CHANGEMENT TPS ---
-            // On instancie l'objet sur le PORTE-OBJET (Le joueur)
-            // Donc l'objet bougera avec le joueur, pas la caméra.
+            // TPS : Instanciation sur le porteObjet
             objetVisuelEnMain = Instantiate(item.prefab, porteObjet);
 
-            // Position locale (par rapport au joueur)
             objetVisuelEnMain.transform.localPosition = offsetMain;
             objetVisuelEnMain.transform.localRotation = Quaternion.Euler(rotationMain);
 
-            // Désactivation Physique
+            // Correction Physique pour l'affichage
             Rigidbody rb = objetVisuelEnMain.GetComponent<Rigidbody>();
             if (rb) rb.isKinematic = true;
 
@@ -98,19 +90,22 @@ public class AttraperObjets : MonoBehaviour
         }
     }
 
-    // --- LOGIQUE D'ACTION (TOUCHE E) ---
+    // --- LOGIQUE D'ACTION SIMPLE (TOUT SUR E) ---
 
     public void AttraperObjet(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            // 1. Ramasser
-            if (TenterRamassage()) return;
+            // CAS 1 : On essaie de RAMASSER un objet au sol
+            if (TenterRamassage())
+            {
+                return; // Si on a ramassé, on s'arrête là.
+            }
 
-            // 2. Jeter
+            // CAS 2 : Si on n'a rien ramassé, on RELÂCHE l'objet qu'on tient
             if (objetVisuelEnMain != null)
             {
-                JeterObjet();
+                RelacherObjetPhysiquement();
             }
         }
     }
@@ -138,23 +133,26 @@ public class AttraperObjets : MonoBehaviour
         return false;
     }
 
-    private void JeterObjet()
+    private void RelacherObjetPhysiquement()
     {
+        // 1. On retire de l'UI
         inventaireUI.RetirerObjet(slotSelection.slotActif);
 
-        // On détache l'objet du joueur
+        // 2. On détache du joueur (il redevient indépendant)
         objetVisuelEnMain.transform.SetParent(null);
 
-        // Réactivation Physique
+        // 3. Correction Echelle (Taille normale)
+        //objetVisuelEnMain.transform.localScale = Vector3.one;
+
+        // 4. Physique (Gravité)
         Rigidbody rb = objetVisuelEnMain.GetComponent<Rigidbody>();
         if (rb)
         {
             rb.isKinematic = false;
 
-            // ASTUCE TPS : On lance dans la direction de la CAMÉRA (pour viser)
-            // Même si l'objet part du corps.
+            // Petite impulsion vers l'avant pour ne pas qu'il tombe dans nos pieds
             Vector3 directionLancer = playerCamera.transform.forward;
-            rb.AddForce(directionLancer * 10f, ForceMode.Impulse); // J'ai augmenté la force un peu
+            rb.AddForce(directionLancer * 5f, ForceMode.Impulse);
 
             if (characterController != null) rb.linearVelocity += characterController.velocity;
         }
@@ -162,12 +160,13 @@ public class AttraperObjets : MonoBehaviour
         Collider col = objetVisuelEnMain.GetComponent<Collider>();
         if (col) col.enabled = true;
 
+        // 5. Nettoyage
         objetVisuelEnMain = null;
-
         MettreAJourVisuelMain();
     }
 
-    // --- OUTLINER (Inchangé) ---
+    // --- OUTLINER (Inchangé & Corrigé) ---
+
     private void Outliner()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange);
@@ -199,29 +198,23 @@ public class AttraperObjets : MonoBehaviour
     {
         Renderer r = obj.GetComponent<Renderer>();
         if (r == null) return;
-        var m = new List<Material>(r.materials);
-        if (!m.Contains(outlineMaterial)) { m.Add(outlineMaterial); r.materials = m.ToArray(); }
+        var m = r.sharedMaterials.ToList();
+        if (!m.Contains(outlineMaterial)) { m.Add(outlineMaterial); r.sharedMaterials = m.ToArray(); }
     }
 
     private void RemoveOutline(GameObject obj)
     {
         Renderer r = obj.GetComponent<Renderer>();
         if (r == null) return;
-        var m = new List<Material>(r.materials);
-        if (m.Remove(outlineMaterial)) r.materials = m.ToArray();
+        var m = r.sharedMaterials.ToList();
+        if (m.Remove(outlineMaterial)) r.sharedMaterials = m.ToArray();
     }
 
-    // Fonctions pour les autres scripts
-    public bool IsHolding()
-    {
-        return objetVisuelEnMain != null;
-    }
+    // Fonctions externes
+    public bool IsHolding() { return objetVisuelEnMain != null; }
 
     public void LacherObjet()
     {
-        if (objetVisuelEnMain != null)
-        {
-            JeterObjet();
-        }
+        if (objetVisuelEnMain != null) RelacherObjetPhysiquement();
     }
 }
