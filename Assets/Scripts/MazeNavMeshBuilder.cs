@@ -9,36 +9,38 @@ public class MazeNavMeshBuilder : MonoBehaviour
     [Header("Références")]
     [SerializeField] private MazeGenerator mazeGenerator;
     [SerializeField] private NavMeshSurface navMeshSurface;
+    
+    // --- AJOUT : Référence au Spawner ---
+    [SerializeField] private SpawnerManager spawnerManager; 
 
     [Header("Réglages Précision")]
     [Tooltip("Décalage manuel pour aligner les zones avec les murs (ex: 2, 0, 2)")]
     [SerializeField] private Vector3 zonePositionOffset = Vector3.zero;
 
     // Index des Areas
-    private int areaSW, areaNW, areaNE, areaSE, areaLobby, areaRoom; // NOUVEAU: areaRoom
+    private int areaSW, areaNW, areaNE, areaSE, areaLobby, areaRoom;
 
     public void BuildNavMeshForZones()
     {
-        // 1. Récupération des IDs via les noms définis dans Unity
+        // ... (Tout ton code d'initialisation des IDs reste identique) ...
         areaSW = NavMesh.GetAreaFromName("SouthWest");
         areaNW = NavMesh.GetAreaFromName("NorthWest");
         areaNE = NavMesh.GetAreaFromName("NorthEast");
         areaSE = NavMesh.GetAreaFromName("SouthEast");
         areaLobby = NavMesh.GetAreaFromName("Lobby");
-        areaRoom = NavMesh.GetAreaFromName("Room"); // NOUVEAU
+        areaRoom = NavMesh.GetAreaFromName("Room");
 
-        // 2. Nettoyage
+        // ... (Tout ton code de nettoyage reste identique) ...
         Transform mazeParent = mazeGenerator.GetMazeParent();
         foreach (Transform child in mazeParent) 
         { 
-            // On supprime aussi les "RoomModifier"
             if (child.name.StartsWith("ZoneModifier_") || child.name == "LobbyModifier" || child.name.StartsWith("RoomModifier_"))
                 Destroy(child.gameObject); 
         }
 
         int cellSize = mazeGenerator.GetCellSize();
 
-        // 3. Création Volumes ZONES (Le sol de base)
+        // ... (Création des modifiers reste identique) ...
         List<RectInt> zones = mazeGenerator.GetAllZones(); 
         int[] areaIndices = new int[] { areaSW, areaNW, areaNE, areaSE };
 
@@ -47,20 +49,19 @@ public class MazeNavMeshBuilder : MonoBehaviour
             CreateNavMeshModifier(zones[i], areaIndices[i], cellSize, $"ZoneModifier_{i}");
         }
 
-        // 4. Création Volume LOBBY (Écrase les zones au centre)
         CreateNavMeshModifier(mazeGenerator.GetLobbyRect(), areaLobby, cellSize, "LobbyModifier");
 
-        // 5. Création Volumes SALLES (Écrase les zones aux endroits des salles) --- NOUVEAU ---
         List<RectInt> rooms = mazeGenerator.GetRandomRooms();
         for (int i = 0; i < rooms.Count; i++)
         {
             CreateNavMeshModifier(rooms[i], areaRoom, cellSize, $"RoomModifier_{i}");
         }
 
-        // 6. Calcul NavMesh
+        // Lancement du Bake
         StartCoroutine(BakeNavMeshDelayed());
     }
 
+    // ... (La méthode CreateNavMeshModifier reste identique) ...
     private void CreateNavMeshModifier(RectInt rect, int areaIndex, int cellSize, string name)
     {
         GameObject modifierObj = new GameObject(name);
@@ -69,7 +70,6 @@ public class MazeNavMeshBuilder : MonoBehaviour
         float width = rect.width * cellSize;
         float depth = rect.height * cellSize;
         
-        // Calcul du centre local
         float centerX = (rect.x * cellSize) + (width / 2f) - (cellSize / 2f);
         float centerZ = (rect.y * cellSize) + (depth / 2f) - (cellSize / 2f);
 
@@ -87,6 +87,18 @@ public class MazeNavMeshBuilder : MonoBehaviour
     {
         yield return null; 
         navMeshSurface.BuildNavMesh();
-        //Debug.Log("NavMesh Bake Terminé (Zones + Lobby + Salles) !");
+        
+        // --- AJOUT : On attend une frame pour être sûr que le NavMesh est à jour ---
+        yield return null; 
+
+        // --- AJOUT : On lance les monstres une fois le terrain prêt ---
+        if (spawnerManager != null)
+        {
+            spawnerManager.StartSpawning();
+        }
+        else
+        {
+            Debug.LogWarning("Attention : SpawnerManager n'est pas assigné dans MazeNavMeshBuilder !");
+        }
     }
 }
