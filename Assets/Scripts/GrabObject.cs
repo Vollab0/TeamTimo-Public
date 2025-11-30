@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public class AttraperObjets : MonoBehaviour
+public class GrabObject : MonoBehaviour
 {
     [Header("Références TPS")]
     [SerializeField] private Transform porteObjet; // L'objet vide DANS le joueur

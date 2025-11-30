@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MySkybox
+  m_Shader: {fileID: -6465566751694194690, guid: 60bab3218cab1a74c9eaac7889b9f8b1, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DayNightBlend: 0.0682807
+    - _DayZenithBlendPower: 0.41
+    - _Day_Nadir_Blend_Power: 0.39
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _StarDensity: 10
+    - _StarIntensity: 1
+    - _StarThreshold: 0.98
+    - _SunSize: 200
+    m_Colors:
+    - _DayHorizonColor: {r: 0.6941177, g: 0.8313726, b: 0.9137255, a: 1}
+    - _DayZenithColor: {r: 0.30980384, g: 0.78431374, b: 0.9647059, a: 1}
+    - _Day_Nadir_Color: {r: 0.06808472, g: 0.8490566, b: 0.07087693, a: 1}
+    - _NightHorizonColor: {r: 0.01568628, g: 0.043137237, b: 0.11372546, a: 1}
+    - _NightZenithColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SunColor: {r: 1, g: 1, b: 0.6666667, a: 1}
+    - _SunDirection: {r: 0.106434375, g: 0.9770808, b: 0.18434976, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &5395689753118358917
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10

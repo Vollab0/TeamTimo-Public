@@ -21,15 +21,15 @@ NavMeshProjectSettings:
     cost: 1
   - name: Lobby
     cost: 1
-  - name: Room
+  - name: WallTop
     cost: 1
-  - name: 
+  - name: SouthWestRoom
     cost: 1
-  - name: 
+  - name: NorthWestRoom
     cost: 1
-  - name: 
+  - name: NorthEastRoom
     cost: 1
-  - name: 
+  - name: SouthEastRoom
     cost: 1
   - name: 
     cost: 1

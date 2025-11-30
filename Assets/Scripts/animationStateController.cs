@@ -22,6 +22,6 @@ public class AnimationStateController : MonoBehaviour
         animator.SetBool("isJumping", stateArray[2]);
         animator.SetBool("isFalling", stateArray[3]);
         animator.SetBool("isGrounded", stateArray[4]);
-        animator.SetBool("isHolding", GetComponentInParent<AttraperObjets>().IsHolding());
+        animator.SetBool("isHolding", GetComponentInParent<GrabObject>().IsHolding());
     }
 }

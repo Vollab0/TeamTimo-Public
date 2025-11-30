@@ -20,8 +20,8 @@ public class EnemySight : MonoBehaviour
     public float patrolRange = 30f;   
     
     [Header("4. Comportement IA")]
-    public float reactionTime = 1.0f; // Temps de pause pour Alerte ET Recherche
-    public float searchTurnSpeed = 2.0f; // Vitesse de rotation de la tête lors de la recherche
+    public float reactionTime = 1.0f; 
+    public float searchTurnSpeed = 2.0f; 
 
     private NavMeshAgent _agent;
     private Transform _player;
@@ -29,7 +29,7 @@ public class EnemySight : MonoBehaviour
     // États
     private bool _isChasing = false;
     private bool _isAlerted = false;
-    private bool _isSearching = false; // Nouvel état pour savoir si on cherche le joueur
+    private bool _isSearching = false; 
 
     void Start()
     {
@@ -54,7 +54,6 @@ public class EnemySight : MonoBehaviour
 
         if (canSee)
         {
-            // Si on voit le joueur, on arrête toute recherche ou patrouille et on attaque
             if (_isSearching) 
             {
                 StopCoroutine("SearchRoutine");
@@ -77,10 +76,9 @@ public class EnemySight : MonoBehaviour
         }
         else 
         {
-            // Si on perd le joueur DE VUE alors qu'on chassait
             if (_isChasing)
             {
-                StopChase(); // Ceci va maintenant lancer la recherche
+                StopChase(); 
             }
         }
     }
@@ -120,7 +118,7 @@ public class EnemySight : MonoBehaviour
     {
         _isAlerted = true;
         StopCoroutine("PatrolRoutine");
-        StopCoroutine("SearchRoutine"); // Sécurité
+        StopCoroutine("SearchRoutine"); 
         _agent.isStopped = true; 
 
         yield return new WaitForSeconds(reactionTime);
@@ -155,53 +153,39 @@ public class EnemySight : MonoBehaviour
     {
         _isChasing = false;
         _agent.speed = patrolSpeed;
-        
-        // AU LIEU DE REPARTIR EN PATROUILLE DIRECTEMENT :
         StartCoroutine(SearchRoutine());
     }
 
-    // --- NOUVELLE ROUTINE DE RECHERCHE ---
     IEnumerator SearchRoutine()
     {
         _isSearching = true;
-        _agent.isStopped = true; // On s'arrête sur place
+        _agent.isStopped = true; 
 
-        // 1. Attente initiale (Reaction Time)
         yield return new WaitForSeconds(reactionTime);
 
-        // Sauvegarde de la rotation où l'ennemi a perdu le joueur
         Quaternion startRotation = transform.rotation;
-
-        // 2. Regarder à GAUCHE (-45 degrés)
         Quaternion lookLeft = startRotation * Quaternion.Euler(0, -45, 0);
         yield return RotateToTarget(lookLeft);
-        yield return new WaitForSeconds(0.5f); // Petite pause regard gauche
+        yield return new WaitForSeconds(0.5f); 
 
-        // 3. Regarder à DROITE (+45 degrés par rapport au centre)
         Quaternion lookRight = startRotation * Quaternion.Euler(0, 45, 0);
         yield return RotateToTarget(lookRight);
-        yield return new WaitForSeconds(0.5f); // Petite pause regard droite
+        yield return new WaitForSeconds(0.5f); 
 
-        // 4. Regarder DEVANT (Retour au centre)
         yield return RotateToTarget(startRotation);
-
-        // 5. Attente finale (Reaction Time)
         yield return new WaitForSeconds(reactionTime);
 
-        // Fin de la recherche -> Retour Patrouille
         _isSearching = false;
         _agent.isStopped = false;
         StartCoroutine(PatrolRoutine());
     }
 
-    // Petite fonction utilitaire pour tourner la tête proprement
     IEnumerator RotateToTarget(Quaternion targetRot)
     {
         float t = 0;
         Quaternion startRot = transform.rotation;
         while (t < 1)
         {
-            // Si le joueur réapparaît pendant qu'on tourne la tête, on coupe court
             if (CanSeePlayer()) yield break; 
 
             transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
@@ -215,11 +199,11 @@ public class EnemySight : MonoBehaviour
     {
         _agent.isStopped = false;
 
-        // Tant qu'on ne chasse pas, qu'on n'est pas alerté et qu'on ne cherche pas
         while (!_isChasing && !_isAlerted && !_isSearching)
         {
             Vector3 targetPoint = GetRandomPointOnNavMesh();
             
+            // Si on ne trouve pas de point valide (Vector3.zero), on attend un peu et on réessaie
             if (targetPoint == Vector3.zero) 
             {
                 yield return new WaitForSeconds(0.5f);
@@ -240,15 +224,32 @@ public class EnemySight : MonoBehaviour
         }
     }
 
+    // --- MODIFICATION ICI ---
     Vector3 GetRandomPointOnNavMesh()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * patrolRange;
-        randomDirection += transform.position;
-        NavMeshHit hit;
-        
-        if (NavMesh.SamplePosition(randomDirection, out hit, patrolRange, _agent.areaMask))
+        // On tente 10 fois de trouver un point valide
+        for (int i = 0; i < 10; i++)
         {
-            return hit.position;
+            Vector3 randomDirection = Random.insideUnitSphere * patrolRange;
+            randomDirection += transform.position;
+            
+            NavMeshHit hit;
+            
+            // On vérifie le NavMesh
+            if (NavMesh.SamplePosition(randomDirection, out hit, patrolRange, _agent.areaMask))
+            {
+                // ON AJOUTE LE RAYCAST ICI
+                // On vérifie qu'il n'y a pas de mur entre l'IA et le point
+                Vector3 origin = transform.position + Vector3.up; 
+                Vector3 target = hit.position + Vector3.up;
+                Vector3 direction = target - origin;
+                
+                // Si le raycast NE touche PAS d'obstacle, c'est bon
+                if (!Physics.Raycast(origin, direction, direction.magnitude, obstacleMask))
+                {
+                    return hit.position;
+                }
+            }
         }
         return Vector3.zero;
     }
@@ -264,7 +265,7 @@ public class EnemySight : MonoBehaviour
         
         if(_isAlerted || _isSearching) 
         {
-            Gizmos.color = _isSearching ? Color.blue : Color.red; // Bleu si recherche, Rouge si alerté
+            Gizmos.color = _isSearching ? Color.blue : Color.red; 
             Gizmos.DrawWireSphere(transform.position + Vector3.up * 2, 0.5f);
         }
     }
