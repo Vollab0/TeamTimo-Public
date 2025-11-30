@@ -38,23 +38,32 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DayNightBlend: 0.0682807
-    - _DayZenithBlendPower: 0.41
-    - _Day_Nadir_Blend_Power: 0.39
+    - _DayNightBlend: 0.88328516
+    - _DayZenithBlendPower: 0.4
+    - _Day_Nadir_Blend_Power: 0.5
+    - _Night_Zenith_Blend_Power: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _StarDensity: 10
+    - _StarDensity: 0.0003
     - _StarIntensity: 1
-    - _StarThreshold: 0.98
-    - _SunSize: 200
+    - _StarThreshold: 0.99
+    - _SunSize: 182.9
+    - _Sun_Rotation_Offset: -11
+    - _SunsetDuration: 0.1
+    - _SunsetTime: 0.9
+    - _Sunset_Zenith_Blend_Power: 0.8
+    - _X: 360
     m_Colors:
     - _DayHorizonColor: {r: 0.6941177, g: 0.8313726, b: 0.9137255, a: 1}
     - _DayZenithColor: {r: 0.30980384, g: 0.78431374, b: 0.9647059, a: 1}
     - _Day_Nadir_Color: {r: 0.06808472, g: 0.8490566, b: 0.07087693, a: 1}
     - _NightHorizonColor: {r: 0.01568628, g: 0.043137237, b: 0.11372546, a: 1}
     - _NightZenithColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SunColor: {r: 1, g: 1, b: 0.6666667, a: 1}
+    - _SunColor: {r: 1, g: 0.81960785, b: 0.38431373, a: 1}
     - _SunDirection: {r: 0.106434375, g: 0.9770808, b: 0.18434976, a: 0}
+    - _Sunset_Color: {r: 0, g: 0.2668006, b: 0.56078434, a: 1}
+    - _Sunset_Horizon_Color: {r: 0.8820755, g: 0.4618501, b: 0, a: 1}
+    - _Sunshine_Color: {r: 0.7830188, g: 0.590911, b: 0.11449797, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5395689753118358917

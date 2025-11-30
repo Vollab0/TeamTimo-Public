@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4568901651327075709}
   - component: {fileID: 8623274676309623507}
-  - component: {fileID: 5374814662194637175}
-  - component: {fileID: 5053800663876943584}
+  - component: {fileID: -5244566561715119440}
+  - component: {fileID: 3819369494013076013}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachinePipeline
---- !u!114 &5374814662194637175
+--- !u!114 &-5244566561715119440
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,8 +58,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachineOrbitalTransposer
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4.8, z: -20}
+  m_BindingMode: 1
+  m_FollowOffset: {x: 0, y: 0, z: -10}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_LegacyHeightOffset: 3.4028235e+38
   m_LegacyHeadingBias: 3.4028235e+38
   m_HeadingIsSlave: 1
---- !u!114 &5053800663876943584
+--- !u!114 &3819369494013076013
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,8 +137,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3105636467478659942}
   - component: {fileID: 8469689582202401578}
-  - component: {fileID: 1803249392353035825}
-  - component: {fileID: 1623219912130899313}
+  - component: {fileID: -18169776928630384}
+  - component: {fileID: 868224864449696371}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachinePipeline
---- !u!114 &1803249392353035825
+--- !u!114 &-18169776928630384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,8 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachineOrbitalTransposer
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4.8, z: -20}
+  m_BindingMode: 1
+  m_FollowOffset: {x: 0, y: 0, z: -10}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_LegacyHeightOffset: 3.4028235e+38
   m_LegacyHeadingBias: 3.4028235e+38
   m_HeadingIsSlave: 1
---- !u!114 &1623219912130899313
+--- !u!114 &868224864449696371
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1656761706100439695}
-  - component: {fileID: 1217321162757613210}
+  - component: {fileID: -9183474799128064011}
   m_Layer: 0
   m_Name: BottomRig
   m_TagString: Untagged
@@ -287,7 +287,7 @@ Transform:
   - {fileID: 3105636467478659942}
   m_Father: {fileID: 1596055879531213034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1217321162757613210
+--- !u!114 &-9183474799128064011
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 50
+    FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -342,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3158879251097095464}
-  - component: {fileID: 795949733357858711}
+  - component: {fileID: 7111964766930338318}
   m_Layer: 0
   m_Name: MiddleRig
   m_TagString: Untagged
@@ -366,7 +366,7 @@ Transform:
   - {fileID: 6934035369696698345}
   m_Father: {fileID: 1596055879531213034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &795949733357858711
+--- !u!114 &7111964766930338318
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 50
+    FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -551,9 +551,9 @@ MonoBehaviour:
     m_Radius: 15
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
-  - {fileID: 6442650333893966690}
-  - {fileID: 795949733357858711}
-  - {fileID: 1217321162757613210}
+  - {fileID: 1848483824968684458}
+  - {fileID: 7111964766930338318}
+  - {fileID: -9183474799128064011}
 --- !u!114 &9199606551772256405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -609,7 +609,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4696635579045371116}
-  - component: {fileID: 6442650333893966690}
+  - component: {fileID: 1848483824968684458}
   m_Layer: 0
   m_Name: TopRig
   m_TagString: Untagged
@@ -633,7 +633,7 @@ Transform:
   - {fileID: 4568901651327075709}
   m_Father: {fileID: 1596055879531213034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6442650333893966690
+--- !u!114 &1848483824968684458
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -661,7 +661,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 50
+    FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -689,8 +689,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6934035369696698345}
   - component: {fileID: 107828989670165737}
-  - component: {fileID: 2624265337839696728}
-  - component: {fileID: 4893092593193893272}
+  - component: {fileID: 4517283965675179706}
+  - component: {fileID: -6483632814555899613}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -725,7 +725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachinePipeline
---- !u!114 &2624265337839696728
+--- !u!114 &4517283965675179706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -737,8 +737,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cinemachine::Cinemachine.CinemachineOrbitalTransposer
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4.8, z: -20}
+  m_BindingMode: 1
+  m_FollowOffset: {x: 0, y: 0, z: -10}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -779,7 +779,7 @@ MonoBehaviour:
   m_LegacyHeightOffset: 3.4028235e+38
   m_LegacyHeadingBias: 3.4028235e+38
   m_HeadingIsSlave: 1
---- !u!114 &4893092593193893272
+--- !u!114 &-6483632814555899613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

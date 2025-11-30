@@ -1,135 +1,86 @@
-using System;
 using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
-    #region --- SETTINGS ---
+    [Header("Réglages Généraux")]
+    [Tooltip("Durée d'un cycle complet en secondes")]
+    public float dayDurationInSeconds = 60f;
+    [Tooltip("L'heure de départ (0 = Midi, 0.5 = Minuit)")]
+    [Range(0, 1)]
+    public float startTime = 0f;
 
-    [Header("1. Temps")]
-    public float dayDuration = 600f; 
-    public float nightDuration = 600f;
+    [Header("Réglages Shader (Skybox)")]
+    public Material targetMaterial;
+    public string variableName = "_DayNightBlend";
     
-    [Header("Info Debug")]
-    [SerializeField] private int _currentDay = 1; 
-
-    [Header("2. Soleil (Objet)")]
-    [SerializeField] private Light _sunLight;
-
-    [Header("3. Skybox Custom")]
-    [Tooltip("Glissez ici votre matériau MAT_MySkybox")]
-    [SerializeField] private Material _mySkyboxMaterial; 
-
-    [Header("4. Réglages Transition")]
-    [Tooltip("Courbe pour gérer l'apparition des étoiles (0 le jour, 1 la nuit)")]
-    [SerializeField] private AnimationCurve _starVisibilityCurve;
+    [Header("Réglages Lumière (Soleil)")]
+    [Tooltip("Glisse ta Directional Light ici")]
+    public Light sunLight;
     
-    [Header("5. Eclairage Ambiant")]
-    [SerializeField] private Color _dayAmbient = Color.gray;
-    [SerializeField] private Color _nightAmbient = new Color(0.1f, 0.1f, 0.3f);
-
-    #endregion
-
-    #region --- EVENTS ---
-    public static event Action OnDayStarted;
-    public static event Action OnNightStarted;
-    public static event Action<int> OnNewDay; 
-    #endregion
-
-    #region --- PRIVATE VARS ---
-    private float _currentTime;
-    private bool _isNight = false;
-    private float _totalCycleDuration;
+    [Tooltip("Définit la couleur de la lumière selon l'heure (Blanc à midi, Rouge au coucher, Noir la nuit)")]
+    public Gradient sunColor;
     
-    // IDs pour optimiser l'envoi des données au shader
-    private int _sunDirID;
-    private int _blendID;
-    private int _starIntID;
-    #endregion
+    [Tooltip("Définit la force de la lumière (Fort à midi, 0 la nuit)")]
+    public AnimationCurve sunIntensity;
 
-    public int GetCurrentDay() { return _currentDay; }
+    [Tooltip("Permet de caler la rotation de la lumière avec celle du Shader")]
+    public float rotationOffset = 0f;
+
+    // Variables privées
+    private int _variableID;
+    private float _timeAccumulator;
 
     void Start()
     {
-        _totalCycleDuration = dayDuration + nightDuration;
-        
-        // Récupération des IDs
-        _sunDirID = Shader.PropertyToID("_SunDirection");
-        _blendID = Shader.PropertyToID("_DayNightBlend");
-        _starIntID = Shader.PropertyToID("_StarIntensity");
+        // Initialisation Shader
+        if (targetMaterial != null)
+            _variableID = Shader.PropertyToID(variableName);
+        else
+            Debug.LogError("Pas de Matériau assigné !");
 
-        // Init
-        if(OnDayStarted != null) OnDayStarted.Invoke();
-        if(OnNewDay != null) OnNewDay.Invoke(_currentDay);
+        // Initialisation Temps
+        // On initialise l'accumulateur pour commencer à l'heure voulue
+        _timeAccumulator = startTime * dayDurationInSeconds;
     }
 
     void Update()
     {
-        _currentTime += Time.deltaTime;
-        if (_currentTime >= _totalCycleDuration) _currentTime %= _totalCycleDuration;
+        if (dayDurationInSeconds <= 0) return;
 
-        float timePercent = _currentTime / _totalCycleDuration;
+        // 1. Calcul du temps
+        _timeAccumulator += Time.deltaTime;
+        // Le modulo (%) permet de boucler indéfiniment
+        float currentCycle = (_timeAccumulator % dayDurationInSeconds) / dayDurationInSeconds;
 
-        // 1. Rotation physique du Soleil
-        float sunAngle = timePercent * 360f - 90f; 
-        _sunLight.transform.rotation = Quaternion.Euler(sunAngle, 30f, 0);
-
-        // 2. Mise à jour du Shader et de l'ambiance
-        UpdateSkyboxShader(timePercent);
-        UpdateAmbientLight(timePercent);
-        CheckPhaseTransition();
-    }
-
-    private void UpdateSkyboxShader(float percent)
-    {
-        if (_mySkyboxMaterial == null || _sunLight == null) return;
-
-        // A. Direction du soleil (inchangé)
-        _mySkyboxMaterial.SetVector(_sunDirID, -_sunLight.transform.forward);
-
-        // B. Calculer le Blend Jour/Nuit --- LOGIQUE ADAPTEE ---
-        
-        // DEMANDE : 0 = Midi (Jour), 1 = Minuit (Nuit)
-        
-        // percent = 0.0 (Minuit) -> Abs(-0.5) * 2 = 1.0 (Nuit)
-        // percent = 0.5 (Midi)   -> Abs(0.0)  * 2 = 0.0 (Jour)
-        // percent = 1.0 (Minuit) -> Abs(0.5)  * 2 = 1.0 (Nuit)
-        
-        float blend = Mathf.Abs(percent - 0.5f) * 2f;
-
-        _mySkyboxMaterial.SetFloat(_blendID, blend);
-
-        // C. Gérer les étoiles
-        float starIntensity = _starVisibilityCurve.Evaluate(percent);
-        _mySkyboxMaterial.SetFloat(_starIntID, starIntensity);
-    }
-
-    private void UpdateAmbientLight(float percent)
-    {
-        // Bascule simple jour/nuit pour la lumière ambiante au sol
-        bool isNightVisually = percent > 0.75f || percent < 0.25f; 
-        RenderSettings.ambientLight = isNightVisually ? _nightAmbient : _dayAmbient;
-    }
-
-    private void CheckPhaseTransition()
-    {
-        // Logique simplifiée : Jour dans la moitié centrale, nuit sur les bords
-        if (_currentTime > _totalCycleDuration * 0.25f && _currentTime < _totalCycleDuration * 0.75f)
+        // 2. Mise à jour du Shader (Le Ciel)
+        if (targetMaterial != null)
         {
-             if (_isNight) // Transition Nuit -> Jour
-            {
-                _isNight = false;
-                _currentDay++;
-                if (OnDayStarted != null) OnDayStarted.Invoke();
-                if (OnNewDay != null) OnNewDay.Invoke(_currentDay);
-            }
+            targetMaterial.SetFloat(_variableID, currentCycle);
         }
-        else // Période Nuit
+
+        // 3. Mise à jour de la Lumière (Le Soleil Physique)
+        if (sunLight != null)
         {
-           if (!_isNight) // Transition Jour -> Nuit
-            {
-                _isNight = true;
-                if (OnNightStarted != null) OnNightStarted.Invoke();
-            }
+            // A. Rotation
+            // On fait tourner la lumière sur l'axe X (360 degrés * le cycle)
+            // L'offset permet de synchroniser avec ton shader si besoin
+            float angle = (currentCycle * 360f) + rotationOffset;
+            
+            // Note : 90 degrés est souvent le zénith (Midi) dans Unity par défaut pour une lumière
+            sunLight.transform.rotation = Quaternion.Euler(angle + 90f, 0, 0);
+
+            // B. Couleur
+            sunLight.color = sunColor.Evaluate(currentCycle);
+
+            // C. Intensité
+            sunLight.intensity = sunIntensity.Evaluate(currentCycle);
+            
+            // D. Gestion des ombres (Optimisation)
+            // Si l'intensité est quasi nulle, on coupe les ombres pour gagner des FPS
+            if (sunLight.intensity <= 0.01f && sunLight.shadows != LightShadows.None)
+                sunLight.shadows = LightShadows.None;
+            else if (sunLight.intensity > 0.01f && sunLight.shadows == LightShadows.None)
+                sunLight.shadows = LightShadows.Soft;
         }
     }
 }
