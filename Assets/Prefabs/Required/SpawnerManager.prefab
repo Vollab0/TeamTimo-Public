@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7988933762784873005}
   - component: {fileID: 4999392650078346051}
   - component: {fileID: 430838865189649562}
+  - component: {fileID: -2533169728837703908}
   m_Layer: 0
-  m_Name: NavigationManager
+  m_Name: SpawnerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,4 +80,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MazeNavMeshBuilder
   mazeGenerator: {fileID: 0}
   navMeshSurface: {fileID: 4999392650078346051}
-  zonePositionOffset: {x: -28, y: 0, z: -15}
+  spawnerManager: {fileID: 0}
+  _wallZoneStartHeight: 2
+  _wallZoneHeight: 10
+  _wallZonePadding: 50
+  _zonePositionOffset: {x: 0, y: 0, z: 0}
+  _showDebugGizmos: 1
+--- !u!114 &-2533169728837703908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8639388868243923159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3517cfef4f1137446b3c94c9f5e75323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnerManager
+  mazeGenerator: {fileID: 8839674110958602725, guid: 7a423f50eb876bf428b48206746df614, type: 3}
+  searchRadius: 5
+  waves: []
