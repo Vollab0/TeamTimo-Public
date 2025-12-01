@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Art/Icons%20Heart/HeartsStyles.uss?fileID=7433441132597879392&amp;guid=af651d5b0ffa17e429ed635ff0e13f95&amp;type=3#HeartsStyles" />
+    <ui:VisualElement name="HeartContainer" picking-mode="Ignore" class="heart-container" style="flex-grow: 1; height: 59px; width: 140px; top: 25px; left: 6px; -unity-background-scale-mode: scale-and-crop; background-color: rgba(97, 97, 97, 0);" />
+</ui:UXML>
