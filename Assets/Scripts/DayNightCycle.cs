@@ -1,30 +1,43 @@
 using UnityEngine;
 
+[ExecuteAlways] 
 public class DayNightCycle : MonoBehaviour
 {
     [Header("Réglages Généraux")]
-    [Tooltip("Durée d'un cycle complet en secondes")]
+    [Tooltip("Durée d'un cycle complet en secondes (Mode Play uniquement)")]
     public float dayDurationInSeconds = 60f;
-    [Tooltip("L'heure de départ (0 = Midi, 0.5 = Minuit)")]
+    
+    [Tooltip("L'heure actuelle (0 = Midi, 0.5 = Minuit).")]
     [Range(0, 1)]
-    public float startTime = 0f;
+    public float timeOfDay = 0f;
 
     [Header("Réglages Shader (Skybox)")]
     public Material targetMaterial;
     public string variableName = "_DayNightBlend";
     
     [Header("Réglages Lumière (Soleil)")]
-    [Tooltip("Glisse ta Directional Light ici")]
     public Light sunLight;
-    
-    [Tooltip("Définit la couleur de la lumière selon l'heure (Blanc à midi, Rouge au coucher, Noir la nuit)")]
+    [Tooltip("Gérez le lever/coucher via ce Gradient (Noir = Lumière éteinte)")]
     public Gradient sunColor;
-    
-    [Tooltip("Définit la force de la lumière (Fort à midi, 0 la nuit)")]
-    public AnimationCurve sunIntensity;
-
-    [Tooltip("Permet de caler la rotation de la lumière avec celle du Shader")]
+    [Tooltip("La puissance fixe du soleil (ex: 1.5).")]
+    public float sunIntensity = 1.5f;
     public float rotationOffset = 0f;
+
+    [Header("Réglages Lumière (Lune)")]
+    public Light moonLight;
+    [Tooltip("Gérez le lever/coucher via ce Gradient (Noir = Lumière éteinte)")]
+    public Gradient moonColor;
+    [Tooltip("La puissance fixe de la lune (ex: 0.5).")]
+    public float moonIntensity = 0.5f;
+
+    [Header("Réglages Ambiance")]
+    public Gradient ambientColor; 
+
+    [Header("Réglages Brouillard")]
+    public Gradient fogColor;
+    
+    [Tooltip("Densité du brouillard fixe (Attention c'est sensible : 0.005 = léger, 0.05 = épais)")]
+    public float fogDensity = 0.005f; // C'est maintenant une valeur fixe (float)
 
     // Variables privées
     private int _variableID;
@@ -32,55 +45,90 @@ public class DayNightCycle : MonoBehaviour
 
     void Start()
     {
-        // Initialisation Shader
         if (targetMaterial != null)
             _variableID = Shader.PropertyToID(variableName);
-        else
-            Debug.LogError("Pas de Matériau assigné !");
 
-        // Initialisation Temps
-        // On initialise l'accumulateur pour commencer à l'heure voulue
-        _timeAccumulator = startTime * dayDurationInSeconds;
+        if (Application.isPlaying)
+        {
+            _timeAccumulator = timeOfDay * dayDurationInSeconds;
+        }
     }
 
     void Update()
     {
         if (dayDurationInSeconds <= 0) return;
 
-        // 1. Calcul du temps
-        _timeAccumulator += Time.deltaTime;
-        // Le modulo (%) permet de boucler indéfiniment
-        float currentCycle = (_timeAccumulator % dayDurationInSeconds) / dayDurationInSeconds;
+        float currentCycle = 0f;
 
-        // 2. Mise à jour du Shader (Le Ciel)
-        if (targetMaterial != null)
+        if (Application.isPlaying)
         {
-            targetMaterial.SetFloat(_variableID, currentCycle);
+            _timeAccumulator += Time.deltaTime;
+            currentCycle = (_timeAccumulator % dayDurationInSeconds) / dayDurationInSeconds;
+            timeOfDay = currentCycle;
+        }
+        else
+        {
+            currentCycle = timeOfDay;
         }
 
-        // 3. Mise à jour de la Lumière (Le Soleil Physique)
+        UpdateVisuals(currentCycle);
+    }
+
+    void UpdateVisuals(float cycle)
+    {
+        // 1. Shader (Ciel)
+        if (targetMaterial != null)
+            targetMaterial.SetFloat(_variableID, cycle);
+
+        float baseAngle = (cycle * 360f) + rotationOffset;
+
+        // 2. Lumière (Soleil)
         if (sunLight != null)
         {
-            // A. Rotation
-            // On fait tourner la lumière sur l'axe X (360 degrés * le cycle)
-            // L'offset permet de synchroniser avec ton shader si besoin
-            float angle = (currentCycle * 360f) + rotationOffset;
+            sunLight.transform.rotation = Quaternion.Euler(baseAngle + 90f, 0, 0);
             
-            // Note : 90 degrés est souvent le zénith (Midi) dans Unity par défaut pour une lumière
-            sunLight.transform.rotation = Quaternion.Euler(angle + 90f, 0, 0);
+            // On applique la couleur et l'intensité fixe
+            sunLight.color = sunColor.Evaluate(cycle);
+            sunLight.intensity = sunIntensity;
 
-            // B. Couleur
-            sunLight.color = sunColor.Evaluate(currentCycle);
+            ManageShadows(sunLight);
+        }
 
-            // C. Intensité
-            sunLight.intensity = sunIntensity.Evaluate(currentCycle);
+        // 3. Lumière (Lune)
+        if (moonLight != null)
+        {
+            moonLight.transform.rotation = Quaternion.Euler(baseAngle + 180f + 90f, 0, 0);
             
-            // D. Gestion des ombres (Optimisation)
-            // Si l'intensité est quasi nulle, on coupe les ombres pour gagner des FPS
-            if (sunLight.intensity <= 0.01f && sunLight.shadows != LightShadows.None)
-                sunLight.shadows = LightShadows.None;
-            else if (sunLight.intensity > 0.01f && sunLight.shadows == LightShadows.None)
-                sunLight.shadows = LightShadows.Soft;
+            // On applique la couleur et l'intensité fixe
+            moonLight.color = moonColor.Evaluate(cycle);
+            moonLight.intensity = moonIntensity;
+
+            ManageShadows(moonLight);
+        }
+
+        // 4. Ambiance & Brouillard
+        RenderSettings.ambientLight = ambientColor.Evaluate(cycle);
+        RenderSettings.fogColor = fogColor.Evaluate(cycle);
+        
+        // MODIFICATION ICI : On applique la valeur fixe directement
+        RenderSettings.fogDensity = fogDensity; 
+    }
+
+    void ManageShadows(Light lightSource)
+    {
+        // Calcul de la luminosité perçue
+        float effectiveBrightness = lightSource.color.grayscale * lightSource.intensity;
+
+        // CORRECTION : On baisse le seuil de 0.01f à 0.0001f.
+        // Cela permet d'avoir des ombres même si la lune est très sombre (bleu nuit).
+        // On ne coupe les ombres que si la lumière est VRAIMENT éteinte (Noir absolu).
+        if (effectiveBrightness <= 0.0001f && lightSource.shadows != LightShadows.None)
+        {
+            lightSource.shadows = LightShadows.None;
+        }
+        else if (effectiveBrightness > 0.0001f && lightSource.shadows == LightShadows.None)
+        {
+            lightSource.shadows = LightShadows.Soft;
         }
     }
 }
