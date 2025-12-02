@@ -38,7 +38,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DayNightBlend: 0.767
+    - _DayNightBlend: 0.708
     - _DayZenithBlendPower: 0.4
     - _Day_Nadir_Blend_Power: 0.5
     - _MoonSharpness: 1
