@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Art/Textures/Barre%20de%20vie/HeartStyles.uss?fileID=7433441132597879392&amp;guid=6f2cbd7aede8f2a4bad45e0962d9ea35&amp;type=3#HeartStyles" />
+    <ui:VisualElement name="HeartsContainer" class="hearts-container" style="flex-grow: 1; height: 36px; width: 136px; top: 16px; left: 11px;" />
+</ui:UXML>

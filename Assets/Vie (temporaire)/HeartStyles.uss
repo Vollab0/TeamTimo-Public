@@ -1,0 +1,33 @@
+/* Le conteneur qui garde les coeurs alignés */
+.hearts-container {
+    flex-direction: row; /* Aligner horizontalement */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+/* Style de base commun à tous les coeurs */
+.heart {
+    width: 64px;  /* Ajuste selon la taille de tes images */
+    height: 64px;
+    margin-right: 4px; /* Espacement entre les coeurs */
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* --- ETATS DES COEURS --- */
+/* Dans l'éditeur Unity, assigne tes images ici dans background-image */
+
+.heart-full {
+    /* background-image: resource('Chemin/Vers/Ton/CoeurPlein'); */
+    background-color: rgba(255, 0, 0, 1); /* Rouge par défaut pour tester */
+}
+
+.heart-half {
+    /* background-image: resource('Chemin/Vers/Ton/CoeurDemi'); */
+    background-color: rgba(255, 165, 0, 1); /* Orange par défaut pour tester */
+}
+
+.heart-empty {
+    /* background-image: resource('Chemin/Vers/Ton/CoeurVide'); */
+    background-color: rgba(50, 50, 50, 0.5); /* Gris par défaut pour tester */
+}
