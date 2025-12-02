@@ -349,18 +349,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].count
-      value: 5
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].count
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].waveName
-      value: Spider
+      value: Bull
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].waveName
+      value: Bull
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].enemyPrefab
       value: 
-      objectReference: {fileID: 4557885439320345782, guid: ca2aab1b340b98441ada6b5bd34d8556, type: 3}
+      objectReference: {fileID: 8941236983163699383, guid: 6d1eb19068f52c24b9212ebfcf690685, type: 3}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].enemyPrefab
+      value: 
+      objectReference: {fileID: 8941236983163699383, guid: 6d1eb19068f52c24b9212ebfcf690685, type: 3}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].navMeshAreaName
+      value: NorthWest
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].navMeshAreaName
       value: NorthWest
       objectReference: {fileID: 0}
     - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
@@ -386,6 +402,14 @@ PrefabInstance:
     - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: _zonePositionOffset.z
       value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4999392650078346051, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: m_VoxelSize
+      value: 0.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 4999392650078346051, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: m_AgentTypeID
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7988933762784873005, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: m_LocalPosition.x
