@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+  m_FogColor: {r: 0.6039216, g: 0.6039216, b: 0.6039216, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.001
   m_LinearFogStart: 0
@@ -450,6 +450,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8381268793152017443, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381268793152017443, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b6087f82c152674b8c09370428d4bfb, type: 2}
+    - target: {fileID: 8381268793152017443, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3d325098753538446894c8baf5ba711d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -522,7 +534,11 @@ PrefabInstance:
       objectReference: {fileID: 329727898}
     - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
       propertyPath: timeOfDay
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: dayDurationInSeconds
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -650,6 +666,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ThirdPersonCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 5997792328017087679, guid: b0d034e2daf27c64790a05cb192301d4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9425404
+      objectReference: {fileID: 0}
+    - target: {fileID: 5997792328017087679, guid: b0d034e2daf27c64790a05cb192301d4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.33409217
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -677,11 +701,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1151977779012466647, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.6360783
+      value: 0.6360782
       objectReference: {fileID: 0}
     - target: {fileID: 1151977779012466647, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.77162457
+      value: -0.7716246
       objectReference: {fileID: 0}
     - target: {fileID: 1151977779012466647, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_LocalRotation.y
@@ -707,13 +731,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoonLight
       objectReference: {fileID: 0}
+    - target: {fileID: 1749141720492382545, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_Color.b
-      value: 0.6949685
+      value: 0.69411767
       objectReference: {fileID: 0}
     - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_Color.g
-      value: 0.9275645
+      value: 0.9294118
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -746,11 +774,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3394519338082207087, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7716246
+      value: -0.77162457
       objectReference: {fileID: 0}
     - target: {fileID: 3394519338082207087, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.6360782
+      value: -0.63607824
       objectReference: {fileID: 0}
     - target: {fileID: 3394519338082207087, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_LocalRotation.y
@@ -774,11 +802,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_Color.b
-      value: 0.827044
+      value: 0.82745105
       objectReference: {fileID: 0}
     - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_Color.g
-      value: 0.9525519
+      value: 0.95294124
       objectReference: {fileID: 0}
     - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_Color.r

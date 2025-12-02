@@ -3,7 +3,37 @@ guid: 69b1a5412e7549d42963bdc94a6170c3
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Materiau_Museau
+    second: {fileID: 2100000, guid: 8c8740b604e557e4a96c62a0f5f529cf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Materiau_Oeil_Droit
+    second: {fileID: 2100000, guid: 3bf650f5e2ec3df429a6d057cc189862, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Materiau_Oeil_Gauche
+    second: {fileID: 2100000, guid: 5daac9a0ffe01ac48adf9e56ca10c272, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Materiau_Paupi\xE8res"
+    second: {fileID: 2100000, guid: edc23dfe1c2da8d4b913306017a88f28, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Materiau_Renard
+    second: {fileID: 2100000, guid: 6b6087f82c152674b8c09370428d4bfb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Materiau_Sourcils
+    second: {fileID: 2100000, guid: 1bb6493c249815c4e83fa0f18d36a724, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
