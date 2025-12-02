@@ -41,8 +41,6 @@ public class MazeGenerator : MonoBehaviour
     [Space(5)]
     [SerializeField] private bool _slowMotion = false;
     [Range(0.001f, 1f)] [SerializeField] private float _stepDelay = 0.01f;
-    [Tooltip("Affiche un sol coloré transparent (URP) pour visualiser les zones")]
-    [SerializeField] private bool _showZoneColors = false;
 
     #endregion
 
@@ -137,9 +135,6 @@ public class MazeGenerator : MonoBehaviour
 
         // 8. Sortie du labyrinthe
         CreateRandomExit();
-
-        // 9. Debug Visuel (Optionnel)
-        if (_showZoneColors) CreateZoneOverlaysURP(quadrants);
 
         // 10. Centrage du Labyrinthe
         CenterMaze();
@@ -527,58 +522,6 @@ public class MazeGenerator : MonoBehaviour
         _mazeParent.transform.localPosition = new Vector3(-centerX, 0, -centerZ);
     }
 
-    private void CreateZoneOverlaysURP(List<RectInt> quadrants)
-    {
-        GameObject overlayParent = new GameObject("DebugZoneOverlays");
-        overlayParent.transform.SetParent(_mazeParent.transform);
-
-        Color[] zoneColors = new Color[] {
-            new Color(1f, 0f, 0f, 0.3f), // Rouge (SW)
-            new Color(0f, 0f, 0f, 0.3f), // Noir (NW)
-            new Color(0f, 1f, 0f, 0.3f), // Vert (NE)
-            new Color(0f, 0f, 1f, 0.3f)  // Bleu (SE)
-        };
-
-        // Fallback shader si URP Lit n'est pas trouvé
-        Shader urpShader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Sprites/Default");
-
-        for (int i = 0; i < quadrants.Count; i++)
-        {
-            RectInt zone = quadrants[i];
-            GameObject floorPlate = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            floorPlate.name = "ZoneOverlay_" + i;
-            floorPlate.transform.SetParent(overlayParent.transform);
-
-            float width = zone.width * _cellSize;
-            float depth = zone.height * _cellSize;
-            float centerX = (zone.x * _cellSize) + (width / 2f) - (_cellSize / 2f);
-            float centerZ = (zone.y * _cellSize) + (depth / 2f) - (_cellSize / 2f);
-
-            floorPlate.transform.localPosition = new Vector3(centerX, 0.1f, centerZ);
-            floorPlate.transform.localScale = new Vector3(width, 0.05f, depth);
-
-            Renderer rend = floorPlate.GetComponent<Renderer>();
-            if (rend != null)
-            {
-                Material mat = new Material(urpShader);
-                mat.SetFloat("_Surface", 1); // Transparent
-                mat.SetFloat("_Blend", 0);
-                mat.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
-                mat.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-                mat.SetInt("_ZWrite", 0);
-                mat.renderQueue = 3000;
-
-                Color col = zoneColors[i % zoneColors.Length];
-                mat.SetColor("_BaseColor", col);
-                mat.SetColor("_BaseMap", col);
-                mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-
-                rend.material = mat;
-                rend.shadowCastingMode = ShadowCastingMode.Off;
-            }
-            Destroy(floorPlate.GetComponent<Collider>());
-        }
-    }
 
     #endregion
 }
