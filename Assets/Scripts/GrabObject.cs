@@ -13,8 +13,8 @@ public class GrabObject : MonoBehaviour
     [SerializeField] public Vector3 offsetMain = new Vector3(0f, 1.5f, 2f);
     [SerializeField] private Vector3 rotationMain = Vector3.zero;
 
-    private SlotSelection slotSelection;
-    private InventaireUI inventaireUI;
+    [SerializeField] public SlotSelection slotSelection;
+    [SerializeField] public InventaireUI inventaireUI;
     private CharacterController characterController;
 
     [Header("Paramètres")]
@@ -86,29 +86,38 @@ public class GrabObject : MonoBehaviour
         }
     }
 
-    private bool TenterRamassage()
+   private bool TenterRamassage()
+{
+    if (highlightedObject == null) return false;
+
+    ItemWorld itemWorld = highlightedObject.GetComponent<ItemWorld>();
+
+    if (itemWorld != null && itemWorld.donnees != null)
     {
-        if (highlightedObject == null) return false;
-
-        ItemWorld itemWorld = highlightedObject.GetComponent<ItemWorld>();
-
-        if (itemWorld != null && itemWorld.donnees != null)
+        // --- DEBUT DE LA PROTECTION ---
+        if (inventaireUI == null)
         {
-            bool aEteAjoute = inventaireUI.AjouterObjet(itemWorld.donnees);
-
-            if (aEteAjoute)
-            {
-                // IMPORTANT : On enlève proprement l'outline AVANT de détruire l'objet
-                RemoveOutline(highlightedObject);
-                Destroy(highlightedObject);
-                highlightedObject = null;
-
-                MettreAJourVisuelMain();
-                return true;
-            }
+            Debug.LogError("CRITICAL : Tu as oublié de relier 'GlobalUI' dans le script GrabObject sur le Player !");
+            return false; // On quitte la fonction proprement sans crasher
         }
-        return false;
+        // --- FIN DE LA PROTECTION ---
+
+        // Maintenant cette ligne est sécurisée :
+        bool aEteAjoute = inventaireUI.AjouterObjet(itemWorld.donnees);
+
+        if (aEteAjoute)
+        {
+            // IMPORTANT : On enlève proprement l'outline AVANT de détruire l'objet
+            RemoveOutline(highlightedObject);
+            Destroy(highlightedObject);
+            highlightedObject = null;
+
+            MettreAJourVisuelMain();
+            return true;
+        }
     }
+    return false;
+}
 
     private void RelacherObjetPhysiquement()
     {

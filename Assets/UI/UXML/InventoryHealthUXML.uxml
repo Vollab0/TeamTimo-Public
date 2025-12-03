@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Visual/InventaireStyle.uss?fileID=7433441132597879392&amp;guid=05a9fa4b91c1fff4aaea24c36609c361&amp;type=3#InventaireStyle" />
+    <Style src="project://database/Assets/Vie%20(temporaire)/HeartStyles.uss?fileID=7433441132597879392&amp;guid=6f2cbd7aede8f2a4bad45e0962d9ea35&amp;type=3#HeartStyles" />
+    <ui:VisualElement name="InventoryContainer" class="hotbar-container" style="flex-grow: 1;" />
+    <ui:VisualElement name="HeartsContainer" class="hearts-container" style="flex-grow: 1; height: 64px; width: 174px;" />
+</ui:UXML>
