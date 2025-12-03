@@ -271,18 +271,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4aee24dcc3773043bfcf997017090a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BullAI
+  visionWidthRatio: 20
+  visionHeight: 5
+  maxVisionDistance: 300
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  maxVisionDistance: 100
-  visionWidth: 1
-  visionHeight: 5
   patrolSpeed: 8
-  randomTurnChance: 10
+  randomTurnChance: 0
   chargeSpeed: 40
   chargeAcceleration: 200
-  preChargeDelay: 1
-  stunDuration: 2
+  preChargeDelay: 2
+  stunDuration: 5
