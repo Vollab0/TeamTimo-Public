@@ -82,51 +82,73 @@ public class DayNightCycle : MonoBehaviour
 
         float baseAngle = (cycle * 360f) + rotationOffset;
 
-        // 2. Lumière (Soleil)
+        // --- GESTION DU SOLEIL ---
         if (sunLight != null)
         {
             sunLight.transform.rotation = Quaternion.Euler(baseAngle + 90f, 0, 0);
             
-            // On applique la couleur et l'intensité fixe
-            sunLight.color = sunColor.Evaluate(cycle);
-            sunLight.intensity = sunIntensity;
+            Color sColor = sunColor.Evaluate(cycle);
+            sunLight.color = sColor;
+            
+            // CORRECTION IMPORTANTE : 
+            // On multiplie l'intensité max par la luminosité de la couleur.
+            // Si la couleur est noire (Nuit), l'intensité devient 0.
+            sunLight.intensity = sunIntensity * sColor.maxColorComponent;
 
             ManageShadows(sunLight);
         }
 
-        // 3. Lumière (Lune)
+        // --- GESTION DE LA LUNE ---
         if (moonLight != null)
         {
             moonLight.transform.rotation = Quaternion.Euler(baseAngle + 180f + 90f, 0, 0);
             
-            // On applique la couleur et l'intensité fixe
-            moonLight.color = moonColor.Evaluate(cycle);
-            moonLight.intensity = moonIntensity;
+            Color mColor = moonColor.Evaluate(cycle);
+            moonLight.color = mColor;
+            
+            // Pareil pour la lune : si le gradient lune est noir le jour, intensité = 0
+            moonLight.intensity = moonIntensity * mColor.maxColorComponent;
 
             ManageShadows(moonLight);
+        }
+
+        // --- CHANGEMENT DE "MAIN LIGHT" ---
+        // On dit à Unity quelle lumière est la plus importante pour les shaders
+        if (sunLight != null && moonLight != null)
+        {
+            if (sunLight.intensity > moonLight.intensity)
+            {
+                if (RenderSettings.sun != sunLight) RenderSettings.sun = sunLight;
+            }
+            else
+            {
+                if (RenderSettings.sun != moonLight) RenderSettings.sun = moonLight;
+            }
         }
 
         // 4. Ambiance & Brouillard
         RenderSettings.ambientLight = ambientColor.Evaluate(cycle);
         RenderSettings.fogColor = fogColor.Evaluate(cycle);
-        
-        // MODIFICATION ICI : On applique la valeur fixe directement
         RenderSettings.fogDensity = fogDensity; 
     }
 
     void ManageShadows(Light lightSource)
     {
-        // Calcul de la luminosité perçue
-        float effectiveBrightness = lightSource.color.grayscale * lightSource.intensity;
+        // CORRECTION MAJEURE :
+        // Au lieu d'utiliser 'grayscale' (qui pénalise le bleu de la lune),
+        // on utilise 'maxColorComponent'. Cela prend la valeur R, G ou B la plus forte.
+        // Si vous avez un bleu pur (0, 0, 0.5), grayscale donnerait ~0.05 (trop bas),
+        // alors que maxColorComponent donne 0.5 (correct).
+        float effectiveBrightness = lightSource.color.maxColorComponent * lightSource.intensity;
 
-        // CORRECTION : On baisse le seuil de 0.01f à 0.0001f.
-        // Cela permet d'avoir des ombres même si la lune est très sombre (bleu nuit).
-        // On ne coupe les ombres que si la lumière est VRAIMENT éteinte (Noir absolu).
-        if (effectiveBrightness <= 0.0001f && lightSource.shadows != LightShadows.None)
+        // Seuil très bas pour ne couper les ombres que si c'est vraiment noir (Lumière éteinte)
+        float shadowThreshold = 0.001f;
+
+        if (effectiveBrightness <= shadowThreshold && lightSource.shadows != LightShadows.None)
         {
             lightSource.shadows = LightShadows.None;
         }
-        else if (effectiveBrightness > 0.0001f && lightSource.shadows == LightShadows.None)
+        else if (effectiveBrightness > shadowThreshold && lightSource.shadows == LightShadows.None)
         {
             lightSource.shadows = LightShadows.Soft;
         }

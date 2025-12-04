@@ -15,12 +15,12 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 0
-  m_FogColor: {r: 0, g: 0, b: 0.18039216, a: 1}
+  m_FogColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.001
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.14509805, g: 0.1764706, b: 0.2784314, a: 1}
+  m_AmbientSkyColor: {r: 0.6156863, g: 0.48627454, b: 0.34117648, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 1003814239}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2100,11 +2100,83 @@ PrefabInstance:
       objectReference: {fileID: 1107891311}
     - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
       propertyPath: timeOfDay
-      value: 0.708
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.ctime1
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.ctime2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.ctime3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key0.b
+      value: 0.5411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key0.g
+      value: 0.36862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key0.r
+      value: 0.3254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key1.b
+      value: 0.54088044
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key1.g
+      value: 0.36970112
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key1.r
+      value: 0.3248684
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key2.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key2.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key2.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key3.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key3.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.key3.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
       propertyPath: dayDurationInSeconds
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513053416036036543, guid: cbf391047f046434799e2bcb6c9423f5, type: 3}
+      propertyPath: moonColor.m_NumColorKeys
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2350,11 +2422,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3394519338082207087, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.97413397
+      value: 0.7716246
       objectReference: {fileID: 0}
     - target: {fileID: 3394519338082207087, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.22597128
+      value: 0.6360782
       objectReference: {fileID: 0}
     - target: {fileID: 3394519338082207087, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_LocalRotation.y
@@ -2378,15 +2450,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_Color.b
-      value: 0.11204119
+      value: 0.827044
       objectReference: {fileID: 0}
     - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_Color.g
-      value: 0.049351722
+      value: 0.9525519
       objectReference: {fileID: 0}
     - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
       propertyPath: m_Color.r
-      value: 0.028521776
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036064489752983207, guid: d476fc21c1e076746be83890121a8777, type: 3}
+      propertyPath: m_Intensity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2706,11 +2782,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1151977779012466647, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.22597136
+      value: -0.6360783
       objectReference: {fileID: 0}
     - target: {fileID: 1151977779012466647, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.97413397
+      value: 0.77162457
       objectReference: {fileID: 0}
     - target: {fileID: 1151977779012466647, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_LocalRotation.y
@@ -2738,15 +2814,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.5411765
       objectReference: {fileID: 0}
     - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.36862746
       objectReference: {fileID: 0}
     - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.3254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
+      propertyPath: m_Intensity
+      value: 0.27058825
       objectReference: {fileID: 0}
     - target: {fileID: 7663019497406764714, guid: 3edae3832ebd0814ba6699146552be50, type: 3}
       propertyPath: m_Shadows.m_Type

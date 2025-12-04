@@ -516,8 +516,9 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   offsetMain: {x: 0, y: 1.5, z: 2}
   rotationMain: {x: 0, y: 0, z: 0}
+  slotSelection: {fileID: 0}
+  inventaireUI: {fileID: 0}
   detectionRange: 2
-  outlineMaterial: {fileID: 2100000, guid: 40f56964a5df4504ca1ad9e2ebffcdf5, type: 2}
 --- !u!1 &7073337933125291862
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +975,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6391090748708684107, guid: 69b1a5412e7549d42963bdc94a6170c3, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6391090748708684107, guid: 69b1a5412e7549d42963bdc94a6170c3, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3d325098753538446894c8baf5ba711d, type: 2}
     - target: {fileID: 6485909812765970817, guid: 69b1a5412e7549d42963bdc94a6170c3, type: 3}
       propertyPath: m_Layer
       value: 3
