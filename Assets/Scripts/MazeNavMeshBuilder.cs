@@ -94,15 +94,35 @@ public class MazeNavMeshBuilder : MonoBehaviour
         _areaWallTop = NavMesh.GetAreaFromName("WallTop");
     }
 
-    private void ClearOldModifiers()
+private void ClearOldModifiers()
     {
+        // Sécurité 1 : Vérifier si le générateur est assigné
+        if (mazeGenerator == null)
+        {
+            Debug.LogError("Erreur : La référence 'MazeGenerator' est manquante dans l'inspecteur !");
+            return;
+        }
+
         Transform mazeParent = mazeGenerator.GetMazeParent();
+
+        // Sécurité 2 : Vérifier si le parent du labyrinthe existe
+        if (mazeParent == null)
+        {
+            // S'il n'y a pas de parent, il n'y a rien à nettoyer, on sort simplement.
+            // On peut mettre un Warning si c'est censé ne jamais arriver.
+            Debug.LogWarning("Attention : GetMazeParent() a retourné null. Aucun nettoyage effectué.");
+            return; 
+        }
+
         List<GameObject> toDestroy = new List<GameObject>();
+        
+        // Maintenant, on est sûr que mazeParent n'est pas null, le foreach ne plantera pas
         foreach (Transform child in mazeParent)
         {
             if (child.name.Contains("Modifier") || child.name == "GLOBAL_WALL_TOP")
                 toDestroy.Add(child.gameObject);
         }
+        
         foreach (var obj in toDestroy) Destroy(obj);
     }
 

@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5144073263412068721}
   - component: {fileID: 5376450844511574072}
-  - component: {fileID: 8003562142167023751}
   - component: {fileID: 4106367174129014735}
   - component: {fileID: 5101906912714639464}
+  - component: {fileID: 7180001196173338879}
   m_Layer: 0
-  m_Name: InventoryHealthInterface
+  m_Name: User Interface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,23 +58,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &8003562142167023751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843767069998530442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7f13fa7738c39c4c988f816228411ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeartHealthSystem
-  nombreDeCoeurs: 3
-  imageCoeurPlein: {fileID: 21300000, guid: cc5305f044b89d842a706a3e844aefb6, type: 3}
-  imageCoeurDemi: {fileID: 21300000, guid: 328476f78c9909841b0cd8e3fc974ab6, type: 3}
-  imageCoeurVide: {fileID: 21300000, guid: ead698ab4d36755429eb9a819b825abc, type: 3}
-  monDocumentUI: {fileID: 5376450844511574072}
 --- !u!114 &4106367174129014735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,3 +84,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlotSelection
   inventaireUI: {fileID: 4106367174129014735}
+--- !u!114 &7180001196173338879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843767069998530442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 482b7c0178e9dae41a469c7a3bfd02d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeartUIManager
+  imageCoeurPlein: {fileID: 21300000, guid: cc5305f044b89d842a706a3e844aefb6, type: 3}
+  imageCoeurDemi: {fileID: 21300000, guid: 328476f78c9909841b0cd8e3fc974ab6, type: 3}
+  imageCoeurVide: {fileID: 21300000, guid: ead698ab4d36755429eb9a819b825abc, type: 3}
+  monDocumentUI: {fileID: 5376450844511574072}

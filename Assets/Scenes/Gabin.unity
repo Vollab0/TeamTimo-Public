@@ -356,61 +356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b03ea82bbc63c8c40b0a9613416fac20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventaireUI
---- !u!1 &517986391
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 517986392}
-  - component: {fileID: 517986393}
-  m_Layer: 0
-  m_Name: UIDocument
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &517986392
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 517986391}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.5321, y: -0, z: 6.56263}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &517986393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 517986391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 01a800905a3ef0c4391e0983467656e5, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 9ff200fbe4fb08346b702c88714a8c3c, type: 3}
-  m_SortingOrder: 0
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
 --- !u!114 &550989754 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6343217835927199623, guid: 7a423f50eb876bf428b48206746df614, type: 3}
@@ -634,7 +579,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 843767069998530442, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
       propertyPath: m_Name
-      value: InventoryHealthInterface
+      value: User Interface
       objectReference: {fileID: 0}
     - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
       propertyPath: m_LocalPosition.x
@@ -689,10 +634,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4710645408333853358, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
-      propertyPath: porteObjet
-      value: 
-      objectReference: {fileID: 1970592031}
     - target: {fileID: 4710645408333853358, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
       propertyPath: inventaireUI
       value: 
@@ -1053,10 +994,9 @@ SceneRoots:
   - {fileID: 563686413}
   - {fileID: 286487029}
   - {fileID: 1970592030}
+  - {fileID: 1469820145}
   - {fileID: 4940996120648834743}
   - {fileID: 720271215}
   - {fileID: 5246824169394916331}
-  - {fileID: 1469820145}
-  - {fileID: 517986392}
   - {fileID: 42438867}
   - {fileID: 1346261449}

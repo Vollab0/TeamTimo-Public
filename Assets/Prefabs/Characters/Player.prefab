@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 7257455390904616440}
   - component: {fileID: 3887887298164217098}
   - component: {fileID: 4710645408333853358}
+  - component: {fileID: 6971994500154827873}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -512,13 +513,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cefe36b9e22d2a49bbbacbfe09f7142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  porteObjet: {fileID: 0}
+  porteObjet: {fileID: 7318170448211957232}
   playerCamera: {fileID: 0}
   offsetMain: {x: 0, y: 1.5, z: 2}
   rotationMain: {x: 0, y: 0, z: 0}
   slotSelection: {fileID: 0}
   inventaireUI: {fileID: 0}
   detectionRange: 2
+--- !u!114 &6971994500154827873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6042655133973750528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4051803e417e5c4428051888b10eab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  nombreDeCoeurs: 3
 --- !u!1 &7073337933125291862
 GameObject:
   m_ObjectHideFlags: 0
