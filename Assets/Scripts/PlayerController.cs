@@ -10,25 +10,31 @@ using UnityEngine.VFX;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-
     private Vector2 _input;
     private CharacterController _characterController;
     private Vector3 _direction;
     private Vector3 _cameraForward;
 
-
+    [Header("Mouvement Settings")]
     [SerializeField] private float speed = 15f;
     [SerializeField] private float speedBoost = 2f;
     [SerializeField] private float jump = 4.0f;
     [SerializeField] private float jumpBoost = 2f;
     [SerializeField] private float smoothTime = 10f;
     [SerializeField] private float gravityMultiplier = 3.0f;
-    [SerializeField] private float coyoteTimeDuration = 0.1f; //Autorise un leger retard pour le saut lors de la descente d'un rebord
-    [SerializeField] private float jumpBufferDuration = 0.15f; // Durée du buffer
+    [SerializeField] private float coyoteTimeDuration = 0.1f;
+    [SerializeField] private float jumpBufferDuration = 0.15f;
     [SerializeField] private bool _isThirdPerson = true;
+    
+    [Header("Camera References")]
     public CinemachineVirtualCamera firstPersonCamera;
     public CinemachineFreeLook thirdPersonCamera;
 
+    // --- AJOUT POUR LE KNOCKBACK (RECUL) ---
+    [Header("Knockback Settings")]
+    [SerializeField] private float knockbackDecay = 5f; // Vitesse à laquelle le recul s'arrête (plus c'est haut, plus c'est court)
+    private Vector3 _knockbackVelocity; // La force actuelle du recul
+    // ----------------------------------------
 
     private float _gravity = -9.81f;
     private float _potionSpeedMultiplier = 1f;
@@ -38,23 +44,17 @@ public class PlayerController : MonoBehaviour
     private float _coyoteTimeExpiration;
     private float _jumpBufferExpiration;
     private Vector3 _newDirection;
-    private bool _hasJumped; // Verifie si le joueur a deja saut pour empcher le double saut
-    private bool _canSprint = true; // Atteste que le joueur a appuy sur sprint (afin d'attendre de retomber au sol pour s'activer)
+    private bool _hasJumped;
+    private bool _canSprint = true;
     private bool _sprintActivated;
     private bool _isSprinting;
     private bool _isFalling = false;
     private bool _isJumping = false;
     private bool _isWalking;
 
-
-
     private bool IsGrounded() => _characterController.isGrounded;
 
-    //public override void OnNetworkSpawn()
-    //{
-    //    if (!IsOwner) Destroy(this);
-    //}//Ce script est execut seuleument pour le owner : si il ne l'est pas tous les players sont controlls par une seule personne
-    private void Awake() // Se lance une fois  l'execution du script
+    private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _velocity = speed;
@@ -65,14 +65,12 @@ public class PlayerController : MonoBehaviour
 
         if (_isThirdPerson)
         {
-            thirdPersonCamera.gameObject.SetActive(true);
+            if(thirdPersonCamera != null) thirdPersonCamera.gameObject.SetActive(true);
         }
         else
         {
-            firstPersonCamera.gameObject.SetActive(true);
+            if(firstPersonCamera != null) firstPersonCamera.gameObject.SetActive(true);
         }
-
-        //playerCamera = GameObject.FindObjectOfType<CinemachineFreeLook>();
     }
 
     private void Update()
@@ -83,6 +81,23 @@ public class PlayerController : MonoBehaviour
         HandleJump();
     }
 
+    // --- AJOUT : LA MÉTHODE APPELÉE PAR PLAYER HEALTH ---
+    public void ApplyKnockback(Vector3 sourcePosition, float force)
+    {
+        // 1. Calcul de la direction (De la source vers le joueur)
+        Vector3 direction = (transform.position - sourcePosition).normalized;
+        
+        // 2. On aplatit l'axe Y pour un recul horizontal, et on ajoute un léger saut
+        direction.y = 0; 
+        
+        // 3. On applique la force (avec un petit bonus vers le haut pour "décoller" le joueur)
+        _knockbackVelocity = (direction + Vector3.up * 0.5f).normalized * force;
+
+        // 4. On reset la gravité actuelle pour que le "pop" vers le haut fonctionne bien
+        if (_verticalVelocity < 0) _verticalVelocity = 0;
+    }
+    // ----------------------------------------------------
+
     private void ApplyGravity()
     {
         if (IsGrounded() && _verticalVelocity < 0.0f)
@@ -91,60 +106,81 @@ public class PlayerController : MonoBehaviour
             _coyoteTimeExpiration = Time.time + coyoteTimeDuration;
             _hasJumped = false;
             
-            // Réinitialiser les états en touchant le sol
             _isFalling = false;
-            _isJumping = false; // 🛑 Réinitialisation de isJumping à l'atterrissage
+            _isJumping = false;
         }
         else
         {
-            _verticalVelocity += _gravity * gravityMultiplier * Time.deltaTime; // verticalVelocity augmente au fur du temps donc il y a une acceleration ( operateur += )
+            _verticalVelocity += _gravity * gravityMultiplier * Time.deltaTime;
             
-            // Logique de séparation des phases (ascendante vs descendante)
-            if (_verticalVelocity > 0.0f) // Phase ascendante
+            if (_verticalVelocity > 0.0f)
             {
-                // Si on monte, on est en train de sauter
                 _isJumping = true;
                 _isFalling = false;
             }
-            else if (_verticalVelocity < 0.0f) // Phase descendante
+            else if (_verticalVelocity < 0.0f)
             {
-                // Si on descend (et qu'on n'est pas au sol, vérifié par le 'else' principal), on chute
-                _isJumping = false; // 🛑 Le saut est terminé, on passe à la chute
+                _isJumping = false;
                 
                 if(!_isFalling)
                 {
-                    _isFalling = true; // Déclenche la chute
-                    StartCoroutine(LandSmoke()); // L'ancienne logique LandSmoke est déplacée ici
+                    _isFalling = true;
+                    StartCoroutine(LandSmoke());
                 }
             }
         }
         _direction.y = _verticalVelocity;
     }
 
-    private void ApplyRotation()
-    {
-        if (_isThirdPerson)
-        {
-            if (_input.sqrMagnitude == 0) return;
-            Vector3 characterOrientation = new Vector3(_newDirection.x, 0.0f, _newDirection.z);
-            Quaternion targetRotation = Quaternion.LookRotation(characterOrientation); // Quaternion.LookRotation permet de transformer un vecteur en Quaternion
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.deltaTime);// Lissage de la rotation avec la fonction Slerp (Spherical Linear Interpolation)
-        }
-        else // Pour la vue à la première personne
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(_cameraForward);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime* Time.deltaTime);
-        }
+ private void ApplyRotation()
+{
+    // Si le joueur ne touche pas aux touches de déplacement (_input est vide),
+    // on arrête tout de suite.
+    // Résultat : Le joueur garde sa dernière orientation (donc il continue de faire face à l'ennemi)
+    // même s'il est poussé en arrière par le knockback.
+    if (_input.sqrMagnitude == 0) return;
 
+    Vector3 targetOrientation = Vector3.zero;
+
+    if (_isThirdPerson)
+    {
+        // 1. On récupère la direction de la caméra
+        Vector3 camFwd = transform.position - thirdPersonCamera.gameObject.transform.position;
+        camFwd.y = 0f; // On garde le plan horizontal
+        Quaternion cameraRot = Quaternion.LookRotation(camFwd);
+
+        // 2. On calcule la direction voulue par le joueur (INPUT SEULEMENT)
+        // On n'utilise PAS _newDirection ici car _newDirection contient le Knockback !
+        Vector3 inputDir = new Vector3(_input.x, 0, _input.y);
+        
+        // 3. On oriente l'input selon la caméra
+        targetOrientation = cameraRot * inputDir;
     }
+    else // Vue Première personne
+    {
+        // Pour la vue FPS, on suit généralement le regard de la caméra
+        if (_cameraForward.sqrMagnitude > 0.001f)
+        {
+            targetOrientation = _cameraForward;
+        }
+    }
+
+    // 4. Application de la rotation
+    if (targetOrientation.sqrMagnitude > 0.001f)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(targetOrientation);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothTime * Time.deltaTime);
+    }
+}
 
     private void ApplyMovement()
     {
+        // 1. Calcul de la direction de la caméra
         if (_isThirdPerson)
         {
             _cameraForward = _characterController.transform.position - thirdPersonCamera.gameObject.transform.position;
         }
-        else // Pour la vue à la première personne
+        else
         {
             float cameraAngle = firstPersonCamera.State.RawOrientation.eulerAngles.y;
             float angleInRadians = cameraAngle * Mathf.Deg2Rad;
@@ -154,14 +190,24 @@ public class PlayerController : MonoBehaviour
         _cameraForward.y = 0f;
         Quaternion cameraRotation = Quaternion.LookRotation(_cameraForward);
 
-        // --- CORRECTION ICI ---
+        // 2. Calcul du mouvement normal (Input + Gravité + Vitesse)
         _newDirection = new Vector3(
              _direction.x * _velocity * _potionSpeedMultiplier * Time.deltaTime,
              _direction.y * speed * _jumpHeight * Time.deltaTime,
              _direction.z * _velocity * _potionSpeedMultiplier * Time.deltaTime
-        ); // On ferme bien la parenthèse et on met le point virgule ici
+        );
 
-        _newDirection = cameraRotation * _newDirection; // Ceci doit être sur une nouvelle ligne
+        _newDirection = cameraRotation * _newDirection;
+
+        // --- AJOUT : INTEGRATION DU KNOCKBACK ---
+        
+        // On ajoute la vélocité du recul au mouvement final
+        _newDirection += _knockbackVelocity * Time.deltaTime;
+
+        // On réduit progressivement la vélocité du recul (Decay)
+        _knockbackVelocity = Vector3.Lerp(_knockbackVelocity, Vector3.zero, knockbackDecay * Time.deltaTime);
+        
+        // ----------------------------------------
 
         _characterController.Move(_newDirection);
         _isWalking = _input.sqrMagnitude > 0.01f;
@@ -181,27 +227,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-        public void HandleJump()
+    public void HandleJump()
     {
-
-
         bool canJump = IsGrounded() || Time.time <= _coyoteTimeExpiration;
-        
         bool jumpBuffered = Time.time <= _jumpBufferExpiration;
 
         if (jumpBuffered && canJump && !_hasJumped)
         {
             _jumpBufferExpiration = 0f;
-
             _hasJumped = true;
-            _isJumping = true; // On active _isJumping au moment du saut
+            _isJumping = true;
             _verticalVelocity += jump;
-
             StartCoroutine(JumpSmoke());
         }
     }
-
-
 
     public void Sprint(InputAction.CallbackContext context)
     {
@@ -230,11 +269,11 @@ public class PlayerController : MonoBehaviour
         return stateArray;
    }
 
-    private IEnumerator BoostCoroutine() //Coroutine qui attend que le joueur retombe au sol avant d'activer le sprint
+    private IEnumerator BoostCoroutine()
     {
         while (!IsGrounded())
         {
-            yield return null; // Attendre un frame avant de v�rifier � nouveau
+            yield return null;
         }
         if(_canSprint)
         {
@@ -250,24 +289,27 @@ public class PlayerController : MonoBehaviour
         bool smokeActive = false;
         while(_sprintActivated)
         {
-            if(IsGrounded() && !smokeActive && transform.GetComponent<CharacterController>().velocity != new Vector3(0.0f, 0.0f, 0.0f))
+            if(IsGrounded() && !smokeActive && transform.GetComponent<CharacterController>().velocity != Vector3.zero)
             {
-                transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StartSprint");
+                var vfx = transform.Find("SprintSmoke")?.gameObject.GetComponentInChildren<VisualEffect>();
+                if(vfx) vfx.SendEvent("StartSprint");
                 smokeActive = true;
                 _isSprinting = true;
             }
             else
             {
-                if (IsGrounded() && smokeActive && transform.GetComponent<CharacterController>().velocity == new Vector3(0.0f, 0.0f, 0.0f)) //Desactive la fum�e si le joueur n'avance pas
+                if (IsGrounded() && smokeActive && transform.GetComponent<CharacterController>().velocity == Vector3.zero)
                 {
-                    transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+                    var vfx = transform.Find("SprintSmoke")?.gameObject.GetComponentInChildren<VisualEffect>();
+                    if(vfx) vfx.SendEvent("StopSprint");
                     smokeActive = false;
                     _isSprinting = false;
                 } else
                 {
-                    if (!IsGrounded() && smokeActive) //Desactive la fum�e si le joueur est en l'air
+                    if (!IsGrounded() && smokeActive)
                     {
-                        transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+                        var vfx = transform.Find("SprintSmoke")?.gameObject.GetComponentInChildren<VisualEffect>();
+                        if(vfx) vfx.SendEvent("StopSprint");
                         smokeActive = false;
                         _isSprinting = false;
                     }
@@ -277,7 +319,8 @@ public class PlayerController : MonoBehaviour
         }
         if (smokeActive)
         {
-            transform.Find("SprintSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("StopSprint");
+            var vfx = transform.Find("SprintSmoke")?.gameObject.GetComponentInChildren<VisualEffect>();
+            if(vfx) vfx.SendEvent("StopSprint");
             _isSprinting = false;
         }
     }
@@ -289,16 +332,17 @@ public class PlayerController : MonoBehaviour
         {
             yield return null;
         }
-        transform.Find("LandSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("OnLand");
+        var vfx = transform.Find("LandSmoke")?.gameObject.GetComponentInChildren<VisualEffect>();
+        if(vfx) vfx.SendEvent("OnLand");
     }
 
     private IEnumerator JumpSmoke()
     {
         yield return null;
-        transform.Find("JumpSmoke").gameObject.GetComponentInChildren<VisualEffect>().SendEvent("OnJump");
+        var vfx = transform.Find("JumpSmoke")?.gameObject.GetComponentInChildren<VisualEffect>();
+        if(vfx) vfx.SendEvent("OnJump");
     }
 
-    // PARTIE BOOST VITESSE -----------------------------------------------------------------
     public void ActiverBoostVitesse(float multiplicateur, float duree)
     {
         StartCoroutine(RoutinePotionVitesse(multiplicateur, duree));
@@ -306,15 +350,10 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RoutinePotionVitesse(float mult, float time)
     {
-        _potionSpeedMultiplier = mult; // On applique le multiplicateur
+        _potionSpeedMultiplier = mult;
         Debug.Log("⚡ Potion bue : Vitesse augmentée !");
-
-        yield return new WaitForSeconds(time); // On attend la durée de la potion
-
-        _potionSpeedMultiplier = 1f; // On remet la vitesse normale
+        yield return new WaitForSeconds(time);
+        _potionSpeedMultiplier = 1f;
         Debug.Log("🐌 Fin de l'effet de la potion.");
     }
-
-    // FIN PARTIE BOOST VITESSE --------------------------------------------------------------
 }
-
