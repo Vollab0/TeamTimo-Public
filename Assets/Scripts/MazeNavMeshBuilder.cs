@@ -10,7 +10,7 @@ public class MazeNavMeshBuilder : MonoBehaviour
 
     [Header("Références")]
     [SerializeField] private MazeGenerator mazeGenerator;
-    [SerializeField] private NavMeshSurface navMeshSurface;
+    [SerializeField] private List<NavMeshSurface> navMeshSurfaces;
     [SerializeField] private SpawnerManager spawnerManager;
 
     [Header("Réglages WallTop (Zone Haute)")]
@@ -195,7 +195,14 @@ private void ClearOldModifiers()
     private IEnumerator BakeNavMeshDelayed()
     {
         yield return null;
-        navMeshSurface.BuildNavMesh();
+        foreach (var surface in navMeshSurfaces)
+        {
+            if (surface != null)
+            {
+                surface.BuildNavMesh();
+            }
+        }
+
         yield return null;
         if (spawnerManager != null) spawnerManager.StartSpawning();
     }

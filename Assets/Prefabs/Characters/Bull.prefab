@@ -281,8 +281,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   patrolSpeed: 8
-  randomTurnChance: 0
-  chargeSpeed: 40
-  chargeAcceleration: 200
-  preChargeDelay: 2
+  chargeSpeed: 100
   stunDuration: 5
+  randomTurnChance: 0
