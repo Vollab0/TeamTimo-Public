@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4aee24dcc3773043bfcf997017090a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BullAI
-  visionWidthRatio: 20
+  visionWidthRatio: 30
   visionHeight: 5
   maxVisionDistance: 300
   playerLayer:
@@ -284,3 +284,8 @@ MonoBehaviour:
   chargeSpeed: 100
   stunDuration: 5
   randomTurnChance: 0
+  zoneRadius: 15
+  contactThreshold: 5
+  directHitDamage: 2
+  zoneHitDamage: 1
+  damageCooldown: 1

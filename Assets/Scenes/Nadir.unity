@@ -486,7 +486,7 @@ PrefabInstance:
       objectReference: {fileID: 1635413938}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: obstacleLayer.m_Bits
@@ -498,7 +498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[1].count
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].waveName
@@ -506,7 +506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[1].waveName
-      value: Bull
+      value: Spider
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].enemyPrefab
@@ -515,14 +515,14 @@ PrefabInstance:
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[1].enemyPrefab
       value: 
-      objectReference: {fileID: 8941236983163699383, guid: 6d1eb19068f52c24b9212ebfcf690685, type: 3}
+      objectReference: {fileID: 4557885439320345782, guid: ca2aab1b340b98441ada6b5bd34d8556, type: 3}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].navMeshAreaName
       value: NorthWest
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[1].navMeshAreaName
-      value: NorthWest
+      value: SouthWest
       objectReference: {fileID: 0}
     - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: mazeGenerator
@@ -701,6 +701,74 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
+--- !u!1001 &703908939
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 843767069998530442, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_Name
+      value: User Interface
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -407.0054
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.000061035156
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -92.09006
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5144073263412068721, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+--- !u!114 &822306305 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5376450844511574072, guid: d1e25b4d9ba32fa46aecf18b8b4cda01, type: 3}
+  m_PrefabInstance: {fileID: 703908939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
 --- !u!1001 &1092204419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -792,10 +860,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4419839817920983451, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4710645408333853358, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6042655133973750528, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6971994500154827873, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
+      propertyPath: hudDocument
+      value: 
+      objectReference: {fileID: 822306305}
     - target: {fileID: 7257455390904616440, guid: d4bc2c50b7652ea43be04251121f8fba, type: 3}
       propertyPath: thirdPersonCamera
       value: 
@@ -860,3 +940,4 @@ SceneRoots:
   - {fileID: 141730460}
   - {fileID: 1092204419}
   - {fileID: 589796756}
+  - {fileID: 703908939}
