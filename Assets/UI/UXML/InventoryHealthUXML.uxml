@@ -1,7 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Style/InventoryStyle.uss?fileID=7433441132597879392&amp;guid=05a9fa4b91c1fff4aaea24c36609c361&amp;type=3#InventoryStyle" />
     <Style src="project://database/Assets/UI/Style/HeartStyles.uss?fileID=7433441132597879392&amp;guid=6f2cbd7aede8f2a4bad45e0962d9ea35&amp;type=3#HeartStyles" />
-    <ui:VisualElement name="InventoryContainer" class="hotbar-container" style="flex-grow: 1;" />
+    <ui:VisualElement name="InventoryContainer" class="hotbar-container" style="flex-grow: 1;">
+        <ui:ListView class="slot" />
+    </ui:VisualElement>
     <ui:VisualElement name="HeartsContainer" class="hearts-container" style="flex-grow: 1; height: 102px; width: 473px;" />
     <ui:VisualElement name="DamageOverlay" style="flex-grow: 1; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(255, 255, 255, 0); opacity: 0; background-image: url(&quot;project://database/Assets/UI/Sprites/Damage.png?fileID=2800000&amp;guid=4156ca0d1176bd047abfa2a900ae79ec&amp;type=3#Damage&quot;);" />
 </ui:UXML>
