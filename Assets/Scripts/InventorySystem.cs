@@ -11,37 +11,39 @@ public class InventorySystem : MonoBehaviour
     public int SelectedSlotIndex { get; private set; } = 0;
 
     // --- ÉVÉNEMENTS ---
-    // Ces "Actions" permettent de prévenir l'UI (ou le Joueur) qu'il s'est passé quelque chose
-    // sans que ce script ait besoin de connaître l'UI directement.
-    public event Action OnInventoryChanged;          // Quand un objet est ajouté/retiré
-    public event Action<int> OnSelectionChanged;     // Quand le slot actif change
+    public event Action OnInventoryChanged;
+    public event Action<int> OnSelectionChanged;
 
     void Awake()
     {
-        // Initialisation de la mémoire des données
-        inventoryContent = new ItemData[inventorySize];
+        InitInventory();
     }
 
     private void Start()
     {
-        // Au démarrage, on notifie tout le monde de l'état initial
         NotifyChanges();
+    }
+
+    // Méthode d'initialisation sécurisée
+    private void InitInventory()
+    {
+        if (inventoryContent == null)
+        {
+            inventoryContent = new ItemData[inventorySize];
+        }
     }
 
     // --- LOGIQUE DE SÉLECTION ---
 
     public void ChangeSelection(int direction)
     {
-        // Calcul du nouvel index
         int newSlot = SelectedSlotIndex + direction;
 
-        // Gestion de la boucle (Wrapping) : Fin -> Début ou Début -> Fin
         if (newSlot < 0) 
             newSlot = inventorySize - 1;
         else if (newSlot >= inventorySize) 
             newSlot = 0;
 
-        // Si l'index a changé, on applique et on prévient les abonnés
         if (newSlot != SelectedSlotIndex)
         {
             SelectedSlotIndex = newSlot;
@@ -53,12 +55,14 @@ public class InventorySystem : MonoBehaviour
 
     public bool AddItem(ItemData item)
     {
+        // SÉCURITÉ : On s'assure que le tableau existe
+        InitInventory();
+
         for (int i = 0; i < inventoryContent.Length; i++)
         {
             if (inventoryContent[i] == null)
             {
                 inventoryContent[i] = item;
-                // On prévient l'UI qu'il faut redessiner les icônes
                 OnInventoryChanged?.Invoke();
                 return true;
             }
@@ -69,6 +73,8 @@ public class InventorySystem : MonoBehaviour
 
     public ItemData RemoveItem(int index)
     {
+        InitInventory(); // Sécurité
+
         if (index < 0 || index >= inventoryContent.Length) return null;
 
         ItemData item = inventoryContent[index];
@@ -82,20 +88,25 @@ public class InventorySystem : MonoBehaviour
 
     public ItemData GetCurrentItem()
     {
+        InitInventory(); // Sécurité
         if (SelectedSlotIndex < 0 || SelectedSlotIndex >= inventoryContent.Length) return null;
         return inventoryContent[SelectedSlotIndex];
     }
     
-    // Permet à l'UI de lire le contenu (lecture seule) pour l'affichage
+    // --- C'EST ICI QUE TU AVAIS LE CRASH ---
     public ItemData GetItemAtIndex(int index)
     {
+        // SÉCURITÉ : Si le tableau est null (pas encore prêt), on renvoie null sans planter
+        if (inventoryContent == null) return null;
+
         if (index < 0 || index >= inventoryContent.Length) return null;
         return inventoryContent[index];
     }
 
-    // Force l'envoi des événements (utile si l'UI se charge après le système)
     public void NotifyChanges()
     {
+        // S'assurer que tout est prêt avant de notifier
+        InitInventory();
         OnInventoryChanged?.Invoke();
         OnSelectionChanged?.Invoke(SelectedSlotIndex);
     }

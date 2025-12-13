@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc396c36062c514298ebf3f4717e095, type: 3}
   m_Name: Data_Sphere
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  nomObjet: Sphere
+  nameObject: Sphere
   icone: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   prefab: {fileID: 1799672983377708620, guid: df646d83a2f28384baef54b195e0919f, type: 3}

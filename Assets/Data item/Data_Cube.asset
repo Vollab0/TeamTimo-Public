@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc396c36062c514298ebf3f4717e095, type: 3}
   m_Name: Data_Cube
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  nomObjet: Cube
+  nameObject: Cube
   icone: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   prefab: {fileID: 4618101438723121560, guid: 43916aa47c9a828499358fce6f8cc85d, type: 3}

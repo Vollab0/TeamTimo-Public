@@ -149,46 +149,60 @@ public class GrabObject : MonoBehaviour
     private void DropObject()
     {
         if (inventorySystem == null) return;
-
-        // 1. Récupérer les données AVANT de supprimer
-        ItemData currentData = inventorySystem.GetCurrentItem();
-        
-        // 2. Retirer l'objet du système (via l'index sélectionné)
-        inventorySystem.RemoveItem(inventorySystem.SelectedSlotIndex);
-
         if (currentVisualObject == null) return;
 
-        // 3. Détacher l'objet
-        currentVisualObject.transform.SetParent(null);
-        currentVisualObject.tag = "Ramassable"; // Assure-toi que ton tag Unity est bien "Ramassable" ou change-le en "Interactable"
+        // --- CORRECTION DU BUG DE DISPARITION ---
 
-        // 4. Réinjecter les données
-        ItemWorld itemWorld = currentVisualObject.GetComponent<ItemWorld>();
-        if (itemWorld == null) itemWorld = currentVisualObject.AddComponent<ItemWorld>();
+        // 1. On sauvegarde l'objet dans une variable temporaire pour ne pas le perdre
+        GameObject objectToThrow = currentVisualObject;
+
+        // 2. On "vide" la main virtuelle TOUT DE SUITE.
+        // Comme ça, quand l'inventaire se mettra à jour dans une milliseconde, 
+        // il pensera que la main est déjà vide et ne tentera pas de détruire l'objet.
+        currentVisualObject = null;
+
+        // 3. On récupère les données de l'item pour les remettre dans l'objet au sol
+        ItemData currentData = inventorySystem.GetCurrentItem();
+
+        // 4. On retire l'item de l'inventaire (ceci déclenche l'événement UpdateHandVisuals)
+        inventorySystem.RemoveItem(inventorySystem.SelectedSlotIndex);
+        
+        // ----------------------------------------
+
+        // 5. On détache l'objet du joueur (Parenting)
+        objectToThrow.transform.SetParent(null);
+        objectToThrow.tag = "Ramassable"; 
+
+        // 6. On remet le script ItemWorld pour qu'il soit ramassable
+        ItemWorld itemWorld = objectToThrow.GetComponent<ItemWorld>();
+        if (itemWorld == null) itemWorld = objectToThrow.AddComponent<ItemWorld>();
         
         if (currentData != null)
         {
             itemWorld.donnees = currentData;
         }
 
-        // 5. Physique (Lancer l'objet)
-        Rigidbody rb = currentVisualObject.GetComponent<Rigidbody>();
+        // 7. On réactive la physique
+        Rigidbody rb = objectToThrow.GetComponent<Rigidbody>();
+        Collider col = objectToThrow.GetComponent<Collider>();
+
+        if (col) 
+        {
+            col.enabled = true;
+            // Astuce : On décale légèrement l'objet pour qu'il ne soit pas coincé DANS le joueur
+            // Sinon la physique peut le faire disparaître ou le propulser à l'infini
+            objectToThrow.transform.position += playerCamera.transform.forward * 0.5f;
+        }
+
         if (rb)
         {
             rb.isKinematic = false;
-            // Utilise linearVelocity si Unity 6, sinon velocity
+            // Utilise 'linearVelocity' si tu es sur Unity 6, sinon 'velocity'
             rb.linearVelocity = playerCamera.transform.forward * 5f; 
             
             if (characterController != null) 
                 rb.linearVelocity += characterController.velocity;
         }
-
-        Collider col = currentVisualObject.GetComponent<Collider>();
-        if (col) col.enabled = true;
-
-        currentVisualObject = null;
-        
-        // L'event OnInventoryChanged s'occupera de rafraîchir l'affichage (slot vide)
     }
 
     private void HandleOutlining()
