@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
     private bool _isFalling = false;
     private bool _isJumping = false;
     private bool _isWalking;
+    private bool _isAttacking = false;
+    private float attackDuration = 0.15f;
 
     private bool IsGrounded() => _characterController.isGrounded;
 
@@ -227,6 +229,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+  public void Attack(InputAction.CallbackContext context)
+{
+
+    if (context.started && !_isAttacking)
+    {
+        StartCoroutine(AttackRoutine());
+    }
+}
+
+private IEnumerator AttackRoutine()
+{
+    _isAttacking = true;
+    Debug.Log("Start attack");
+
+    float originalSpeed = _velocity;
+    _velocity = 0; 
+
+    yield return new WaitForSeconds(attackDuration);
+
+    _velocity = originalSpeed;
+
+    _isAttacking = false;
+    Debug.Log("End attack");
+}
     public void HandleJump()
     {
         bool canJump = IsGrounded() || Time.time <= _coyoteTimeExpiration;
@@ -260,12 +286,13 @@ public class PlayerController : MonoBehaviour
 
     public bool[] GetState()
     {
-        bool[] stateArray = new bool[5];
+        bool[] stateArray = new bool[6];
         stateArray[0] = _isWalking;
         stateArray[1] = _isSprinting;
         stateArray[2] = _isJumping;
         stateArray[3] = _isFalling;
         stateArray[4] = IsGrounded();
+        stateArray[5] = _isAttacking;
         return stateArray;
    }
 
