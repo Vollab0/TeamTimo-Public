@@ -460,6 +460,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 975107997}
     - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: _wallZoneHeight
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: _showDebugGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: _wallZoneStartHeight
       value: 45
       objectReference: {fileID: 0}

@@ -15,10 +15,10 @@ public class MazeNavMeshBuilder : MonoBehaviour
 
     [Header("Réglages WallTop (Zone Haute)")]
     [Tooltip("A partir de quelle hauteur commence la zone 'WallTop' ?")]
-    [SerializeField] private float _wallZoneStartHeight = 2.0f; 
+    [SerializeField] private float _wallZoneStartHeight = 45.0f; 
     
     [Tooltip("Epaisseur de la zone vers le haut.")]
-    [SerializeField] private float _wallZoneHeight = 10.0f; 
+    [SerializeField] private float _wallZoneHeight = 15.0f; 
 
     [Tooltip("Marge supplémentaire ajoutée autour du labyrinthe pour bien englober les murs extérieurs.")]
     [SerializeField] private float _wallZonePadding = 50.0f; // <--- NOUVEAU
