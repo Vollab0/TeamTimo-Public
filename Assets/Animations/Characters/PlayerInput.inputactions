@@ -61,22 +61,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangerSlot",
+                    "name": "Scroll",
                     "type": "Value",
                     "id": "40ac5af5-d579-4eb2-8f9a-1619a5cc9031",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Jeter",
-                    "type": "Button",
-                    "id": "75839543-b612-4762-9cf6-bafd484d3972",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -362,18 +353,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangerSlot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "03da43af-8249-41a3-89a7-b8a5cecf4047",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jeter",
+                    "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

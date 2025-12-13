@@ -5,172 +5,221 @@ using System.Linq;
 
 public class GrabObject : MonoBehaviour
 {
-    [Header("Références TPS")]
-    [SerializeField] private Transform porteObjet;
+    [Header("System References")]
+    // On ne parle plus à l'UI, mais au cerveau (le système)
+    [SerializeField] private InventorySystem inventorySystem;
+
+    [Header("TPS References")]
+    [SerializeField] private Transform objectHolder; // Ancien 'porteObjet'
     [SerializeField] private Camera playerCamera;
 
-    [Header("Ajustements")]
-    [SerializeField] public Vector3 offsetMain = new Vector3(0f, 1.5f, 2f);
-    [SerializeField] private Vector3 rotationMain = Vector3.zero;
+    [Header("Adjustments")]
+    [SerializeField] public Vector3 handOffset = new Vector3(0f, 1.5f, 2f);
+    [SerializeField] private Vector3 handRotation = Vector3.zero;
 
-    [SerializeField] public SlotSelection slotSelection;
-    [SerializeField] public InventaireUI inventaireUI;
     private CharacterController characterController;
 
-    [Header("Paramètres")]
+    [Header("Settings")]
     [SerializeField] public float detectionRange = 2f;
-    // NOTE : Plus besoin de mettre le matériau ici, on utilise celui du GameManager
 
-    private GameObject objetVisuelEnMain = null;
+    [Header("Visual Debug")]
+    [SerializeField] private bool showDebugGizmos = true;
+    [SerializeField] private Color gizmoColor = Color.yellow;
+
+    // État interne
+    private GameObject currentVisualObject = null; // Ancien 'objetVisuelEnMain'
     private GameObject highlightedObject = null;
-    private int indexSlotPrecedent = -1;
 
     private void Start()
     {
         TryGetComponent<CharacterController>(out characterController);
         if (playerCamera == null) playerCamera = Camera.main;
 
-        GameObject systeme = GameObject.Find("SystemeInventaire");
-        if (systeme != null)
+        // 1. Recherche automatique du système si non assigné
+        if (inventorySystem == null)
+            inventorySystem = FindFirstObjectByType<InventorySystem>();
+
+        // 2. Abonnement aux événements (La magie opère ici)
+        if (inventorySystem != null)
         {
-            slotSelection = systeme.GetComponent<SlotSelection>();
-            inventaireUI = systeme.GetComponent<InventaireUI>();
+            // Si on scroll la molette -> On met à jour la main
+            inventorySystem.OnSelectionChanged += OnSelectionChangedCallback;
+            // Si on ajoute/retire un item -> On met à jour la main (au cas où on jette l'item tenu)
+            inventorySystem.OnInventoryChanged += UpdateHandVisuals;
+            
+            // Premier affichage au lancement
+            UpdateHandVisuals();
+        }
+        else
+        {
+            Debug.LogError("ERROR: InventorySystem not found in the scene!");
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Toujours se désabonner pour éviter les erreurs quand on quitte/change de scène
+        if (inventorySystem != null)
+        {
+            inventorySystem.OnSelectionChanged -= OnSelectionChangedCallback;
+            inventorySystem.OnInventoryChanged -= UpdateHandVisuals;
         }
     }
 
     private void Update()
     {
-        Outliner();
-        VerifierChangementDeSlot();
+        // Plus besoin de vérifier le slot ici, les events s'en chargent !
+        HandleOutlining();
     }
 
-    private void VerifierChangementDeSlot()
-    {
-        if (slotSelection == null) return;
-        if (slotSelection.slotActif != indexSlotPrecedent)
-        {
-            indexSlotPrecedent = slotSelection.slotActif;
-            MettreAJourVisuelMain();
-        }
-    }
+    // Petit wrapper car l'event renvoie un int, mais notre fonction n'en a pas besoin
+    private void OnSelectionChangedCallback(int index) => UpdateHandVisuals();
 
-    public void MettreAJourVisuelMain()
+    public void UpdateHandVisuals()
     {
-        if (objetVisuelEnMain != null)
+        // 1. Nettoyage de l'objet précédent
+        if (currentVisualObject != null)
         {
-            Destroy(objetVisuelEnMain);
-            objetVisuelEnMain = null;
+            Destroy(currentVisualObject);
+            currentVisualObject = null;
         }
 
-        ItemData item = inventaireUI.GetItemData(slotSelection.slotActif);
+        if (inventorySystem == null) return;
 
-        if (item != null && item.prefab != null)
+        // 2. Récupération de l'item actuel via le système
+        ItemData item = inventorySystem.GetCurrentItem();
+
+        // 3. Instanciation du visuel
+        // ATTENTION : Vérifie si ton ItemData utilise 'prefab' ou 'prefab3D'. J'utilise 'prefab' ici.
+        if (item != null && item.prefab != null) 
         {
-            objetVisuelEnMain = Instantiate(item.prefab, porteObjet);
-            objetVisuelEnMain.transform.localPosition = offsetMain;
-            objetVisuelEnMain.transform.localRotation = Quaternion.Euler(rotationMain);
+            currentVisualObject = Instantiate(item.prefab, objectHolder);
+            currentVisualObject.transform.localPosition = handOffset;
+            currentVisualObject.transform.localRotation = Quaternion.Euler(handRotation);
 
-            Rigidbody rb = objetVisuelEnMain.GetComponent<Rigidbody>();
+            // Désactivation de la physique pour l'objet en main
+            Rigidbody rb = currentVisualObject.GetComponent<Rigidbody>();
             if (rb) rb.isKinematic = true;
-            Collider col = objetVisuelEnMain.GetComponent<Collider>();
+            
+            Collider col = currentVisualObject.GetComponent<Collider>();
             if (col) col.enabled = false;
         }
     }
 
-    public void AttraperObjet(InputAction.CallbackContext context)
+    // À lier dans l'Input System
+    public void OnGrabInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            if (TenterRamassage()) return;
-            if (objetVisuelEnMain != null) RelacherObjetPhysiquement();
+            // Si on vise quelque chose, on essaie de le prendre
+            if (TryPickup()) return;
+            
+            // Sinon, si on tient quelque chose, on le lâche
+            if (currentVisualObject != null) DropObject();
         }
     }
 
-   private bool TenterRamassage()
-{
-    if (highlightedObject == null) return false;
-
-    ItemWorld itemWorld = highlightedObject.GetComponent<ItemWorld>();
-
-    if (itemWorld != null && itemWorld.donnees != null)
+    private bool TryPickup()
     {
-        // --- DEBUT DE LA PROTECTION ---
-        if (inventaireUI == null)
+        if (highlightedObject == null) return false;
+
+        ItemWorld itemWorld = highlightedObject.GetComponent<ItemWorld>();
+
+        if (itemWorld != null && itemWorld.donnees != null)
         {
-            Debug.LogError("CRITICAL : Tu as oublié de relier 'GlobalUI' dans le script GrabObject sur le Player !");
-            return false; // On quitte la fonction proprement sans crasher
+            if (inventorySystem == null) return false;
+
+            // Utilisation de la nouvelle méthode AddItem
+            bool wasAdded = inventorySystem.AddItem(itemWorld.donnees);
+
+            if (wasAdded)
+            {
+                RemoveOutline(highlightedObject);
+                Destroy(highlightedObject);
+                highlightedObject = null;
+
+                // Pas besoin d'appeler UpdateHandVisuals() ici manuellement,
+                // car AddItem déclenche l'event OnInventoryChanged qui va le faire tout seul !
+                return true;
+            }
         }
-        // --- FIN DE LA PROTECTION ---
-
-        // Maintenant cette ligne est sécurisée :
-        bool aEteAjoute = inventaireUI.AjouterObjet(itemWorld.donnees);
-
-        if (aEteAjoute)
-        {
-            // IMPORTANT : On enlève proprement l'outline AVANT de détruire l'objet
-            RemoveOutline(highlightedObject);
-            Destroy(highlightedObject);
-            highlightedObject = null;
-
-            MettreAJourVisuelMain();
-            return true;
-        }
+        return false;
     }
-    return false;
-}
 
-    private void RelacherObjetPhysiquement()
+    private void DropObject()
     {
-        inventaireUI.RetirerObjet(slotSelection.slotActif);
-        objetVisuelEnMain.transform.SetParent(null);
+        if (inventorySystem == null) return;
 
-        Rigidbody rb = objetVisuelEnMain.GetComponent<Rigidbody>();
+        // 1. Récupérer les données AVANT de supprimer
+        ItemData currentData = inventorySystem.GetCurrentItem();
+        
+        // 2. Retirer l'objet du système (via l'index sélectionné)
+        inventorySystem.RemoveItem(inventorySystem.SelectedSlotIndex);
+
+        if (currentVisualObject == null) return;
+
+        // 3. Détacher l'objet
+        currentVisualObject.transform.SetParent(null);
+        currentVisualObject.tag = "Ramassable"; // Assure-toi que ton tag Unity est bien "Ramassable" ou change-le en "Interactable"
+
+        // 4. Réinjecter les données
+        ItemWorld itemWorld = currentVisualObject.GetComponent<ItemWorld>();
+        if (itemWorld == null) itemWorld = currentVisualObject.AddComponent<ItemWorld>();
+        
+        if (currentData != null)
+        {
+            itemWorld.donnees = currentData;
+        }
+
+        // 5. Physique (Lancer l'objet)
+        Rigidbody rb = currentVisualObject.GetComponent<Rigidbody>();
         if (rb)
         {
             rb.isKinematic = false;
-            rb.AddForce(playerCamera.transform.forward * 5f, ForceMode.Impulse);
-            if (characterController != null) rb.linearVelocity += characterController.velocity;
+            // Utilise linearVelocity si Unity 6, sinon velocity
+            rb.linearVelocity = playerCamera.transform.forward * 5f; 
+            
+            if (characterController != null) 
+                rb.linearVelocity += characterController.velocity;
         }
 
-        Collider col = objetVisuelEnMain.GetComponent<Collider>();
+        Collider col = currentVisualObject.GetComponent<Collider>();
         if (col) col.enabled = true;
 
-        objetVisuelEnMain = null;
-        MettreAJourVisuelMain();
+        currentVisualObject = null;
+        
+        // L'event OnInventoryChanged s'occupera de rafraîchir l'affichage (slot vide)
     }
 
-    private void Outliner()
+    private void HandleOutlining()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange);
-        GameObject objetAViser = null;
-        float distanceMin = float.MaxValue;
+        GameObject objectToHighlight = null;
+        float minDistance = float.MaxValue;
 
         foreach (Collider collider in colliders)
         {
             if (collider.CompareTag("Ramassable"))
             {
                 float distance = Vector3.Distance(transform.position, collider.transform.position);
-                if (distance < distanceMin)
+                if (distance < minDistance)
                 {
-                    distanceMin = distance;
-                    objetAViser = collider.gameObject;
+                    minDistance = distance;
+                    objectToHighlight = collider.gameObject;
                 }
             }
         }
 
-        if (objetAViser != highlightedObject)
+        if (objectToHighlight != highlightedObject)
         {
             if (highlightedObject != null) RemoveOutline(highlightedObject);
-            if (objetAViser != null) AddOutline(objetAViser);
-            highlightedObject = objetAViser;
+            if (objectToHighlight != null) AddOutline(objectToHighlight);
+            highlightedObject = objectToHighlight;
         }
     }
 
-    // --- C'EST ICI QUE LA CORRECTION AGIT ---
-
     private void AddOutline(GameObject obj)
     {
-        // 1. On va chercher le matériau "sûr" dans le GameManager
         if (GameManager.Instance == null) return;
         Material mat = GameManager.Instance.globalOutlineMaterial;
 
@@ -178,7 +227,6 @@ public class GrabObject : MonoBehaviour
         if (r == null) return;
 
         var m = r.sharedMaterials.ToList();
-        // 2. On vérifie s'il est déjà là
         if (!m.Contains(mat))
         {
             m.Add(mat);
@@ -188,7 +236,6 @@ public class GrabObject : MonoBehaviour
 
     private void RemoveOutline(GameObject obj)
     {
-        // 1. On va chercher le MEME matériau "sûr" dans le GameManager
         if (GameManager.Instance == null) return;
         Material mat = GameManager.Instance.globalOutlineMaterial;
 
@@ -196,13 +243,18 @@ public class GrabObject : MonoBehaviour
         if (r == null) return;
 
         var m = r.sharedMaterials.ToList();
-        // 3. On l'enlève. Comme c'est la même référence (mat), ça marche à tous les coups.
         if (m.Remove(mat))
         {
             r.sharedMaterials = m.ToArray();
         }
     }
 
-    public bool IsHolding() { return objetVisuelEnMain != null; }
-    public void LacherObjet() { if (objetVisuelEnMain != null) RelacherObjetPhysiquement(); }
+    public bool IsHolding() { return currentVisualObject != null; }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!showDebugGizmos) return;
+        Gizmos.color = gizmoColor;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+    }
 }
