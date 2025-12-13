@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shovel
   m_EditorClassIdentifier: Assembly-CSharp::WeaponItem
   nameObject: Shovel
-  icone: {fileID: 21300000, guid: 7742a3b3e00fd15409ace389cc0e7ad4, type: 3}
+  icone: {fileID: 21300000, guid: 7ca3dc164c7dfd64d87dcfcce4a4e411, type: 3}
   prefab: {fileID: 637420037898087892, guid: 7ccfefe241eb60c4ea3b96fb7a88878f, type: 3}
   damage: 1
