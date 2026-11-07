@@ -21,29 +21,29 @@ public class BullAI : MonoBehaviour
     [SerializeField] private float stunDuration = 5.0f;
     [Range(0, 100)][SerializeField] private float randomTurnChance = 0f;
 
-    [Header("3. Dégâts (Cumulatifs)")]
-    [Tooltip("Rayon de la zone extérieure (Vapeur)")]
+    [Header("3. DÃ©gÃ¢ts (Cumulatifs)")]
+    [Tooltip("Rayon de la zone extÃ©rieure (Vapeur)")]
     [SerializeField] private float zoneRadius = 15.0f;
 
-    [Tooltip("Rayon de la zone intérieure (Corps à corps)")]
+    [Tooltip("Rayon de la zone intÃ©rieure (Corps Ã  corps)")]
     [SerializeField] private float contactThreshold = 5.0f;
 
-    [Tooltip("Dégâts de la zone extérieure")]
+    [Tooltip("DÃ©gÃ¢ts de la zone extÃ©rieure")]
     [SerializeField] private int zoneDamage = 1;
 
-    [Tooltip("Dégâts SUPPLÉMENTAIRES du contact")]
+    [Tooltip("DÃ©gÃ¢ts SUPPLÃ‰MENTAIRES du contact")]
     [SerializeField] private int contactDamage = 1;
 
-    [Tooltip("Temps avant de reprendre des dégâts de ZONE")]
+    [Tooltip("Temps avant de reprendre des dÃ©gÃ¢ts de ZONE")]
     [SerializeField] private float zoneCooldown = 1.0f;
 
-    [Tooltip("Temps avant de reprendre des dégâts de CONTACT")]
+    [Tooltip("Temps avant de reprendre des dÃ©gÃ¢ts de CONTACT")]
     [SerializeField] private float contactCooldown = 1.5f;
     #endregion
 
     // --- NOUVEAU : VARIABLES RAIL ---
     private bool _isAxisX; // True = Couloir Est/Ouest, False = Nord/Sud
-    private float _fixedAxisCoordinate; // La coordonnée "sacrée" qui ne doit jamais changer
+    private float _fixedAxisCoordinate; // La coordonnÃ©e "sacrÃ©e" qui ne doit jamais changer
     private bool _railInitialized = false;
 
     private NavMeshAgent _agent;
@@ -85,7 +85,7 @@ public class BullAI : MonoBehaviour
         if (_isCharging)
         {
             CheckImpact();
-            ProcessCombat(); // Gestion des dégâts
+            ProcessCombat(); // Gestion des dÃ©gÃ¢ts
             return;
         }
 
@@ -101,13 +101,13 @@ public class BullAI : MonoBehaviour
         Vector3 currentPos = transform.position;
         bool needCorrection = false;
 
-        // Si je suis censé être fixe en X mais que j'ai bougé...
+        // Si je suis censÃ© Ãªtre fixe en X mais que j'ai bougÃ©...
         if (!_isAxisX && Mathf.Abs(currentPos.x - _fixedAxisCoordinate) > 0.1f)
         {
             currentPos.x = Mathf.Lerp(currentPos.x, _fixedAxisCoordinate, Time.deltaTime * 5f);
             needCorrection = true;
         }
-        // Si je suis censé être fixe en Z mais que j'ai bougé...
+        // Si je suis censÃ© Ãªtre fixe en Z mais que j'ai bougÃ©...
         else if (_isAxisX && Mathf.Abs(currentPos.z - _fixedAxisCoordinate) > 0.1f)
         {
             currentPos.z = Mathf.Lerp(currentPos.z, _fixedAxisCoordinate, Time.deltaTime * 5f);
@@ -117,7 +117,7 @@ public class BullAI : MonoBehaviour
         if (needCorrection) _agent.nextPosition = currentPos;
     }
 
-    // --- LOGIQUE DE DÉGÂTS CUMULATIFS ---
+    // --- LOGIQUE DE DÃ‰GÃ‚TS CUMULATIFS ---
     void ProcessCombat()
     {
         // On cherche le joueur dans la plus grande zone (Zone Radius)
@@ -131,7 +131,7 @@ public class BullAI : MonoBehaviour
             {
                 float distance = Vector3.Distance(transform.position, hit.transform.position);
 
-                // --- COUCHE 1 : Dégâts de ZONE (Extérieur) ---
+                // --- COUCHE 1 : DÃ©gÃ¢ts de ZONE (ExtÃ©rieur) ---
                 // Si on est dans le rayon de zone ET que le cooldown de zone est fini
                 if (distance <= zoneRadius && Time.time >= _nextZoneHitTime)
                 {
@@ -140,9 +140,9 @@ public class BullAI : MonoBehaviour
                     _nextZoneHitTime = Time.time + zoneCooldown;
                 }
 
-                // --- COUCHE 2 : Dégâts de CONTACT (Intérieur) ---
+                // --- COUCHE 2 : DÃ©gÃ¢ts de CONTACT (IntÃ©rieur) ---
                 // Si on est assez proche pour le contact ET que le cooldown de contact est fini
-                // Note : C'est une condition indépendante. On peut prendre les deux dans la même frame.
+                // Note : C'est une condition indÃ©pendante. On peut prendre les deux dans la mÃªme frame.
                 if (distance <= contactThreshold && Time.time >= _nextContactHitTime)
                 {
                     // Debug.Log("Hit Contact !");
@@ -150,7 +150,7 @@ public class BullAI : MonoBehaviour
                     _nextContactHitTime = Time.time + contactCooldown;
                 }
 
-                // On s'arrête au premier joueur trouvé
+                // On s'arrÃªte au premier joueur trouvÃ©
                 break;
             }
         }
@@ -188,7 +188,7 @@ public class BullAI : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(Vector3.right);
         }
         _agent.Warp(finalPos);
-        _railInitialized = true; // On valide que le rail est prêt
+        _railInitialized = true; // On valide que le rail est prÃªt
     }
 
     float GetRayDist(Vector3 origin, Vector3 dir)
@@ -257,13 +257,13 @@ public class BullAI : MonoBehaviour
         Vector3 chargeDir = transform.forward;
         Vector3 targetPos = transform.position + (chargeDir * maxVisionDistance);
 
-        // Raycast pour s'arrêter au mur
+        // Raycast pour s'arrÃªter au mur
         if (Physics.Raycast(transform.position + Vector3.up, chargeDir, out RaycastHit wallHit, maxVisionDistance, obstacleLayer))
         {
             targetPos = wallHit.point;
         }
 
-        // CORRECTION DE DESTINATION : On écrase la coordonnée latérale pour qu'elle soit égale au rail
+        // CORRECTION DE DESTINATION : On Ã©crase la coordonnÃ©e latÃ©rale pour qu'elle soit Ã©gale au rail
         if (!_isAxisX) targetPos.x = _fixedAxisCoordinate; // Force X
         else targetPos.z = _fixedAxisCoordinate; // Force Z
 

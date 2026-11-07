@@ -10,7 +10,7 @@ public class SpawnerManager : MonoBehaviour
     public MazeGenerator mazeGenerator;
 
     [Header("Global Settings")]
-    public float searchRadius = 10.0f; // Augmenté pour être sûr de trouver le sol
+    public float searchRadius = 10.0f; // AugmentÃ© pour Ãªtre sÃ»r de trouver le sol
     [Tooltip("Layer des Murs ET Piliers")]
     public LayerMask obstacleLayer;
 
@@ -100,7 +100,7 @@ public class SpawnerManager : MonoBehaviour
                 if (agent != null)
                 {
                     agent.areaMask = areaMask;
-                    // Force la position NavMesh pour éviter tout décalage visuel
+                    // Force la position NavMesh pour Ã©viter tout dÃ©calage visuel
                     agent.Warp(spawnPos);
                 }
                 spawnedCount++;
@@ -126,7 +126,7 @@ public class SpawnerManager : MonoBehaviour
             if (IsCorridorOccupied(p)) continue;
 
             // 2. Mesure l'espace disponible (Mur <-> Mur ou Pilier)
-            // On lève le point de mesure (+1.5m) pour taper les murs/piliers et pas le sol
+            // On lÃ¨ve le point de mesure (+1.5m) pour taper les murs/piliers et pas le sol
             Vector3 measureP = p + Vector3.up * 1.5f;
 
             float wX = GetRayDist(measureP, Vector3.right) + GetRayDist(measureP, Vector3.left);
@@ -142,16 +142,16 @@ public class SpawnerManager : MonoBehaviour
             }
         }
 
-        // Si on n'a rien trouvé de "parfait", on renvoie Zero pour que la boucle réessaie
+        // Si on n'a rien trouvÃ© de "parfait", on renvoie Zero pour que la boucle rÃ©essaie
         return bestPoint;
     }
 
-    // Retourne un point collé au NavMesh ou null
+    // Retourne un point collÃ© au NavMesh ou null
     private Vector3? GetRandomNavMeshPoint(int areaMask)
     {
         Vector3 randomRaw = GetRandomPointInMap();
         NavMeshHit hit;
-        // SearchRadius large (10f) pour trouver le sol même s'il est haut ou bas
+        // SearchRadius large (10f) pour trouver le sol mÃªme s'il est haut ou bas
         if (NavMesh.SamplePosition(randomRaw, out hit, 10.0f, areaMask))
         {
             return hit.position;

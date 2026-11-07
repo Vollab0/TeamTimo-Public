@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; // Permet l'accès global
-    public Material globalOutlineMaterial; // Ton matériau jaune unique
+    public static GameManager Instance; // Permet l'accÃ¨s global
+    public Material globalOutlineMaterial; // Ton matÃ©riau jaune unique
 
     private void Awake()
     {

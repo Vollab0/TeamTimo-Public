@@ -8,7 +8,7 @@ public class InitialisationPositionObjet : MonoBehaviour
 
     void Start()
     {
-        // Enregistre la position de l'objet au moment du démarrage du jeu
+        // Enregistre la position de l'objet au moment du dÃ©marrage du jeu
         _positionInitial = transform.position;
     }
 }
