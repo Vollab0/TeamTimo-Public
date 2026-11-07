@@ -1,0 +1,12 @@
+{
+  "attachmentFolderPath": "99_Attachments",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "00_Inbox",
+  "useMarkdownLinks": false,
+  "newLinkFormat": "shortest",
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": false,
+  "userIgnoreFilters": [
+    "98_Templates/"
+  ]
+}

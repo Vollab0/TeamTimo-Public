@@ -1,0 +1,19 @@
+{
+	"nodes":[
+		{"id":"g_mobs","type":"group","x":-780,"y":500,"width":1560,"height":560,"label":"Mobs & variantes de nuit"},
+		{"id":"g_joueurs","type":"group","x":-780,"y":-420,"width":760,"height":420,"label":"Personnages jouables"},
+		{"id":"g_lobby","type":"group","x":20,"y":-420,"width":760,"height":420,"label":"Lobby & Grange"},
+		{"id":"g_boss","type":"group","x":20,"y":40,"width":760,"height":420,"label":"Gardiens (à revoir)"},
+		{"id":"g_pnj","type":"group","x":-780,"y":40,"width":760,"height":340,"label":"PNJ"},
+		{"id":"aide","type":"text","text":"# Moodboard visuel\nImages issues du brainstorming (`99_Attachments/Brainstorming/`). Glisse de nouvelles images dans le groupe adapté.","x":-760,"y":-560,"width":1520,"height":110,"color":"6"},
+		{"id":"f_joueurs","type":"file","file":"99_Attachments/Brainstorming/Personnages_Jouables.jpg","x":-760,"y":-400,"width":709,"height":360},
+		{"id":"f_lobby","type":"file","file":"99_Attachments/Brainstorming/Lobby_Concept.jpg","x":40,"y":-400,"width":720,"height":325},
+		{"id":"f_pnj","type":"file","file":"99_Attachments/Brainstorming/PNJs.jpg","x":-760,"y":60,"width":719,"height":256},
+		{"id":"f_boss","type":"file","file":"99_Attachments/Brainstorming/Boss.jpg","x":40,"y":60,"width":709,"height":360},
+		{"id":"f_mobs","type":"file","file":"99_Attachments/Brainstorming/Mobs.jpg","x":-760,"y":520,"width":340,"height":505},
+		{"id":"f_nuit","type":"file","file":"99_Attachments/Brainstorming/Cycle_Jour_Nuit.jpg","x":-400,"y":520,"width":737,"height":490},
+		{"id":"f_boss_nuit","type":"file","file":"99_Attachments/Brainstorming/Nuit_Boss.jpg","x":360,"y":520,"width":400,"height":243},
+		{"id":"f_grange","type":"file","file":"99_Attachments/Brainstorming/Grange.jpg","x":360,"y":790,"width":400,"height":185}
+	],
+	"edges":[]
+}

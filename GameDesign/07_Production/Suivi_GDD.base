@@ -1,0 +1,56 @@
+filters:
+  and:
+    - file.ext == "md"
+    - '!file.inFolder("98_Templates")'
+properties:
+  note.status:
+    displayName: Statut
+  note.priority:
+    displayName: Priorité
+  note.owner:
+    displayName: Responsable
+  note.updated:
+    displayName: Mis à jour
+views:
+  - type: table
+    name: Mécaniques
+    filters:
+      and:
+        - file.inFolder("02_Mecaniques")
+    order:
+      - file.name
+      - status
+      - priority
+      - owner
+      - updated
+  - type: table
+    name: À coder
+    filters:
+      and:
+        - status == "ready-to-code"
+    order:
+      - file.name
+      - priority
+      - owner
+  - type: table
+    name: Contenu
+    filters:
+      and:
+        - file.inFolder("03_Contenu")
+    order:
+      - file.name
+      - type
+      - status
+      - owner
+  - type: table
+    name: Bugs ouverts
+    filters:
+      and:
+        - file.inFolder("07_Production/Bugs")
+        - status != "fixed"
+        - status != "wontfix"
+    order:
+      - file.name
+      - severite
+      - assigne
+      - status
