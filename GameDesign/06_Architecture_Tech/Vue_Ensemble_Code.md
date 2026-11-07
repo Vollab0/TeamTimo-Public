@@ -46,7 +46,7 @@ sequenceDiagram
 - **Données** : ScriptableObjects `ItemData` dans `Assets/Data item/`.
 
 ## Packages notables
-URP 17.2 · Input System 1.14 · Cinemachine 2.10 (API `CinemachineVirtualCamera` / `FreeLook`, pas la v3) · AI Navigation 2.0 · Netcode for GameObjects 1.14 (installé, non utilisé) · VFX Graph 17.2 · Timeline · Visual Scripting.
+URP 17.3 · Input System 1.20 · Cinemachine 2.10 (API `CinemachineVirtualCamera` / `FreeLook`, pas la v3) · AI Navigation 2.0 · Netcode for GameObjects 2.13 (installé, non utilisé) · VFX Graph 17.3 · Timeline · Visual Scripting.
 
 ## Décisions techniques
 Les choix structurants sont consignés dans `Decisions/` (format ADR, template `Template_Decision_ADR`).

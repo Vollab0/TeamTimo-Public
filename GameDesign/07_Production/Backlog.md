@@ -107,7 +107,8 @@ updated: 2026-11-07
 - [ ] **`MySkybox.mat` toujours modifié dans git** : `DayNightCycle` est `[ExecuteAlways]` et écrit `_DayNightBlend` dans l'asset du matériau. Piste : `Shader.SetGlobalFloat` ou une instance de matériau. — [[Cycle_Jour_Nuit]]
 - [x] **Build Settings** : `Labo.unity` (inexistante) remplacée par `Labyrinthe.unity` le 2026-11-07.
 - [ ] `PlayerController` : `GetComponent` / `transform.Find` appelés à chaque frame dans `SprintSmoke()` → mettre en cache dans `Awake()`.
-- [ ] `PlayerHealth` : touches de debug `K`/`L`/`H` via l'ancienne API `Input` → les retirer ou les passer sous `#if UNITY_EDITOR`.
+- [ ] `PlayerHealth` : touches de debug `K`/`L`/`H` via l'ancienne API `Input` → les retirer ou les passer sous `#if UNITY_EDITOR`. Une fois fait, passer *Player Settings → Active Input Handling* de « Both » à « Input System Package » (Unity 6.3 avertit que l'Input Manager est déprécié).
+- [ ] Warning en Play Mode : « TerrainCollider: MeshCollider is not supported on terrain » → un `MeshCollider` est présent sur l'objet `Terrain` de `Labyrinthe.unity`, à retirer (relevé le 2026-11-08).
 - [ ] `EnemySight` : `StopCoroutine("PatrolRoutine")` (par nom) n'arrête pas une coroutine lancée avec `StartCoroutine(PatrolRoutine())` → risque de patrouilles en double. À vérifier.
 - [ ] `SpawnerManager` : le taureau est détecté par `prefab.name.Contains("Bull")` → préférer un champ dans `WaveSettings`.
 - [ ] `PlayerController.attackDuration` non exposé dans l'Inspector.
@@ -120,6 +121,8 @@ updated: 2026-11-07
 - [ ] **Chaque membre** : configurer UnityYAMLMerge (procédure dans `README.md`) — (Gabin ✅) (Kenny) (Lucas) (Nadir)
 - [ ] **Git LFS** : tenté le 2026-11-07, push refusé par GitHub (« This repository exceeded its LFS budget »). Le propriétaire du compte `Vollab0` doit vérifier *Settings → Billing and licensing → Budgets and alerts* (quota gratuit : 10 Go de stockage + 10 Go de téléchargement par mois). À réactiver si le dépôt grossit beaucoup ou si des fichiers dépassent ~50 Mo.
 - [x] README : pitch ajouté — 2026-11-07 — [[Pitch]].
+- [ ] **Migration Unity 6000.3.28f1 (6.3 LTS)** — branche `migration-unity-6.3`, 2026-11-08. Chaque membre installe 6000.3.28f1 avant de puller, puis met à jour le chemin de UnityYAMLMerge (procédure dans `README.md`) — (Gabin) (Kenny) (Lucas) (Nadir). Netcode for GameObjects est passé de 1.14 à 2.13 (version majeure, non utilisé pour l'instant).
+- [x] Package `com.unity.pipeline` (Unity CLI) ajouté — 2026-11-07.
 
 ## Idées
 - Monstres importants qui dorment la nuit → récupérer des objets importants — [[Cycle_Jour_Nuit]]
