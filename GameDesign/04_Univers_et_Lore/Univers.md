@@ -2,7 +2,7 @@
 type: lore
 status: in-progress
 tags: [gdd, lore]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Univers
 
@@ -20,9 +20,13 @@ Quatre labyrinthes, quatre ambiances, chacun tenu par un **gardien** — chef de
 
 ## Les anciens bataillons
 D'anciens « bataillons » (de cobayes ?) ont laissé des **indices dans le labyrinthe** (note collée sur le tableau, texte en partie coupé).
+- Ces indices servent à **localiser la porte de sortie**, dont l'emplacement change à chaque partie — [[Fragments_et_Cle]] (décidé le 2026-11-08).
+
+## Lore persistant (décidé le 2026-11-08)
+Le seul élément conservé d'une partie à l'autre : les **indices / journaux** trouvés s'archivent et révèlent peu à peu la vérité sur le Fermier. Aucune progression de puissance.
 
 ## Ton
-**Mignon en surface, sombre en dessous** — [[Piliers_de_Design]].
+**Mignon en surface, sombre en dessous** — [[Piliers_de_Design]]. En jeu : **tension + humour**, une horreur coop légère à la *Lethal Company* / *Content Warning* (décidé le 2026-11-08).
 
 ## Questions ouvertes
 - [ ] Qui sont les anciens bataillons ? Quels indices (porte de sortie, faiblesses des gardiens) ?

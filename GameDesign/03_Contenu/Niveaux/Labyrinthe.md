@@ -4,12 +4,12 @@ status: in-progress
 owner:
 scene: Assets/Scenes/Labyrinthe.unity
 tags: [gdd, contenu, niveau]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Niveau — Labyrinthe
 
 ## Objectif du joueur
-Partir du [[Lobby]] central, explorer les **4 zones** (A, B, C, D), récupérer or et objets, voler les **4 fragments de clé** dans les salles des gardiens, puis ouvrir la **porte de sortie** avant la fin du jour 10 — [[Cycle_de_Partie]].
+Partir du [[Lobby]] central, explorer les **4 zones** (A, B, C, D), récupérer or et objets, obtenir les **4 fragments de clé** dans les salles des gardiens (raid de jour ou vol de nuit), puis **trouver** et ouvrir la **porte de sortie** avant la fin du jour 10. Les zones se font **dans l'ordre voulu** — [[Cycle_de_Partie]].
 
 ## Structure
 - **Lobby** au centre (zone sûre).

@@ -1,7 +1,7 @@
 ---
 type: roadmap
 tags: [production]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Roadmap
 
@@ -17,9 +17,10 @@ updated: 2026-11-07
 - [x] Cycle jour / nuit visuel — [[Cycle_Jour_Nuit]]
 
 ## Jalon 0.5 — Décisions structurantes *(avant de coder la suite)*
-- [ ] Caméra (TPS vs Top-Down / iso)
-- [ ] Multijoueur : nombre de joueurs, réseau → ADR — [[Multijoueur]]
-- [ ] Durée et ratio du jour
+- [x] Caméra → 3e personne (2026-11-08)
+- [x] Multijoueur : 1-4 joueurs en ligne (2026-11-08) — [[Multijoueur]]
+- [ ] Technologie réseau → ADR — [[Multijoueur]]
+- [x] Durée et ratio du jour → 18 min, 70/30 (2026-11-08)
 - [ ] Les 4 gardiens et les 4 thèmes de zone
 
 ## Jalon 1 — Vertical slice *(date : ?)*
@@ -36,7 +37,7 @@ Objectif : **une boucle complète sur une seule zone**.
 - [ ] 4 zones avec thèmes sensoriels — [[Discretion_et_Aggro]]
 - [ ] 5 mobs + variantes de nuit — [[Bestiaire]]
 - [ ] 4 gardiens
-- [ ] 6 PNJ + enlèvements — [[Enlevement_des_PNJ]]
+- [ ] 6 PNJ + figurants + enlèvements — [[Enlevement_des_PNJ]]
 - [ ] 21 objets — [[Catalogue_Objets]]
 - [ ] Carte / minimap — [[Carte_et_Navigation]]
 - [ ] Multijoueur

@@ -5,7 +5,7 @@ priority: high
 owner:
 scripts: []
 tags: [gdd, contenu, boss]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Les Gardiens (boss de raid)
 
@@ -16,12 +16,14 @@ Chaque zone du labyrinthe se termine par une **Salle des Gardiens** où un boss 
 
 ## Règles (design)
 - **Mécanique de raid :** le combat n'est pas une simple bagarre. C'est un raid unique qui demande une **stratégie basée sur la spécificité de la zone** (ex. : un boss aveugle surpuissant qu'il faut **leurrer par le son**) — [[Discretion_et_Aggro]].
+- **Deux voies pour le fragment (décidé le 2026-11-08) :** le **vaincre de jour** en raid, ou **voler le fragment de nuit** pendant son sommeil — [[Fragments_et_Cle]].
 - **Stats et préparation :** l'affronter sans l'équipement adéquat est **suicidaire** — [[Combat_Attaque]], [[Economie]].
 - **Arènes non procédurales**, conçues à la main pour favoriser les stratégies de raid — [[Generation_Labyrinthe]].
 - **La nuit** — [[Cycle_Jour_Nuit]] :
   - les gardiens **s'endorment** et sont **plus faibles** ;
   - le fragment est en fait **un pilier qui retient le boss** : les joueurs peuvent s'en approcher pendant son sommeil ;
   - **enlever le pilier réveille le boss**, qui peut alors **se promener partout** dans le labyrinthe.
+  - **Menace permanente (décidé le 2026-11-08) :** il ne se rendort pas et erre le reste de la partie **jusqu'à ce qu'on le vainque**. Il **n'entre pas** dans le [[Lobby]], qui reste sûr.
   - Ex. tableau « Nuit » : *le taureau dort mais se réveille quand le fragment est récupéré*.
 
     ![[Boss_Taureau_Endormi.jpg|260]]
@@ -42,5 +44,6 @@ Chaque zone du labyrinthe se termine par une **Salle des Gardiens** où un boss 
 ## Questions ouvertes
 - [ ] Le 4e gardien ?
 - [ ] Le Taureau-boss et le [[Taureau]]-mob coexistent-ils ?
-- [ ] Un gardien réveillé et errant peut-il être tué ensuite ? Se rendort-il ?
+- [x] Un gardien réveillé et errant peut-il être tué ? Se rendort-il ? → **peut être vaincu, ne se rendort pas** (2026-11-08)
+- [ ] Vaincre un gardien errant rapporte-t-il quelque chose (or, objet rare) ?
 - [ ] La cohérence boss ↔ zone : quel thème sensoriel pour chacun ?

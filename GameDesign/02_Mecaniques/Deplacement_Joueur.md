@@ -7,7 +7,7 @@ scripts:
   - Assets/Scripts/PlayerController.cs
   - Assets/Scripts/AnimationStateController.cs
 tags: [gdd, mecanique, joueur]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Déplacement du joueur
 
@@ -15,10 +15,10 @@ updated: 2026-11-07
 D'après le brainstorming :
 - Déplacements : **marche, course, accroupissement** (l'accroupissement sert la discrétion — [[Discretion_et_Aggro]]).
 - **Stamina** associée à la santé (cœurs) — limite la course.
-- **Caméra : Top-Down ou Isométrique.**
+- ~~Caméra : Top-Down ou Isométrique.~~ → **Décidé le 2026-11-08 : 3e personne**, comme le prototype (murs hauts qui bouchent la vue : le labyrinthe reste oppressant et la carte précieuse).
 
-> [!warning] Écart avec le prototype
-> Le code actuel est en **3e personne** (Cinemachine FreeLook) avec option 1re personne, sans accroupissement ni stamina. Le choix de caméra change le level design, l'UI et les contrôles : à trancher avant d'aller plus loin.
+> [!success] Caméra tranchée (2026-11-08)
+> On garde la **3e personne** (Cinemachine FreeLook) du prototype. La vue 1re personne n'a pas été retenue comme option joueur. Restent à coder : accroupissement et stamina.
 
 ## 2. Règles et comportement (état actuel du code)
 - **Contrôleur :** `CharacterController`, déplacement relatif à la caméra.
@@ -62,6 +62,7 @@ D'après le brainstorming :
 - **Notes :** dette technique listée dans [[Backlog]].
 
 ## 7. Questions ouvertes
-- [ ] **Caméra : 3e personne (prototype) ou Top-Down / Isométrique (brainstorming) ?**
+- [x] **Caméra** → **3e personne** (2026-11-08)
+- [ ] La vue 1re personne du prototype : la retirer, ou la garder pour le debug ?
 - [ ] Garde-t-on le saut ? (pas mentionné dans le brainstorming)
 - [ ] Stamina partagée entre course et autres actions (attaque) ?

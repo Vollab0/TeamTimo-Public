@@ -9,7 +9,7 @@ scripts:
   - Assets/Scripts/MazeNavMeshBuilder.cs
   - Assets/Scripts/TerrainGenerator.cs
 tags: [gdd, mecanique, niveau, procedural]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Génération procédurale du labyrinthe
 
@@ -18,7 +18,8 @@ L'environnement n'est pas un bloc uniforme mais **4 petits labyrinthes interconn
 - **4 zones, 4 ambiances :** chaque zone a une **thématique sensorielle** qui dicte le gameplay (ennemis aveugles, sourds…) — [[Discretion_et_Aggro]] — et des **variantes de kit modulaire** (murs, sol, plafond, portes).
 - **Salle des gardiens** au fond de chaque zone : arène **non procédurale**, conçue pour favoriser les stratégies de raid — [[Gardiens]].
 - **Placement aléatoire** des **coffres** (loot) et des **spawners** de monstres — [[Economie]], [[Apparition_Ennemis]].
-- **Porte de sortie finale** à localiser — [[Fragments_et_Cle]].
+- **Porte de sortie finale** à localiser, **placée à un endroit différent à chaque partie** (décidé le 2026-11-08) — [[Fragments_et_Cle]].
+- **Zones en ordre libre** : toutes accessibles dès le jour 1 (décidé le 2026-11-08) ; la difficulté monte avec chaque fragment récupéré — [[Cycle_de_Partie]].
 - Les **anciens bataillons** ont laissé des indices dans le labyrinthe — [[Univers]].
 - Algorithme envisagé dans les tâches : **tile-based ou Wave Function Collapse** (le prototype utilise un parcours en profondeur sur grille).
 
@@ -71,5 +72,5 @@ Ces noms sont utilisés par le spawner : **ne pas les renommer** sans mettre à 
 - [ ] Correspondance zones A/B/C/D ↔ quadrants SW/NW/NE/SE ?
 - [ ] Les salles aléatoires actuelles (1 par zone) deviennent-elles les salles des gardiens, placées « au fond » de la zone ?
 - [ ] Garde-t-on le parcours en profondeur ou passe-t-on au tile-based / WFC ?
-- [ ] Échelle : 1 500 m de côté est-il cohérent avec des journées de 10-20 min ?
+- [ ] Échelle : 1 500 m de côté est-il cohérent avec ~13 min de jour et ~5 min de nuit (journée de 18 min) ?
 - [ ] À faire dans le code : coffres, porte de sortie verrouillée, arènes de boss, variantes visuelles par zone.

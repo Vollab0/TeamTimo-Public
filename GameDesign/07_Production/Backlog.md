@@ -1,7 +1,7 @@
 ---
 type: backlog
 tags: [production]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Backlog
 
@@ -12,16 +12,16 @@ updated: 2026-11-07
 > - Les tâches 1 à 8 viennent de la liste « Tâches » du brainstorming.
 
 ## ⚠️ Design à trancher (incohérences relevées dans le brainstorming)
-- [ ] **Caméra** : Top-Down / Isométrique (tâches) ou 3e personne (prototype) ? — [[Deplacement_Joueur]]
-- [ ] **Durée d'un jour** : 10 min (tableau) / 20 min = 10 + 10 (tâches) / ~18 min (10 jours ≈ 3 h) ? — [[Cycle_Jour_Nuit]]
-- [ ] **Ratio jour/nuit** : 60/40 (tableau) ou 50/50 (tâches) ?
-- [ ] **Nombre de PNJ enlevés par matin** (1 ? un groupe ?) — [[Enlevement_des_PNJ]]
+- [x] **Caméra** → **3e personne** (2026-11-08) — [[Deplacement_Joueur]]
+- [x] **Durée d'un jour** → **~18 min** (2026-11-08) — [[Cycle_Jour_Nuit]]
+- [x] **Ratio jour/nuit** → **70/30** (2026-11-08)
+- [x] **Nombre de PNJ enlevés par matin** → **1 important + des figurants** (2026-11-08) — [[Enlevement_des_PNJ]]
 - [ ] **Gardiens** : 3 candidats « à revoir » (Taureau, Rat, Coq) pour 4 zones — [[Gardiens]]
 - [ ] **Taureau** à la fois mob, boss et Forgeron ? — [[Taureau]], [[Forgeron]]
 - [ ] **Vie** : cœurs (prototype) ou barres de vie (HUD du brainstorming) ? — [[Sante_et_Degats]]
-- [ ] **Encombrement du fragment** confirmé ? — [[Fragments_et_Cle]]
+- [x] **Encombrement du fragment** → **confirmé**, lâchable (2026-11-08) — [[Fragments_et_Cle]]
 - [ ] Thèmes sensoriels des zones C et D — [[Discretion_et_Aggro]]
-- [ ] Nombre de joueurs, en ligne ou local — [[Multijoueur]]
+- [x] Nombre de joueurs → **1-4 en ligne** (2026-11-08) — [[Multijoueur]]
 - [ ] Écrire / valider les piliers — [[Piliers_de_Design]]
 
 ## 1. Programmation — systèmes cœur
@@ -30,7 +30,7 @@ updated: 2026-11-07
   - [ ] Game Over (fin du jour 10 ou tous morts)
   - [ ] Victoire (clé assemblée + sortie atteinte)
 - [ ] **Cycle jour / nuit** — [[Cycle_Jour_Nuit]]
-  - [ ] Timer journalier (durée à trancher)
+  - [ ] Timer journalier (18 min, 70 % jour / 30 % nuit)
   - [ ] Transition d'éclairage (lumière directionnelle, skybox, post-process) — *visuel déjà en place*
   - [ ] Event System : changement de stats des monstres à la tombée de la nuit
 - [ ] **Génération procédurale (labyrinthe)** — [[Generation_Labyrinthe]]
@@ -38,15 +38,15 @@ updated: 2026-11-07
   - [ ] Logique des 4 zones connectées (A, B, C, D) — *déjà en place*
   - [ ] Placement aléatoire du loot (coffres) et des spawners
 - [ ] **PNJ & événements (Lobby)** — [[Enlevement_des_PNJ]]
-  - [ ] « RNG du Fermier » : chaque matin, calculer quel PNJ disparaît
+  - [ ] « RNG du Fermier » : chaque matin, calculer quel PNJ important disparaît (+ des figurants)
   - [ ] Désactiver le PNJ enlevé et fermer son stand
 
 ## 2. Programmation — joueur & interactions
 - [ ] **Contrôleur personnage** — [[Deplacement_Joueur]]
   - [ ] Marche, course *(fait)*, accroupissement
-  - [ ] Caméra (Top-Down ou isométrique — à trancher)
+  - [x] Caméra 3e personne *(décidée le 2026-11-08, déjà en place)*
   - [ ] Santé (cœurs, *fait*) et stamina
-  - [ ] Mort & réanimation (kit de réa) — [[Sante_et_Degats]]
+  - [ ] Mort : état « à terre », kit de réa, corps transportable, spectateur — [[Sante_et_Degats]]
 - [ ] **Inventaire** — [[Inventaire]]
   - [ ] UI à slots limités *(fait)*
   - [ ] Stacking des consommables

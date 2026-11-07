@@ -5,12 +5,19 @@ priority: high
 owner:
 scripts: []
 tags: [gdd, mecanique, reseau]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Multijoueur (coopératif)
 
 ## 1. Intention de design
 Le jeu est pensé **en coopération** : tout le brainstorming parle « des joueurs ». Références : *Lethal Company*, *Content Warning* ([[Pitch]]). Pilier : « Ensemble ou rien » ([[Piliers_de_Design]]).
+
+## Décisions (2026-11-08)
+- **1 à 4 joueurs, en ligne** : jouable en solo, mais pensé pour 2-4. L'équilibrage doit s'adapter au nombre de joueurs.
+- **Sauvegarde automatique chaque matin** par l'hôte : on reprend la partie au dernier matin avec le même groupe — [[Cycle_de_Partie]].
+- **Personnages cosmétiques** : un 4e animal est nécessaire pour 4 joueurs — [[Personnages_Jouables]].
+- **Or individuel + banque commune** — [[Economie]].
+- **Mort** : à terre → corps à ramener au Médecin, spectateur en attendant — [[Sante_et_Degats]].
 
 ## 2. Règles — ce que le brainstorming implique
 - **Défaite** quand **tous** les joueurs sont morts — [[Cycle_de_Partie]].
@@ -23,7 +30,7 @@ Le jeu est pensé **en coopération** : tout le brainstorming parle « des joueu
 - **Personnages jouables :** Renard, Poule, Mouton — [[Personnages_Jouables]].
 
 ## 3. État actuel du projet
-- **Netcode for GameObjects 1.14.1** installé, `Assets/DefaultNetworkPrefabs.asset` présent.
+- **Netcode for GameObjects 2.13** installé, `Assets/DefaultNetworkPrefabs.asset` présent.
 - `PlayerController` importe `Unity.Netcode` mais reste un `MonoBehaviour` : **aucun script n'est réseau**.
 - Plusieurs systèmes supposent **un seul joueur** (`HeartUIManager` : `FindFirstObjectByType<PlayerHealth>()`, `EnemySight` : un seul joueur ciblé).
 
@@ -35,7 +42,10 @@ Le jeu est pensé **en coopération** : tout le brainstorming parle « des joueu
 - Plus le passage au réseau est tardif, plus il coûte cher : à décider avant de coder les nouveaux systèmes.
 
 ## 7. Questions ouvertes
-- [ ] Nombre de joueurs (2-4 ?)
-- [ ] En ligne (Relay / Lobby Unity) ou réseau local ?
-- [ ] Jouable en solo ?
+- [x] Nombre de joueurs → **1 à 4** (2026-11-08)
+- [x] En ligne ou local → **en ligne** (2026-11-08) ; technologie (Relay / Lobby Unity, Steam…) à fixer dans un ADR
+- [x] Jouable en solo → **oui** (2026-11-08)
+- [ ] Comment l'équilibrage s'adapte-t-il au nombre de joueurs (PV des gardiens, nombre de mobs, [[Loup]] en solo, porter un corps seul) ?
+- [ ] En solo, la mort = Game Over immédiat (personne pour ramener le corps) ?
+- [ ] Peut-on rejoindre une partie en cours / reprendre une sauvegarde avec un joueur en moins ?
 - [ ] Chat vocal intégré ?

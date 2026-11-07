@@ -6,7 +6,7 @@ owner:
 scripts:
   - Assets/Scripts/DayNightCycle.cs
 tags: [gdd, mecanique, coeur, ambiance]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Cycle jour / nuit
 
@@ -20,7 +20,7 @@ Deux phases au rôle opposé :
 
 ## 2. Règles et comportement
 ### Design (brainstorming)
-- Répartition **60 % jour / 40 % nuit**.
+- Répartition **70 % jour / 30 % nuit** (décidé le 2026-11-08 ; le brainstorming hésitait entre 60/40 et 50/50) : sur un jour de ~18 min, **~13 min de jour et ~5 min de nuit**. La nuit est un « coup » court et risqué.
 - **La nuit :**
   - les mobs deviennent des **mobs de nuit** : buff de vitesse et de dégâts, **rayon d'aggro augmenté**, apparence différente (yeux rouges, textures sombres) — [[Bestiaire]] ;
   - les **gardiens dorment** et sont **plus faibles** → fenêtre pour voler le fragment — [[Gardiens]] ;
@@ -38,8 +38,8 @@ Deux phases au rôle opposé :
 ## 3. Paramètres de tuning
 | Paramètre | Type | Défaut code | Cible design | Rôle |
 |---|---|---|---|---|
-| `dayDurationInSeconds` | float | 60 | ⚠️ 600 ou 1200 | Durée d'un cycle complet |
-| part de jour | float | (50 %) | 60 % | À ajouter |
+| `dayDurationInSeconds` | float | 60 | 1080 (18 min) | Durée d'un cycle complet |
+| part de jour | float | (50 %) | 70 % | À ajouter |
 | `timeOfDay` | float [0-1] | 0 | | Heure de départ |
 | `sunIntensity` / `moonIntensity` | float | 1.5 / 0.5 | | Puissance des astres |
 | `fogDensity` | float | 0.005 | | Brouillard |
@@ -59,6 +59,6 @@ Deux phases au rôle opposé :
 - **Matériau :** `Assets/Art/Materials/Environment/MySkybox.mat` — modifié en mode édition par le script, voir [[Backlog]].
 
 ## 7. Questions ouvertes
-- [ ] Durée d'un jour : **10 min** (tableau « Cycle jour/nuit ») ou **20 min = 10 jour + 10 nuit** (liste de tâches) ? Et 10 jours ≈ 3 h donne ~18 min.
-- [ ] Ratio : 60/40 (tableau) ou 50/50 (liste de tâches) ?
+- [x] Durée d'un jour → **~18 min** (2026-11-08)
+- [x] Ratio → **70/30** (2026-11-08)
 - [ ] Conditions pour sauter la nuit (tous d'accord ? tous au Lobby ?).

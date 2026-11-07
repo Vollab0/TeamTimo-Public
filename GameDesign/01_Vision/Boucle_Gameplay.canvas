@@ -1,14 +1,14 @@
 {
 	"nodes":[
 		{"id":"titre","type":"text","text":"# Boucle de gameplay\nUne journée × 10 jours. Source : brainstorming de l'équipe.","x":-460,"y":-460,"width":760,"height":110,"color":"6"},
-		{"id":"matin","type":"text","text":"## 🌅 Matin\nLe **Fermier enlève un PNJ** : son service disparaît\n[[Enlevement_des_PNJ]]","x":-720,"y":-260,"width":340,"height":150,"color":"1"},
+		{"id":"matin","type":"text","text":"## 🌅 Matin\nLe **Fermier enlève un PNJ important** (son service disparaît) et des figurants : le village se vide\n[[Enlevement_des_PNJ]]","x":-720,"y":-260,"width":340,"height":150,"color":"1"},
 		{"id":"lobby","type":"text","text":"## 🏠 Lobby (zone sûre)\nAcheter, soigner, réanimer, réparer, mettre à jour la carte, déposer l'or\n[[Lobby]] · [[PNJ]] · [[Economie]]","x":-280,"y":-260,"width":360,"height":170},
-		{"id":"jour","type":"text","text":"## ☀️ Jour (~60 %)\nExplorer les zones, fouiller les **coffres**, tuer des mobs → or & objets\n[[Labyrinthe]] · [[Bestiaire]]","x":180,"y":-260,"width":360,"height":170,"color":"3"},
-		{"id":"nuit","type":"text","text":"## 🌙 Nuit (~40 %)\nMobs plus forts, mais les **gardiens dorment** → voler un fragment (pilier)\n[[Cycle_Jour_Nuit]] · [[Gardiens]]","x":180,"y":20,"width":360,"height":170,"color":"5"},
+		{"id":"jour","type":"text","text":"## ☀️ Jour (~70 %, ~13 min)\nExplorer les zones, fouiller les **coffres**, tuer des mobs → or & objets. Ou affronter un gardien en **raid**\n[[Labyrinthe]] · [[Bestiaire]]","x":180,"y":-260,"width":360,"height":170,"color":"3"},
+		{"id":"nuit","type":"text","text":"## 🌙 Nuit (~30 %, ~5 min)\nMobs plus forts, mais les **gardiens dorment** → voler un fragment (pilier)\n[[Cycle_Jour_Nuit]] · [[Gardiens]]","x":180,"y":20,"width":360,"height":170,"color":"5"},
 		{"id":"retour","type":"text","text":"## ↩️ Retour au Lobby\nÀ pied, avec le **Rappel**, ou en sautant la nuit\nPorteur de fragment vulnérable","x":-280,"y":20,"width":360,"height":150},
 		{"id":"escalade","type":"text","text":"## 📈 Escalade\nChaque fragment récupéré : le gardien se réveille et rôde, la difficulté globale augmente\n[[Fragments_et_Cle]]","x":640,"y":20,"width":340,"height":170,"color":"2"},
 		{"id":"cle","type":"text","text":"## 🗝️ 4 fragments\nLe **Forgeron** reconstruit la Clé Maîtresse (s'il n'a pas été enlevé)","x":-280,"y":300,"width":360,"height":130},
-		{"id":"victoire","type":"text","text":"## 🏁 Victoire\nOuvrir la porte de sortie avant la fin du jour 10","x":-720,"y":300,"width":340,"height":130,"color":"4"},
+		{"id":"victoire","type":"text","text":"## 🏁 Victoire\n**Trouver** (indices) et ouvrir la porte de sortie avant la fin du jour 10","x":-720,"y":300,"width":340,"height":130,"color":"4"},
 		{"id":"defaite","type":"text","text":"## 💀 Défaite\nFin du jour 10 **ou** tous les joueurs morts\n[[Cycle_de_Partie]]","x":180,"y":300,"width":360,"height":130,"color":"1"}
 	],
 	"edges":[

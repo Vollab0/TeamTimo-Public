@@ -1,7 +1,7 @@
 ---
 type: reference
 tags: [gdd, vision]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Glossaire
 
@@ -19,8 +19,12 @@ Vocabulaire commun à l'équipe (et à Claude Code). Le code mélange français 
 | **Gardien / Boss** | Boss d'une zone ; combat en « raid » — [[Gardiens]] |
 | **Fragment de clé** | Pièce de la clé, gardée par un gardien ; c'est un **pilier** qui retient le boss — [[Fragments_et_Cle]] |
 | **Clé Maîtresse** | Clé réassemblée à partir des 4 fragments, ouvre la sortie |
-| **Malédiction du porteur** | Effets négatifs subis par celui qui porte un fragment (encombrement, à confirmer) |
-| **PNJ** | Habitant du village offrant un service — [[PNJ]] |
+| **Malédiction du porteur** | Le porteur d'un fragment est ralenti et a ses slots bloqués ; il peut le poser ou le passer — [[Fragments_et_Cle]] |
+| **Gardien errant** | Gardien réveillé par le vol de son fragment : il erre dans le labyrinthe jusqu'à être vaincu — [[Gardiens]] |
+| **À terre** | État d'un joueur à 0 cœur, relevable au kit pendant quelques secondes avant la mort — [[Sante_et_Degats]] |
+| **Figurant** | Villageois sans service (dialogues seulement), enlevé lui aussi au fil des matins — [[Enlevement_des_PNJ]] |
+| **Indices des anciens bataillons** | Traces laissées dans le labyrinthe ; mènent à la porte de sortie et s'archivent entre les parties — [[Univers]] |
+| **PNJ (important)** | Habitant du village offrant un service ; 1 enlevé chaque matin — [[PNJ]] |
 | **Mob / Mob de nuit** | Monstre du labyrinthe ; sa variante de nuit est plus forte — [[Bestiaire]] |
 | **Pièces d'or** | Monnaie (monstres, coffres) — [[Economie]] |
 | **Aggro** | Cible actuelle d'un monstre — [[Discretion_et_Aggro]] |

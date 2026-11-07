@@ -2,7 +2,7 @@
 type: personnage
 status: draft
 tags: [gdd, contenu, personnage]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Personnages jouables
 
@@ -12,14 +12,20 @@ De **petits animaux mignons** (« base animale mignonne »), cobayes du Fermier 
 
 | Personnage | Différences de gameplay | Modèle 3D | Statut |
 |---|---|---|---|
-| Renard | ? | concept | draft |
-| Poule | ? | concept | draft |
-| Mouton | ? | concept | draft |
+| Renard | aucune (cosmétique) | concept | draft |
+| Poule | aucune (cosmétique) | concept | draft |
+| Mouton | aucune (cosmétique) | concept | draft |
+| *4e animal* | aucune (cosmétique) | à concevoir | draft |
+
+> [!success] Décidé le 2026-11-08
+> Le choix du personnage est **purement cosmétique** : même gameplay pour tous, la spécialisation vient de l'**équipement** acheté. Le jeu se joue jusqu'à 4 : il faut un **4e animal**.
 
 - Les joueurs apparaissent dans la **grange** du [[Lobby]].
 - Animations : Idle, Walk, Run, Attack, Hit, Die — [[Direction_Artistique]].
 - Prefab actuel du prototype : `Assets/Prefabs/Characters/Player.prefab`.
 
 ## Questions ouvertes
-- [ ] Simple choix cosmétique, ou stats / capacités différentes ?
-- [ ] Un 4e personnage si l'on joue à 4 ?
+- [x] Simple choix cosmétique, ou stats / capacités différentes ? → **cosmétique** (2026-11-08)
+- [x] Un 4e personnage si l'on joue à 4 ? → **oui** (2026-11-08)
+- [ ] Quel 4e animal ?
+- [ ] Deux joueurs peuvent-ils prendre le même animal (variantes de couleur) ?

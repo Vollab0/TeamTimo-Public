@@ -5,7 +5,7 @@ priority: medium
 owner:
 scripts: []
 tags: [gdd, mecanique, economie]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Économie
 
@@ -27,6 +27,10 @@ L'or permet de **se préparer** (soins, équipement, carte, réparation) : la pr
 | [[Cartographe]] | Mise à jour de la carte |
 | [[Arnaqueur]] | Jeux d'argent |
 
+### Possession de l'or (décidé le 2026-11-08)
+- **Individuel** : chacun porte son or. À la mort, l'or porté **tombe au sol** (récupérable par les alliés).
+- La **banque est commune** à l'équipe : y déposer son or le met en sécurité et en commun.
+
 ### Stocker l'or
 - Le [[Banquier]] stocke les pièces de tout le monde et prend **1 pièce par jour d'intérêt**.
 - S'il est enlevé, il **lâche les pièces** : les joueurs doivent se les partager.
@@ -45,9 +49,9 @@ L'or permet de **se préparer** (soins, équipement, carte, réparation) : la pr
 - Sons : achat, loot.
 
 ## 5. Liens
-- [[PNJ]] · [[Catalogue_Objets]] · [[Enlevement_des_PNJ]] · [[Multijoueur]] (or partagé ou individuel ?)
+- [[PNJ]] · [[Catalogue_Objets]] · [[Enlevement_des_PNJ]] · [[Multijoueur]]
 
 ## 7. Questions ouvertes
-- [ ] L'or est-il individuel ou commun à l'équipe ?
-- [ ] Que perd un joueur qui meurt (or porté) ?
+- [x] L'or est-il individuel ou commun ? → **individuel, banque commune** (2026-11-08)
+- [x] Que perd un joueur qui meurt ? → son **or porté tombe au sol** (2026-11-08 ; inventaire : à préciser)
 - [ ] Équilibrage prix des objets vs gain d'or (tâche de polish).

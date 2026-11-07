@@ -1,7 +1,7 @@
 ---
 type: catalogue
 tags: [gdd, contenu, pnj]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # PNJ du village
 
@@ -19,5 +19,7 @@ Les habitants du [[Lobby]] offrent services et objets contre des pièces ([[Econ
 | [[Banquier]] | Castor | Stockage de l'or (1 pièce / jour d'intérêt) | Lâche les pièces, à partager |
 
 Animaux d'après la liste de tâches (« Forgeron Taureau, Médecin Chat, Marchand Blaireau, Cartographe Hibou, Arnaqueur Raton, Banquier Castor »).
+
+En plus de ces 6 PNJ importants, le village compte de **nombreux villageois figurants** (dialogues seulement), enlevés eux aussi petit à petit pour que le joueur voie le village se vider — [[Enlevement_des_PNJ]].
 
 Chaque PNJ a un **stand** dans le Lobby (forge, tente du médecin, table du cartographe…) — [[Direction_Artistique]].

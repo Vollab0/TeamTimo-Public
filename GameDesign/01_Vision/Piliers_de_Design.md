@@ -2,7 +2,7 @@
 type: vision
 status: draft
 tags: [gdd, vision]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Piliers de design
 
@@ -33,4 +33,7 @@ Des animaux adorables… qui sont des cobayes de laboratoire. Le décalage nourr
 - Sert : [[Univers]], [[Direction_Artistique]]
 
 ## Ce que le jeu n'est PAS
+- **Un jeu d'horreur pure** : la tension est réelle, mais l'humour la désamorce (échecs drôles, ton cartoon) — décidé le 2026-11-08.
+- **Un roguelite à progression de puissance** : rien ne rend plus fort d'une partie à l'autre ; seul le **lore** se débloque — [[Univers]].
+- **Un jeu de classes** : les personnages sont cosmétiques, la spécialisation vient de l'équipement — [[Personnages_Jouables]].
 - *(à compléter)*

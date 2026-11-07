@@ -9,7 +9,7 @@ scripts:
   - Assets/Scripts/DamageDealer.cs
   - Assets/Scripts/RagdollController.cs
 tags: [gdd, mecanique, joueur, combat]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Santé, mort et réanimation
 
@@ -24,6 +24,12 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
 - **Mort & réanimation :**
   - le [[Medecin]] peut réanimer un joueur mort ; **gratuit (ou peu cher) si les autres joueurs ont ramené son corps** au Lobby ;
   - le **Kit de réanimation** permet de réanimer un allié sur place.
+
+> [!success] Décidé le 2026-11-08 — déroulé de la mort
+> 1. À 0 cœur, le joueur passe **à terre** quelques secondes : un allié peut le relever sur place avec un **Kit de réanimation**.
+> 2. Passé ce délai, il est **mort** : son **corps** devient un objet transportable que les alliés ramènent au [[Medecin]] pour le ressusciter.
+> 3. En attendant, le joueur mort est **spectateur**. Son or porté tombe au sol — [[Economie]].
+> 4. Game Over si tous les joueurs sont morts — [[Cycle_de_Partie]].
 - **Bouclier :** permet d'encaisser des coups — [[Combat_Attaque]].
 - Les mobs de nuit font plus de dégâts — [[Cycle_Jour_Nuit]].
 
@@ -62,7 +68,10 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
 
 ## 7. Questions ouvertes
 - [ ] Ajouter des frames d'invincibilité ?
-- [ ] Le corps d'un joueur mort est-il un objet transportable (ragdoll à porter) ?
-- [ ] Que fait un joueur mort en attendant (spectateur) ?
+- [x] Le corps d'un joueur mort est-il transportable ? → **oui** (2026-11-08)
+- [x] Que fait un joueur mort en attendant ? → **spectateur** (2026-11-08)
+- [ ] Durée de l'état « à terre » ? Peut-on ramper / appeler à l'aide ?
+- [ ] Si le [[Medecin]] est enlevé, un joueur mort ne peut plus revenir (seul le kit pendant l'état « à terre ») ?
+- [ ] Porter un corps : ralentit-il comme un fragment ? Bloque-t-il l'inventaire ?
 - [ ] Le HUD affiche-t-il des **cœurs** (prototype) ou des **barres de vie** (brainstorming, HUD) ?
 - [ ] À faire dans le code : stamina, mort → état « à terre », réanimation, perte des touches de debug.
