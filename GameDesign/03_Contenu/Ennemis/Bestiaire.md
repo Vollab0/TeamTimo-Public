@@ -5,7 +5,7 @@ updated: 2026-11-07
 ---
 # Bestiaire
 
-![[Mobs.jpg]]
+![[Mob_Taureau.jpg|140]] ![[Mob_Araignee.jpg|140]] ![[Mob_Loup.jpg|140]] ![[Mob_Taupe.jpg|140]] ![[Mob_Aigle.jpg|140]]
 
 ## Mobs du labyrinthe
 | Mob | Rôle | Particularité | Fenêtre d'attaque | Statut |
@@ -21,6 +21,8 @@ updated: 2026-11-07
 Machine à états : **Patrouille → Détection → Poursuite → Attaque → Retour**.
 
 ## Variante de nuit
+![[Mob_Souris_Jour.jpg|140]] ![[Mob_Souris_Nuit.jpg|140]]
+
 La nuit, chaque mob devient plus dangereux — [[Cycle_Jour_Nuit]] :
 - buff de **vitesse** et de **dégâts**, **rayon d'aggro** augmenté ;
 - visuel : **yeux rouges, textures sombres**.

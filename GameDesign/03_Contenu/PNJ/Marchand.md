@@ -8,6 +8,8 @@ updated: 2026-11-07
 ---
 # Le Marchand
 
+![[PNJ_Marchand.jpg|220]]
+
 ## Rôle
 - **Vendre des objets** aux joueurs.
 - Ce ne sont **pas des objets de valeur**, mais ils sont **indispensables au commencement** du jeu (ex. : cailloux, allumettes…).

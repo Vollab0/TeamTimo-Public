@@ -6,7 +6,7 @@ updated: 2026-11-07
 ---
 # Personnages jouables
 
-![[Personnages_Jouables.jpg]]
+![[Perso_Renard.jpg|180]] ![[Perso_Poule.jpg|200]] ![[Perso_Mouton.jpg|200]]
 
 De **petits animaux mignons** (« base animale mignonne »), cobayes du Fermier — [[Univers]].
 

@@ -10,6 +10,8 @@ updated: 2026-11-07
 ---
 # Taupe
 
+![[Mob_Taupe.jpg|220]]
+
 ## Rôle dans le jeu
 Menace d'**embuscade** qui détecte les **vibrations** : force les joueurs à surveiller leurs déplacements — [[Discretion_et_Aggro]].
 

@@ -10,6 +10,8 @@ updated: 2026-11-07
 ---
 # Aigle
 
+![[Mob_Aigle.jpg|220]]
+
 ## Rôle dans le jeu
 Tireur **perché sur les murs** du labyrinthe : menace verticale qui rend le **Lance-pierre** indispensable.
 

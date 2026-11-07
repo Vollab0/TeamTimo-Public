@@ -11,6 +11,8 @@ updated: 2026-11-07
 ---
 # Araignée (Spider)
 
+![[Mob_Araignee.jpg|220]]
+
 ## Rôle dans le jeu
 Mob qui **tisse des toiles dans les couloirs**. Lorsqu'un joueur entre dans une toile, il est **très fortement ralenti** et l'araignée qui l'a tissée est **alertée** et vient l'attaquer. En temps normal, l'araignée rôde et réagit aux joueurs qui entrent dans sa zone de vision.
 

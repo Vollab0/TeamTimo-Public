@@ -11,6 +11,8 @@ updated: 2026-11-07
 ---
 # Taureau (Bull)
 
+![[Mob_Taureau.jpg|220]]
+
 ## Rôle dans le jeu
 Mob qui **prend toute la largeur des couloirs** : dès qu'il aperçoit le joueur, il prend quelques secondes puis **charge** dans sa direction. Pousse le joueur à éviter les longs couloirs à découvert.
 

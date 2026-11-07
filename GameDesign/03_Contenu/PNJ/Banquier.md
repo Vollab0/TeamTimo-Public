@@ -8,6 +8,8 @@ updated: 2026-11-07
 ---
 # Le Banquier
 
+![[PNJ_Banquier.jpg|220]]
+
 ## Rôle
 - **Stocke les pièces** de tout le monde.
 - Prend **une pièce par jour** d'intérêt.

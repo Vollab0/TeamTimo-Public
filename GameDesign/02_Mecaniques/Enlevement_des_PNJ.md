@@ -9,8 +9,6 @@ updated: 2026-11-07
 ---
 # Enlèvement des PNJ — le « RNG du Fermier »
 
-![[PNJs_Morts.jpg]]
-
 ## 1. Intention de design
 Le village est **en sursis** : chaque jour, le Fermier « enlève » aléatoirement des PNJ. Les joueurs doivent **prioriser leurs achats** (soins, équipement) avant que le spécialiste concerné ne disparaisse définitivement.
 

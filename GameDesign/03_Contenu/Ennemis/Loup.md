@@ -10,6 +10,8 @@ updated: 2026-11-07
 ---
 # Loup
 
+![[Mob_Loup.jpg|220]]
+
 ## Rôle dans le jeu
 Un animal **peureux** qui chasse en **meute**. Il punit les joueurs isolés et récompense ceux qui restent groupés — [[Multijoueur]].
 

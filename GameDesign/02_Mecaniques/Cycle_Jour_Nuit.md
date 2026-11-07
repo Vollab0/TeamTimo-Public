@@ -10,7 +10,8 @@ updated: 2026-11-07
 ---
 # Cycle jour / nuit
 
-![[Cycle_Jour_Nuit.jpg]]
+![[Mob_Souris_Jour.jpg|180]] ![[Mob_Souris_Nuit.jpg|180]]
+*Un mob de jour et sa variante de nuit.*
 
 ## 1. Intention de design
 Deux phases au rôle opposé :

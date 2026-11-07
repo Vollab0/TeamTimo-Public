@@ -9,7 +9,7 @@ updated: 2026-11-07
 ---
 # Les Gardiens (boss de raid)
 
-![[Boss.jpg]]
+![[Boss_Taureau.jpg|200]] ![[Boss_Rat.jpg|200]] ![[Boss_Coq.jpg|200]]
 
 ## Rôle dans le jeu
 Chaque zone du labyrinthe se termine par une **Salle des Gardiens** où un boss garde un **fragment de clé** — [[Fragments_et_Cle]]. Il y a une **cohérence totale entre le boss et sa zone**.
@@ -23,6 +23,8 @@ Chaque zone du labyrinthe se termine par une **Salle des Gardiens** où un boss 
   - le fragment est en fait **un pilier qui retient le boss** : les joueurs peuvent s'en approcher pendant son sommeil ;
   - **enlever le pilier réveille le boss**, qui peut alors **se promener partout** dans le labyrinthe.
   - Ex. tableau « Nuit » : *le taureau dort mais se réveille quand le fragment est récupéré*.
+
+    ![[Boss_Taureau_Endormi.jpg|260]]
 - Musique dédiée : thème Boss / Poursuite.
 
 ## Candidats — ⚠️ « À revoir » sur le tableau

@@ -8,6 +8,8 @@ updated: 2026-11-07
 ---
 # Le Forgeron
 
+![[PNJ_Forgeron.jpg|220]]
+
 ## Rôles (contre des pièces)
 - Gérer la **durabilité** des objets possédés (réparation) — [[Combat_Attaque]].
 - **Reconstruire la Clé Maîtresse** une fois tous les fragments trouvés — [[Fragments_et_Cle]].

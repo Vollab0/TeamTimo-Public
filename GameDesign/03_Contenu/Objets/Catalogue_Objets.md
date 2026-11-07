@@ -5,8 +5,6 @@ updated: 2026-11-07
 ---
 # Catalogue des objets
 
-![[Tableau_Objets.jpg]]
-
 Les 21 objets du brainstorming. **Rareté** : Commun < Rare < Épique < Légendaire. **Emplacement** : *Marchand* (acheté au [[Marchand]]) ou *Labyrinthe* (coffres / loot).
 Un objet complexe mérite sa propre note dans ce dossier (template `Template_Objet`).
 

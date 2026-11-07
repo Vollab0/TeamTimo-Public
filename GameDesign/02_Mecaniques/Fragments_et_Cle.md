@@ -9,7 +9,7 @@ updated: 2026-11-07
 ---
 # Fragments de clé et Clé Maîtresse
 
-![[Nuit_Boss.jpg]]
+![[Boss_Taureau_Endormi.jpg|300]]
 
 ## 1. Intention de design
 L'objectif principal : pour s'enfuir, récupérer **4 fragments de clé**, un dans la **salle des gardiens** au fond de chacune des 4 zones. Chaque fragment est une prise de risque qui rend la suite plus dure.

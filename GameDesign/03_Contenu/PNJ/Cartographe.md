@@ -8,6 +8,8 @@ updated: 2026-11-07
 ---
 # Le Cartographe
 
+![[PNJ_Cartographe.jpg|220]]
+
 ## Rôle (indispensable)
 - **Dessiner la carte des joueurs.**
 - **Dessiner la carte globale du Lobby.**

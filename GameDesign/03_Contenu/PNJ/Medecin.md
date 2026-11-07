@@ -8,6 +8,8 @@ updated: 2026-11-07
 ---
 # Le Médecin
 
+![[PNJ_Medecin.jpg|220]]
+
 ## Rôles
 - **Soigner** les joueurs.
 - **Réanimer** un joueur mort. Si les autres joueurs ont réussi à **ramener son corps**, la réanimation est **gratuite (ou peu chère)**.

@@ -8,6 +8,8 @@ updated: 2026-11-07
 ---
 # L'Arnaqueur
 
+![[PNJ_Arnaqueur.jpg|220]]
+
 ## Rôle (non essentiel)
 - **Racheter les objets** des joueurs contre de l'argent.
 - **Proposer des jeux d'argent.**

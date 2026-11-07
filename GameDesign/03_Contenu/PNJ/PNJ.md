@@ -5,7 +5,7 @@ updated: 2026-11-07
 ---
 # PNJ du village
 
-![[PNJs.jpg]]
+![[PNJ_Forgeron.jpg|130]] ![[PNJ_Medecin.jpg|130]] ![[PNJ_Marchand.jpg|130]] ![[PNJ_Cartographe.jpg|130]] ![[PNJ_Arnaqueur.jpg|130]] ![[PNJ_Banquier.jpg|130]]
 
 Les habitants du [[Lobby]] offrent services et objets contre des pièces ([[Economie]]). Chaque matin, le Fermier en enlève — [[Enlevement_des_PNJ]].
 
