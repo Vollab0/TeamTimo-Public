@@ -22,7 +22,7 @@ updated: 2026-11-08
 - [x] **Encombrement du fragment** → **confirmé**, lâchable (2026-11-08) — [[Fragments_et_Cle]]
 - [ ] Thèmes sensoriels des zones C et D — [[Discretion_et_Aggro]]
 - [x] Nombre de joueurs → **1-4 en ligne** (2026-11-08) — [[Multijoueur]]
-- [ ] Écrire / valider les piliers — [[Piliers_de_Design]]
+- [x] Écrire / valider les piliers (revus en équipe le 2026-11-08) — [[Piliers_de_Design]]
 
 ## 1. Programmation — systèmes cœur
 - [ ] **GameManager (cycle du jeu)** — [[Cycle_de_Partie]]

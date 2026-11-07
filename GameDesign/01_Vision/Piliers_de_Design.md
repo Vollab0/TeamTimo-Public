@@ -1,15 +1,12 @@
 ---
 type: vision
-status: draft
+status: in-progress
 tags: [gdd, vision]
 updated: 2026-11-08
 ---
 # Piliers de design
 
 Les 3 à 5 principes qui tranchent les débats : **chaque mécanique doit servir au moins un pilier**, sinon on la coupe.
-
-> [!warning] Proposition à valider par l'équipe
-> Le brainstorming ne formule pas de piliers explicitement : ceux-ci sont **déduits** de ses idées récurrentes. À reformuler, fusionner ou supprimer.
 
 ## 1. Le temps presse
 Le compte à rebours de 10 jours et les enlèvements quotidiens de PNJ obligent à **prioriser** : chaque journée perdue coûte un service, une ressource, une chance.
