@@ -108,7 +108,7 @@ updated: 2026-11-07
 - [x] **Build Settings** : `Labo.unity` (inexistante) remplacée par `Labyrinthe.unity` le 2026-11-07.
 - [ ] `PlayerController` : `GetComponent` / `transform.Find` appelés à chaque frame dans `SprintSmoke()` → mettre en cache dans `Awake()`.
 - [ ] `PlayerHealth` : touches de debug `K`/`L`/`H` via l'ancienne API `Input` → les retirer ou les passer sous `#if UNITY_EDITOR`. Une fois fait, passer *Player Settings → Active Input Handling* de « Both » à « Input System Package » (Unity 6.3 avertit que l'Input Manager est déprécié).
-- [ ] Warning en Play Mode : « TerrainCollider: MeshCollider is not supported on terrain » → un `MeshCollider` est présent sur l'objet `Terrain` de `Labyrinthe.unity`, à retirer (relevé le 2026-11-08).
+- [x] Warning en Play Mode : « TerrainCollider: MeshCollider is not supported on terrain » → le prefab `Assets/Prefabs/SM_Rock_01.prefab`, peint comme « arbre » sur le terrain `Lobby`, portait un `MeshCollider` (les arbres de terrain n'acceptent que des colliders primitifs). Remplacé par un `CapsuleCollider` (rayon 0,23, hauteur 0,66) le 2026-11-08.
 - [ ] `EnemySight` : `StopCoroutine("PatrolRoutine")` (par nom) n'arrête pas une coroutine lancée avec `StartCoroutine(PatrolRoutine())` → risque de patrouilles en double. À vérifier.
 - [ ] `SpawnerManager` : le taureau est détecté par `prefab.name.Contains("Bull")` → préférer un champ dans `WaveSettings`.
 - [ ] `PlayerController.attackDuration` non exposé dans l'Inspector.

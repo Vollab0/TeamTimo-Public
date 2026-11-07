@@ -69,9 +69,16 @@ TeamTimo/
 
 ## 5. Règles de sécurité sur les assets Unity
 - **`.meta` :** si tu déplaces, renommes ou supprimes un fichier/dossier dans `Assets/`, fais de même avec son `.meta` (sinon les GUID et toutes les références sautent). Tu ne peux pas créer de `.meta` valide toi-même : laisse Unity le générer pour un nouveau fichier.
-- **Ne modifie pas en texte brut** les `.unity`, `.prefab`, `.asset`, `.mat`, `.controller` sauf demande explicite ; préfère un script, un outil d'éditeur (`Assets/Scripts/Editor/`) ou des instructions pour l'Inspector.
-- **Scènes :** chaque membre a sa scène de test (`Assets/Scenes/<Prénom>.unity`) ; `Labyrinthe.unity` est partagée.
-- **Tu ne peux pas lancer Unity ni les tests :** après une modification de code, indique ce qu'il faut vérifier dans l'éditeur (Play Mode, Inspector, console).
+- **Ne modifie pas en texte brut** les `.unity`, `.prefab`, `.asset`, `.mat`, `.controller` sauf demande explicite ; passe par l'éditeur ouvert (Unity CLI, ci-dessous), un outil d'éditeur (`Assets/Scripts/Editor/`) ou des instructions pour l'Inspector.
+- **Scènes :** chaque membre a sa scène de test (`Assets/Scenes/<Prénom>.unity`) ; `Labyrinthe.unity` est la scène principale partagée.
+- **Unity CLI — tu peux piloter l'éditeur :** le CLI `unity` (installé dans `%LOCALAPPDATA%\Unity\bin`) et le package `com.unity.pipeline` permettent de lancer / fermer l'éditeur et de commander un éditeur ouvert. Passe toujours `--project-path` et `--caller plugin --skill <skill>` ; détails dans la skill `unity-cli`.
+  - `unity status` : éditeur connecté et prêt ? (`--until-ready` pour attendre ; un dialogue ouvert, ex. « Project Upgrade Required », le bloque : demande à l'utilisateur de répondre).
+  - `unity command console get --level warn` / `console status` : erreurs de compilation et console, à lire **après chaque modification de code**.
+  - `unity command script eval --file <fichier.cs>` : exécuter du C# dans l'éditeur (inspecter la scène, modifier un prefab via `PrefabUtility`…). Sous PowerShell, passe le code par `--file` (les guillemets de `--code` sont mal transmis).
+  - `unity command editor.playmode start|stop` : tester en Play Mode. Le premier passage déclenche un rechargement du domaine (~1 min) pendant lequel l'éditeur ne répond pas : attends `ready`, puis vérifie que `Time.frameCount` avance.
+  - Tests : `unity command test list` / les commandes `test` de l'éditeur ouvert ; `unity test` (headless) refuse un projet déjà ouvert dans un éditeur.
+  - `unity open` / `unity close` : demande avant de fermer l'éditeur de l'utilisateur et vérifie qu'aucune scène n'est non sauvegardée.
+- **Après une modification de code :** vérifie toi-même la compilation et la console via le CLI ; si aucun éditeur n'est ouvert, indique ce qu'il faut vérifier dans l'éditeur (Play Mode, Inspector, console).
 
 ## 6. Git
 - Ignorés : `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `*.csproj`, `*.sln`, `UIElementsSchema/`, l'état local d'Obsidian (`GameDesign/.obsidian/workspace*.json`), fichiers système.
