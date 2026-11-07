@@ -3,11 +3,11 @@
 Jeu Unity développé par une équipe de 4 (Gabin, Kenny, Lucas, Nadir). Ce dépôt contient **le projet Unity** et **le Game Design Document** (vault Obsidian `GameDesign/`). Les notes et le code sont écrits en français ; réponds en français.
 
 ## 1. Aperçu technique
-- **Moteur :** Unity **6000.2.7f2** (Unity 6) — physique : `Rigidbody.linearVelocity` (pas `velocity`).
-- **Rendu :** URP 17.2 · VFX Graph · UI **UI Toolkit** (UXML/USS dans `Assets/UI/`, pas uGUI).
+- **Moteur :** Unity **6000.3.28f1** (Unity 6.3 LTS) — physique : `Rigidbody.linearVelocity` (pas `velocity`).
+- **Rendu :** URP 17.3 · VFX Graph · UI **UI Toolkit** (UXML/USS dans `Assets/UI/`, pas uGUI).
 - **Le jeu :** survie / évasion **coopérative**. Des animaux-cobayes ont **10 jours in-game** pour vaincre les gardiens de 4 labyrinthes (zones A-D autour d'un Lobby-village), récupérer 4 fragments de clé et s'évader, pendant que le « Fermier » enlève chaque matin un PNJ du village. Jour = exploration / préparation ; nuit = mobs plus forts mais gardiens endormis. Résumé complet : `GameDesign/01_Vision/Pitch.md`.
 - **Prototype actuel :** 3e personne, labyrinthe procédural en 4 zones, taureau chargeur, araignée, inventaire, cœurs, jour/nuit visuel. Plusieurs points de design sont encore à trancher (caméra, durée du jour…) : voir la section « Design à trancher » de `GameDesign/07_Production/Backlog.md`.
-- **Packages clés :** Input System 1.14 (`PlayerInput` → Unity Events) · **Cinemachine 2.10** (API `CinemachineVirtualCamera` / `CinemachineFreeLook`, pas la v3) · AI Navigation 2.0 (NavMeshSurface/Modifier, zones NavMesh nommées) · Netcode for GameObjects 1.14 (installé, **non utilisé** pour l'instant).
+- **Packages clés :** Input System 1.20 (`PlayerInput` → Unity Events) · **Cinemachine 2.10** (API `CinemachineVirtualCamera` / `CinemachineFreeLook`, pas la v3) · AI Navigation 2.0 (NavMeshSurface/Modifier, zones NavMesh nommées) · Netcode for GameObjects 2.13 (installé, **non utilisé** pour l'instant).
 
 ## 2. Structure du dépôt
 ```

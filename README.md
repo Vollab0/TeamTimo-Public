@@ -19,7 +19,7 @@ Jeu de survie / évasion **coopératif** développé sous Unity 6.
 Game Design Document complet : [`GameDesign/00_Index.md`](GameDesign/00_Index.md) · Pitch : [`GameDesign/01_Vision/Pitch.md`](GameDesign/01_Vision/Pitch.md)
 
 ## Démarrer
-- **Unity :** ouvrir la racine du dépôt avec Unity **6000.2.7f2**. Scène principale : `Assets/Scenes/Labyrinthe.unity`.
+- **Unity :** ouvrir la racine du dépôt avec Unity **6000.3.28f1** (6.3 LTS). Scène principale : `Assets/Scenes/Labyrinthe.unity`.
 - **Game Design Document :** dans Obsidian, *Ouvrir un dossier comme coffre* → choisir `GameDesign/`. Point d'entrée : `GameDesign/00_Index.md`.
 - **Claude Code :** les conventions du projet et le workflow GDD ↔ code sont décrits dans [`CLAUDE.md`](CLAUDE.md).
 
@@ -29,7 +29,7 @@ Game Design Document complet : [`GameDesign/00_Index.md`](GameDesign/00_Index.md
 Fusion intelligente des scènes et prefabs en cas de conflit. Adapter le chemin à votre installation d'Unity :
 ```bash
 git config merge.unityyamlmerge.name "Unity SmartMerge (UnityYAMLMerge)"
-git config merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/6000.2.7f2/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p %O %B %A %A"
+git config merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/6000.3.28f1/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p %O %B %A %A"
 git config merge.unityyamlmerge.recursive binary
 ```
 Sans cette configuration, rien ne casse : git fusionne simplement de façon classique.
