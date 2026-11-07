@@ -1,0 +1,34 @@
+# =====================================================================
+#  TeamTimo — .gitattributes
+#  UnityYAMLMerge : fusion intelligente des scènes / prefabs / assets Unity.
+#  Configuration à faire une fois par membre : voir README.md
+#
+#  Git LFS n'est PAS utilisé pour l'instant (budget LFS du compte GitHub
+#  bloqué) : les binaires sont des fichiers git normaux. Voir le Backlog.
+# =====================================================================
+
+# Sans la config locale "merge.unityyamlmerge", git fusionne normalement :
+# rien ne casse, la fusion est juste moins intelligente.
+*.unity              merge=unityyamlmerge
+*.prefab             merge=unityyamlmerge
+*.asset              merge=unityyamlmerge
+*.mat                merge=unityyamlmerge
+*.anim               merge=unityyamlmerge
+*.controller         merge=unityyamlmerge
+*.overrideController merge=unityyamlmerge
+*.physicMaterial     merge=unityyamlmerge
+*.physicsMaterial2D  merge=unityyamlmerge
+*.playable           merge=unityyamlmerge
+*.mask               merge=unityyamlmerge
+*.lighting           merge=unityyamlmerge
+*.terrainlayer       merge=unityyamlmerge
+*.spriteatlas        merge=unityyamlmerge
+*.renderTexture      merge=unityyamlmerge
+*.mixer              merge=unityyamlmerge
+*.preset             merge=unityyamlmerge
+*.meta               merge=unityyamlmerge
+
+# Assets Unity enregistrés en binaire (même en mode "Force Text") :
+# jamais fusionnables, git garde une version entière.
+**/LightingData.asset   binary
+**/Terrain_Data/*.asset binary
