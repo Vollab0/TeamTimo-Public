@@ -14,7 +14,7 @@ updated: 2026-11-08
 Zone de **sécurité absolue** au centre de la carte : se préparer, dépenser son or, se soigner, préparer l'expédition suivante.
 
 ## Contenu
-- **Grange** : point d'apparition des joueurs ; on y **dort pour sauter la nuit** si tous les joueurs vivants y sont — [[Cycle_Jour_Nuit]] (équivalent du vaisseau de *Lethal Company* / de la maison de *Content Warning*)
+- **Grange** : point d'apparition des joueurs ; on y **dort pour sauter la nuit** si tous les joueurs vivants y sont — [[Cycle_Jour_Nuit]] (équivalent du vaisseau de *Lethal Company* / de la maison de *Content Warning*). On y pose aussi les **fragments récupérés** sur un **socle** visible par tous (décidé le 2026-11-08) — [[Fragments_et_Cle]].
 
   ![[Lobby_Grange.jpg|260]]
 - **Stands des PNJ** : forge, tente du médecin, étal du marchand, table du cartographe, table de l'arnaqueur, banque — [[PNJ]].
@@ -32,9 +32,11 @@ Village cartoon entouré de hauts murs de pierre percés de portes : chemins de 
 ![[Lobby_Batiments.jpg|300]] ![[Lobby_Decor.jpg|300]] ![[Lobby_Etals.jpg|180]] ![[Lobby_Bois_Panneau.jpg|90]]
 
 ## Implémentation technique
-- **Scène assemblée à la main** (liste de tâches : « Assembler la scène du Lobby, placer les PNJ de manière logique »).
+- **Même scène que le labyrinthe** (décidé le 2026-11-08) : le village est au centre, on passe une porte sans chargement — cohérent avec le prototype et plus simple pour le multijoueur.
+- **Assemblé à la main** (liste de tâches : « Assembler la scène du Lobby, placer les PNJ de manière logique ») à l'intérieur de `Labyrinthe.unity`, à l'emplacement réservé par `MazeGenerator`.
 - Aujourd'hui, le lobby est une zone vide de 6 × 6 cellules générée par `MazeGenerator` (zone NavMesh `Lobby`) entourée du terrain de `TerrainGenerator` — [[Generation_Labyrinthe]].
 
 ## Questions ouvertes
 - [x] Les monstres peuvent-ils entrer dans le Lobby ? → **non**, même un gardien réveillé (2026-11-08)
-- [ ] Le Lobby est-il dans la même scène que le labyrinthe ?
+- [x] Le Lobby est-il dans la même scène que le labyrinthe ? → **oui** (2026-11-08)
+- [ ] Le Lobby fait à la main se cale-t-il sur la zone 6 × 6 cellules générée, ou sa taille doit-elle changer ?

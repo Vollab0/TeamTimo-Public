@@ -22,7 +22,17 @@ Les objets servent à **manipuler l'aggro** des monstres.
 | Vue (cône) | Être dans le champ de vision | Carton (immobile), Sable (aveugle 3 s) |
 | Ouïe | Courir, objets bruyants | S'accroupir ; diversion avec Cailloux / Réveil |
 | Lumière | Torche, allumettes | Éteindre sa lumière |
-| Vibrations | Se déplacer près de la [[Taupe]] | Rester immobile ? |
+| Vibrations | Courir, sauter, atterrir près de la [[Taupe]] (décidé le 2026-11-08) | Marcher |
+| Odorat | Nourriture, joueurs proches ([[Gardiens]] : la Truie) | Tomates en diversion |
+
+### Sens déjà connus par créature
+| Créature | Sens |
+|---|---|
+| [[Taureau]] | Vue (couloir droit devant) |
+| [[Taupe]] | Vibrations |
+| L'Oie ([[Gardiens]]) | Vue : elle fait éclore un œuf quand elle voit un joueur |
+| La Truie ([[Gardiens]]) | Odorat |
+| [[Souris]], [[Araignee]], [[Loup]], [[Aigle]] | à définir |
 
 ### Objets qui modifient l'aggro — [[Catalogue_Objets]]
 | Objet | Effet |
@@ -54,4 +64,4 @@ Rayon d'aggro augmenté — [[Cycle_Jour_Nuit]].
 
 ## 7. Questions ouvertes
 - [x] Quels thèmes pour les zones C et D ? → **abandonné** : plus de thèmes par zone (2026-11-08)
-- [ ] Quels sens pour chaque mob (vue, ouïe, vibrations…) ?
+- [ ] Quels sens pour chaque mob ? (Taureau, Taupe, Oie, Truie connus — reste Souris, Araignée, Loup, Aigle)

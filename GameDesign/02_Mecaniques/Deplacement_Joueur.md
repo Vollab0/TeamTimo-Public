@@ -16,6 +16,7 @@ D'après le brainstorming :
 - Déplacements : **marche, course, accroupissement** (l'accroupissement sert la discrétion — [[Discretion_et_Aggro]]).
 - **Stamina** — limite la course et la roulade. Affichée par une **petite jauge discrète** près du personnage, visible seulement quand on la consomme (décidé le 2026-11-08).
 - **Saut conservé** et **roulade ajoutée** (décidé le 2026-11-08) : une esquive au sol en plus du saut du prototype.
+- **Roulade (précisé le 2026-11-08) :** coûte de la **stamina** et donne une **courte invincibilité** (i-frames) : elle sert à esquiver la charge du [[Taureau]] ou un coup. La stamina sert **seulement à courir et rouler**, pas à attaquer.
 - ~~Caméra : Top-Down ou Isométrique.~~ → **Décidé le 2026-11-08 : 3e personne**, comme le prototype (murs hauts qui bouchent la vue : le labyrinthe reste oppressant et la carte précieuse).
 
 > [!success] Caméra tranchée (2026-11-08)
@@ -47,6 +48,7 @@ D'après le brainstorming :
 | *stamina max, coût du sprint, régénération* | — | à créer | |
 | *vitesse accroupi* | — | à créer | |
 | *roulade : distance, durée, coût en stamina* | — | à créer | |
+| *roulade : durée d'invincibilité* | — | à créer | Fraction de seconde |
 
 ## 4. Feedback
 - VFX Graph : événements `StartSprint`/`StopSprint` (`SprintSmoke`), `OnJump` (`JumpSmoke`), `OnLand` (`LandSmoke`).
@@ -67,5 +69,6 @@ D'après le brainstorming :
 - [x] **Caméra** → **3e personne** (2026-11-08)
 - [ ] La vue 1re personne du prototype : la retirer, ou la garder pour le debug ?
 - [x] Garde-t-on le saut ? → **oui**, et on ajoute une **roulade** (2026-11-08)
-- [ ] Roulade : coûte-t-elle de la stamina ? Donne-t-elle une invincibilité courte ? Quelle touche ?
-- [ ] Stamina partagée entre course et autres actions (attaque) ?
+- [x] Roulade : stamina ? invincibilité ? → **coûte de la stamina**, **i-frames courtes** (2026-11-08)
+- [ ] Roulade : quelle touche (manette et clavier) ?
+- [x] Stamina partagée avec l'attaque ? → **non** : course et roulade seulement (2026-11-08)

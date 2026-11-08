@@ -16,7 +16,9 @@ updated: 2026-11-08
 ## 1. Intention de design
 L'environnement n'est pas un bloc uniforme mais **4 petits labyrinthes interconnectés** (zones A, B, C, D) autour du [[Lobby]] central.
 - **4 zones, 4 ambiances :** chaque zone a son **gardien** et des **variantes de kit modulaire** (murs, sol, plafond, portes). Pas de thème sensoriel (abandonné le 2026-11-08) : les mobs sont **mélangés dans toutes les zones** — [[Bestiaire]].
-- **Salle des gardiens** au fond de chaque zone : arène **non procédurale**, conçue pour favoriser les stratégies de raid. Le gardien de chaque zone (et donc son arène) est **tiré au sort à chaque partie** (décidé le 2026-11-08) — [[Gardiens]].
+- **Salle des gardiens** dans chaque zone : arène **non procédurale**, conçue pour favoriser les stratégies de raid, **placée à un endroit aléatoire de la zone** (décidé le 2026-11-08 : il faut la chercher). Le gardien de chaque zone (et donc son arène) est **tiré au sort à chaque partie** (décidé le 2026-11-08) — [[Gardiens]].
+- **Cages** (rares) : un PNJ enlevé peut y être retenu et libéré — [[Enlevement_des_PNJ]].
+- **Lobby dans la même scène** que le labyrinthe (décidé le 2026-11-08) — [[Lobby]].
 - **Placement aléatoire** des **coffres** (loot) et des **spawners** de monstres — [[Economie]], [[Apparition_Ennemis]].
 - **Porte de sortie finale** à localiser, **placée à un endroit différent à chaque partie** (décidé le 2026-11-08) — [[Fragments_et_Cle]].
 - **Zones en ordre libre** : toutes accessibles dès le jour 1 (décidé le 2026-11-08) ; chaque fragment récupéré lâche un gardien de plus dans le labyrinthe — [[Cycle_de_Partie]].
@@ -55,7 +57,7 @@ Ces noms sont utilisés par le spawner : **ne pas les renommer** sans mettre à 
 | `_slowMotion` / `_stepDelay` | bool / float | false / 0.01 | Visualisation pas à pas (debug) |
 
 > [!note] Échelle
-> Avec les valeurs par défaut, le labyrinthe fait 30 × 50 = **1 500 m** de côté.
+> Avec les valeurs par défaut, le labyrinthe fait 30 × 50 = **1 500 m** de côté. La taille cible sera **fixée en playtest** (décidé le 2026-11-08) : on mesure d'abord le temps réel de traversée d'une zone avec le prototype.
 
 ## 5. Liens
 - Déclenche : [[Apparition_Ennemis]]
@@ -70,7 +72,7 @@ Ces noms sont utilisés par le spawner : **ne pas les renommer** sans mettre à 
 ## 7. Questions ouvertes
 - [ ] Graine (seed) partagée pour le multijoueur / le debug ?
 - [ ] Correspondance zones A/B/C/D ↔ quadrants SW/NW/NE/SE ?
-- [ ] Les salles aléatoires actuelles (1 par zone) deviennent-elles les salles des gardiens, placées « au fond » de la zone ?
+- [x] Où placer les arènes des gardiens ? → **n'importe où dans la zone**, tirage aléatoire (2026-11-08). Les salles aléatoires actuelles (1 par zone) peuvent servir d'emplacement ; reste à fixer la distance minimale au Lobby.
 - [ ] Garde-t-on le parcours en profondeur ou passe-t-on au tile-based / WFC ?
-- [ ] Échelle : 1 500 m de côté est-il cohérent avec ~13 min de jour et ~5 min de nuit (journée de 18 min) ?
-- [ ] À faire dans le code : coffres, porte de sortie verrouillée, arènes de boss, variantes visuelles par zone.
+- [x] Échelle : 1 500 m de côté, cohérent avec ~13 min de jour ? → **à fixer en playtest** (2026-11-08)
+- [ ] À faire dans le code : coffres, porte de sortie verrouillée, arènes de boss (salles taille fixe à la main), cages de PNJ, variantes visuelles par zone.

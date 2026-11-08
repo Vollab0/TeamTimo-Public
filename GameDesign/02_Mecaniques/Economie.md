@@ -32,7 +32,8 @@ L'or permet de **se préparer** (soins, équipement, carte, réparation) : la pr
 **Prix d'un demi-cœur — loi quadratique** (décidé le 2026-11-08) : `prix = k × n²`, où `n` est le nombre de demi-cœurs que le joueur a **avant** l'achat (sa vie actuelle pour un soin, sa vie max pour une séquelle ou une chirurgie). **Moins on a de cœurs, moins c'est cher.** `k` est à régler en playtest. Exemple avec `k = 1` : passer de 1 à 2 demi-cœurs coûte 1, de 5 à 6 coûte 25 ; une chirurgie à 3 cœurs (n = 6) coûte 36, la suivante 49 — [[Medecin]].
 
 ### Possession de l'or (décidé le 2026-11-08)
-- **Individuel** : chacun porte son or. À la mort, l'or porté **tombe au sol** (récupérable par les alliés) ; en solo, il est perdu.
+- **Individuel** : chacun porte son or. À la mort, l'or porté **tombe à côté du corps** et **disparaît au bout de 15 s** (précisé le 2026-11-08) : les alliés doivent le ramasser vite ; en solo, il est perdu.
+- **Résurrection payante** chez le [[Medecin]] : payée avec l'**or porté** d'un allié, prix **croissant à chaque mort** (décidé le 2026-11-08) — [[Sante_et_Degats]].
 - La **banque est commune** à l'équipe : y déposer son or le met en sécurité et en commun.
 
 ### Stocker l'or
@@ -57,5 +58,5 @@ L'or permet de **se préparer** (soins, équipement, carte, réparation) : la pr
 
 ## 7. Questions ouvertes
 - [x] L'or est-il individuel ou commun ? → **individuel, banque commune** (2026-11-08)
-- [x] Que perd un joueur qui meurt ? → son **or porté tombe au sol** (2026-11-08 ; inventaire : à préciser)
+- [x] Que perd un joueur qui meurt ? → son **or porté tombe au sol** et disparaît en 15 s ; ses **objets** sont gardés si les alliés ramènent le corps, sinon restés sur place jusqu'au matin (2026-11-08) — [[Sante_et_Degats]]
 - [ ] Équilibrage prix des objets vs gain d'or (tâche de polish).

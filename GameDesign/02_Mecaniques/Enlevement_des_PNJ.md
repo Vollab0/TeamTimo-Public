@@ -14,9 +14,10 @@ Le village est **en sursis** : chaque jour, le Fermier « enlève » aléatoirem
 
 ## 2. Règles et comportement
 - **Un matin sur deux** (jours **2, 4, 6, 8 et 10**), un calcul aléatoire désigne **1 PNJ important** (à service) enlevé (décidé le 2026-11-08). Soit **5 enlèvements** : il reste **1 PNJ important** le dernier jour. Le jour 1 est tranquille.
-- **Figurants :** le [[Lobby]] est aussi peuplé de **nombreux villageois figurants** (simples lignes de dialogue, aucun service). Leurs dialogues donnent des **rumeurs et indices utiles** (faiblesses des gardiens, coffres, porte de sortie) : chaque figurant enlevé, c'est de l'information perdue (décidé le 2026-11-08). Plusieurs sont enlevés **chaque matin**, même les matins sans enlèvement important : le joueur doit **sentir le village se vider** jour après jour.
+- **Figurants :** le [[Lobby]] est aussi peuplé de **nombreux villageois figurants** (simples lignes de dialogue, aucun service). Leurs dialogues donnent des **rumeurs et indices utiles** (faiblesses des gardiens, coffres, porte de sortie) : chaque figurant enlevé, c'est de l'information perdue (décidé le 2026-11-08). Mais ces indices ne sont que des **raccourcis** : les informations **vitales** sont aussi inscrites dans le labyrinthe, donc perdre un figurant coûte du temps, jamais la partie (décidé le 2026-11-08) — [[Fragments_et_Cle]]. Plusieurs sont enlevés **chaque matin**, même les matins sans enlèvement important : le joueur doit **sentir le village se vider** jour après jour.
 - **Mise en scène :** à l'aube, une courte séquence montre la **silhouette géante du Fermier** qui emporte les villageois (décidé le 2026-11-08) — [[Univers]].
-- Le GameObject du PNJ est désactivé et **son stand est fermé** pour le reste de la partie.
+- Le GameObject du PNJ est désactivé et **son stand est fermé**.
+- **Sauvetage, rarement (décidé le 2026-11-08) :** une **cage cachée** dans le labyrinthe peut retenir un PNJ enlevé ; la trouver et la libérer le **ramène au village**, qui rouvre son stand. C'est un objectif secondaire risqué, pas une garantie : la plupart des enlèvements restent définitifs.
 - **Conséquences par PNJ :**
 
 | PNJ | Si enlevé |
@@ -47,6 +48,8 @@ Le village est **en sursis** : chaque jour, le Fermier « enlève » aléatoirem
 ## 7. Questions ouvertes
 - [x] Combien de PNJ enlevés par jour ? → **1 PNJ important tous les 2 jours (jours 2, 4, 6, 8, 10) + des figurants chaque matin** (2026-11-08)
 - [x] Les figurants ont-ils un rôle ? → **rumeurs et indices** (2026-11-08)
-- [ ] Quels indices précisément, et comment éviter qu'un indice vital disparaisse avec un figurant ?
+- [x] Comment éviter qu'un indice vital disparaisse avec un figurant ? → indices vitaux **aussi dans le labyrinthe**, figurants = raccourcis (2026-11-08)
+- [ ] Quels indices précisément donnent les figurants ?
 - [x] Le Forgeron peut-il être enlevé ? → **oui, comme les autres**, dès le jour 2 : on assemble alors la clé soi-même (2026-11-08)
-- [ ] Peut-on sauver un PNJ enlevé ?
+- [x] Peut-on sauver un PNJ enlevé ? → **oui, rarement** : cage cachée dans le labyrinthe (2026-11-08)
+- [ ] Cages : combien par partie ? Seulement les PNJ importants, ou aussi des figurants ? Gardée par des mobs, verrouillée (clé, levier) ? Le PNJ libéré peut-il être ré-enlevé ?

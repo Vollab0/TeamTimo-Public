@@ -14,7 +14,7 @@ updated: 2026-11-08
 - **Soigner** les joueurs.
 - **Ressusciter** un joueur mort (précisé le 2026-11-08) — [[Sante_et_Degats]] :
   - **gratuitement** si ses alliés lui **ramènent son corps** ;
-  - **contre paiement** sinon : il va récupérer le corps lui-même, et le fait savoir — « Il va encore falloir que j'aille récupérer le corps moi-même… » Le joueur réapparaît au Lobby.
+  - **contre paiement** sinon : il va récupérer le corps lui-même, et le fait savoir — « Il va encore falloir que j'aille récupérer le corps moi-même… » Un allié paie avec son **or porté** ; le prix **augmente à chaque mort** de la partie. Le joueur réapparaît **tout de suite** au Lobby, mais **sans ses objets** (restés sur place jusqu'au matin) : « Je n'ai pas pu prendre ces objets avec moi. » (précisé le 2026-11-08)
 - **Soigner les séquelles** (décidé le 2026-11-08) : il rend le **½ cœur max** perdu à chaque retour sans lui (veillée, réveil au matin, solo) ou relevé au kit — [[Sante_et_Degats]]. Le [[Pharmacien]] peut aussi le faire avec son Baume de séquelle.
 - **Chirurgie** (décidé le 2026-11-08) : il vend des **améliorations permanentes pour la partie** : **+½ cœur max** par opération, **2 fois au maximum** (+1 cœur entier). On sort de son cabinet en se demandant ce qu'il nous a fait — [[Piliers_de_Design]] (« Mignon dehors, sombre dedans »).
 
@@ -29,7 +29,7 @@ updated: 2026-11-08
 |---|---|
 | Soin (½ cœur de vie) | `k × n²`, n = demi-cœurs de vie actuels |
 | Résurrection, corps ramené | gratuit |
-| Résurrection, corps non ramené | ? |
+| Résurrection, corps non ramené | croissant à chaque mort (base et hausse ?), en or porté |
 | Soin d'une séquelle (½ cœur max) | `k × n²`, n = demi-cœurs de vie max actuels |
 | Chirurgie (+½ cœur max, 2 fois max) | `k × n²`, n = demi-cœurs de vie max actuels |
 
@@ -37,5 +37,6 @@ updated: 2026-11-08
 
 ## Dialogues (idées)
 - Résurrection payante : « Il va encore falloir que j'aille récupérer le corps moi-même… »
+- Au retour du corps : « Je n'ai pas pu prendre ces objets avec moi. »
 
 Voir : [[Sante_et_Degats]] · [[PNJ]] · [[Enlevement_des_PNJ]]

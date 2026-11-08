@@ -22,6 +22,8 @@ Mob qui **prend toute la largeur des couloirs** : dès qu'il aperçoit le joueur
   2. il rentre dans un **joueur** ;
   3. il se fait **parer par un bouclier** porté par un joueur.
 - Une fois arrêté, il est **étourdi quelques secondes** puis reprend sa patrouille.
+- **Joueur percuté (décidé le 2026-11-08) :** **1 cœur** de dégâts et un **gros recul**.
+- **Signal de charge (décidé le 2026-11-08) :** avant de charger, il **gratte le sol en soufflant** (animation + son), ce qui laisse le temps de **rouler** hors de l'axe — [[Deplacement_Joueur]].
 - Animation spécifique : charge.
 
 > [!success] Décidé le 2026-11-08 : le Taureau est un **mob classique**
@@ -70,5 +72,6 @@ stateDiagram-v2
 - **À faire :** arrêt sur collision joueur / bouclier, variante de nuit, PV et loot.
 
 ## Questions ouvertes
-- [ ] Le joueur percuté prend-il des dégâts et un knockback ?
-- [ ] Feedback de préparation de charge (son de meuglement, anim) ?
+- [x] Le joueur percuté prend-il des dégâts et un knockback ? → **1 cœur + gros recul** (2026-11-08). Le code actuel retire 1 demi-cœur par source (`zoneDamage` / `contactDamage`) : à aligner.
+- [x] Feedback de préparation de charge ? → **gratte le sol en soufflant** (anim + son) (2026-11-08)
+- [ ] Durée de la préparation (1 s codée en dur aujourd'hui) : suffisante pour réagir avec une roulade ?

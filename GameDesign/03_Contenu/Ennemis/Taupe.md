@@ -28,6 +28,7 @@ stateDiagram-v2
 - Se déplace **sous terre** : **invisible et invulnérable**, et **passe sous les murs** du labyrinthe (sa règle, d'après le pilier « Chaque mob a sa règle » — [[Piliers_de_Design]]).
 - **Fait surface toutes les 5 secondes** ; à l'émergence, inflige des **dégâts de zone** et **scanne** les environs.
 - Si elle détecte une **vibration**, elle **fonce sous terre** vers la position du joueur.
+- **Vibrations (décidé le 2026-11-08) :** **courir, sauter et atterrir** la déclenchent ; **marcher est sûr**. Des **monticules de terre** visibles signalent sa présence.
 - Une fois sortie, elle reste **immobile quelques instants** → **fenêtre d'attaque** pour les joueurs.
 - Animation spécifique : enfouissement.
 
@@ -40,5 +41,6 @@ stateDiagram-v2
 | Durée d'immobilité | « quelques instants » | Fenêtre d'attaque |
 
 ## Questions ouvertes
-- [ ] Qu'est-ce qui produit une vibration : marcher, courir, sauter ? L'accroupissement l'évite-t-il ?
-- [ ] Indice visuel de son déplacement (terre qui bouge) ?
+- [x] Qu'est-ce qui produit une vibration ? → **courir, sauter, atterrir** ; marcher est sûr (2026-11-08)
+- [x] Indice visuel de son déplacement ? → **monticules de terre** (2026-11-08)
+- [ ] La roulade produit-elle une vibration (impact au sol) ?

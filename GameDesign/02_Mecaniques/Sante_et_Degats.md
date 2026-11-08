@@ -26,11 +26,15 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
   - le **Kit de réanimation** relève sur place un allié **à terre**.
 
 > [!success] Décidé le 2026-11-08 — déroulé de la mort
-> 1. À 0 cœur, le joueur passe **à terre** quelques secondes : un allié peut le relever sur place avec un **Kit de réanimation**.
+> 1. À 0 cœur, le joueur passe **à terre** pendant **~30 s** (précisé le 2026-11-08) : il peut **ramper** lentement et **appeler à l'aide** (cri + marqueur visible des alliés). Un allié peut le relever sur place avec un **Kit de réanimation**.
 > 2. Passé ce délai, il est **mort**. Deux façons de le faire revenir chez le [[Medecin]] (précisé le 2026-11-08) :
->    - **corps ramené** : son **corps** est un objet transportable ; si les alliés le rapportent au Médecin, la résurrection est **gratuite** ;
->    - **corps laissé sur place** : les alliés **paient** le Médecin, qui va récupérer le corps lui-même en râlant (ex. : « Il va encore falloir que j'aille récupérer le corps moi-même… »). Le joueur **réapparaît au Lobby**.
-> 3. En attendant, le joueur mort est **spectateur**. Son or porté tombe au sol — [[Economie]].
+>    - **corps ramené** : son **corps** est un objet transportable, **encombrant comme un fragment** (ralentit et bloque tout l'inventaire du porteur — précisé le 2026-11-08) ; si les alliés le rapportent au Médecin, la résurrection est **gratuite** et le joueur **garde ses objets** ;
+>    - **corps laissé sur place** : un allié **paie avec son or porté** un prix **qui augmente à chaque mort de la partie** (précisé le 2026-11-08) ; le Médecin va récupérer le corps lui-même en râlant (« Il va encore falloir que j'aille récupérer le corps moi-même… »). Le joueur **réapparaît tout de suite au Lobby**, mais **sans ses objets** : « Je n'ai pas pu prendre ces objets avec moi. »
+> 3. En attendant, le joueur mort est **spectateur**.
+>
+> **Ce que l'on perd en mourant** (décidé le 2026-11-08) :
+> - **l'or porté** tombe **toujours** à côté du corps et **disparaît au bout de 15 s** : les alliés doivent le ramasser vite — [[Economie]] ;
+> - **les objets** sont **conservés** si les alliés ramènent eux-mêmes le corps (au Médecin ou à la grange pour la veillée). Sinon, ils restent **au sol sur le lieu de la mort jusqu'au matin suivant**, puis disparaissent.
 > 4. Game Over si tous les joueurs sont morts — [[Cycle_de_Partie]].
 >
 > **Médecin enlevé — la veillée** (décidé le 2026-11-08 : une mort définitive serait trop punitive) :
@@ -75,6 +79,9 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
 | *vie max minimale* | — | 1 demi-cœur | Les séquelles ne descendent pas plus bas |
 | *chirurgie : gain par opération / opérations max* | — | 1 demi-cœur / 2 | Améliorations du [[Medecin]] |
 | *coefficient de prix `k`* | — | ? | `prix = k × n²` (soin, séquelle, chirurgie) |
+| *durée « à terre »* | — | ~30 s | Le joueur rampe et peut appeler à l'aide |
+| *durée de vie de l'or tombé* | — | 15 s | Puis il disparaît |
+| *résurrection payante : prix de base / hausse par mort* | — | ? / ? | Payée en or porté |
 
 ## 4. Feedback
 - HUD : cœurs pleins / demi / vides dans `HeartsContainer` (`HeartUIManager`).
@@ -90,12 +97,14 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
 - [ ] Ajouter des frames d'invincibilité ?
 - [x] Le corps d'un joueur mort est-il transportable ? → **oui** (2026-11-08)
 - [x] Que fait un joueur mort en attendant ? → **spectateur** (2026-11-08)
-- [ ] Durée de l'état « à terre » ? Peut-on ramper / appeler à l'aide ?
+- [x] Durée de l'état « à terre » ? Peut-on ramper / appeler à l'aide ? → **~30 s**, **ramper + appel à l'aide** (2026-11-08)
 - [x] Si le Médecin est enlevé, un joueur mort peut-il revenir ? → **oui** : veillée à la grange, ou réveil au matin en perdant or et inventaire (2026-11-08)
 - [x] Séquelles → **½ cœur max par mort sans Médecin** (ou relevé au kit), cumulables jusqu'à **½ cœur** de vie max ; soin au prix quadratique (2026-11-08)
-- [ ] Valeur de `k` ; la loi quadratique s'applique-t-elle aussi à la résurrection payante ?
-- [ ] Porter un corps : ralentit-il comme un fragment ? Bloque-t-il l'inventaire ?
-- [ ] Résurrection payante : quel prix (fixe, croissant à chaque mort) ? Qui paie (or porté, banque commune) ? Réapparition immédiate ou au matin ?
+- [ ] Valeur de `k`.
+- [x] Porter un corps : ralentit-il comme un fragment ? Bloque-t-il l'inventaire ? → **oui, comme un fragment** (2026-11-08)
+- [x] Résurrection payante : prix, qui paie, quand ? → **croissant à chaque mort**, payé avec l'**or porté** d'un allié, **réapparition immédiate** sans les objets (2026-11-08). La loi `k × n²` ne s'y applique pas.
+- [ ] Résurrection payante : prix de départ et augmentation (ex. 20, +10 par mort) ? Le compteur est-il par joueur ou pour toute l'équipe ?
+- [ ] En solo, le réveil au matin fait-il aussi perdre les objets (ils disparaissent au matin selon la règle générale) ? Le texte « En solo » ne mentionne que l'or.
 - [x] Le HUD affiche-t-il des cœurs ou des barres de vie ? → **cœurs** (2026-11-08)
 - [x] Comment afficher la stamina ? → **petite jauge discrète** près du personnage, visible quand on court / roule (2026-11-08) — [[Deplacement_Joueur]]
 - [ ] À faire dans le code : stamina, mort → état « à terre », réanimation, perte des touches de debug.

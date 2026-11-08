@@ -26,7 +26,7 @@ updated: 2026-11-08
 
 ## 📦 03 — Contenu
 - **Personnages :** [[Personnages_Jouables]] (Renard, Poule, Mouton, Lapin)
-- **Ennemis :** [[Bestiaire]] — [[Taureau]] · [[Araignee]] · [[Loup]] · [[Taupe]] · [[Aigle]]
+- **Ennemis :** [[Bestiaire]] — [[Souris]] · [[Taureau]] · [[Araignee]] · [[Loup]] · [[Taupe]] · [[Aigle]]
 - **Boss :** [[Gardiens]]
 - **PNJ :** [[PNJ]] — [[Forgeron]] · [[Medecin]] · [[Marchand]] · [[Cartographe]] · [[Arnaqueur]] · [[Banquier]] · [[Pharmacien]] (Hérisson, semi-important, caché)
 - **Objets :** [[Catalogue_Objets]] (23 objets + 3 remèdes du Pharmacien)

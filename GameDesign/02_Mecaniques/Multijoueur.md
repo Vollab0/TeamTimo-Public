@@ -13,7 +13,8 @@ updated: 2026-11-08
 Le jeu est pensé **en coopération** : tout le brainstorming parle « des joueurs ». Références : *Lethal Company*, *Content Warning* ([[Pitch]]). Pilier : « Ensemble ou rien » ([[Piliers_de_Design]]).
 
 ## Décisions (2026-11-08)
-- **1 à 4 joueurs, en ligne** : jouable en solo, mais pensé pour 2-4. L'équilibrage doit s'adapter au nombre de joueurs.
+- **1 à 4 joueurs, en ligne** : jouable en solo, mais pensé pour 2-4.
+- **Équilibrage selon le nombre de joueurs (décidé le 2026-11-08) :** seul le **nombre de mobs** s'adapte. Les PV des gardiens ne changent pas, et il n'y a pas d'aide spéciale en solo — [[Apparition_Ennemis]].
 - **Sauvegarde automatique chaque matin** par l'hôte : on reprend la partie au dernier matin avec le même groupe — [[Cycle_de_Partie]].
 - **Personnages cosmétiques** : Renard, Poule, Mouton et **Lapin** (4e animal pour jouer à 4) — [[Personnages_Jouables]].
 - **Or individuel + banque commune** — [[Economie]].
@@ -45,7 +46,8 @@ Le jeu est pensé **en coopération** : tout le brainstorming parle « des joueu
 - [x] Nombre de joueurs → **1 à 4** (2026-11-08)
 - [x] En ligne ou local → **en ligne** (2026-11-08) ; technologie (Relay / Lobby Unity, Steam…) à fixer dans un ADR
 - [x] Jouable en solo → **oui** (2026-11-08)
-- [ ] Comment l'équilibrage s'adapte-t-il au nombre de joueurs (PV des gardiens, nombre de mobs, [[Loup]] en solo, porter un corps seul) ?
+- [x] Comment l'équilibrage s'adapte-t-il au nombre de joueurs ? → **seulement le nombre de mobs** (2026-11-08)
+- [ ] Courbe exacte (mobs × 1 / 1,5 / 2 / 2,5 ?) ; le [[Loup]] attaque-t-il toujours un joueur seul ?
 - [x] En solo, la mort = Game Over ? → **non** : réveil à la grange au matin suivant, or porté perdu (2026-11-08) — [[Sante_et_Degats]]
 - [ ] Peut-on rejoindre une partie en cours / reprendre une sauvegarde avec un joueur en moins ?
 - [ ] Chat vocal intégré ?

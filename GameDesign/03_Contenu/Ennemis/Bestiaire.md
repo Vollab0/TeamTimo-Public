@@ -16,8 +16,8 @@ Décidé le 2026-11-08 : **pas de thème par zone**, chaque mob a sa règle et l
 | [[Araignee]] | Piégeuse | Tisse des toiles qui ralentissent et l'alertent | ? | in-progress |
 | [[Loup]] | Traqueur en meute | Appelle des renforts, fuit si en infériorité | ? | draft |
 | [[Taupe]] | Embuscade souterraine | Invisible / invulnérable sous terre, **passe sous les murs**, émerge avec dégâts de zone | Immobile après émergence | draft |
-| [[Aigle]] | Tireur en hauteur | Sur les murs, crache des boules de salive | Lance-pierre uniquement | draft |
-| Souris | Mob de base ? | Illustre la variante jour → nuit ; liée au gardien Rat | ? | idée |
+| [[Aigle]] | Tireur en hauteur | Sur les murs, crache des boules de salive | Lance-pierre uniquement (tombé = mort) | draft |
+| [[Souris]] | Mob de base | Le plus courant, **dans toutes les zones** (décidé le 2026-11-08) ; liée au gardien Rat | ? | draft |
 
 ## Comportement commun (IA de base)
 Machine à états : **Patrouille → Détection → Poursuite → Attaque → Retour**.
@@ -36,4 +36,5 @@ Voir [[Gardiens]].
 - [x] Quels mobs dans quelle zone ? → **mélangés partout**, Aigle rare (2026-11-08)
 - [ ] Proportions de chaque mob (elles ne changent pas avec les fragments — 2026-11-08)
 - [ ] Or lâché par mob — [[Economie]]
-- [ ] La souris est-elle un mob à part entière ?
+- [x] La souris est-elle un mob à part entière ? → **oui**, mob de base dans toutes les zones (2026-11-08) — [[Souris]]
+- [ ] Nombre de mobs selon le nombre de joueurs (seul paramètre qui s'adapte — 2026-11-08) — [[Apparition_Ennemis]]

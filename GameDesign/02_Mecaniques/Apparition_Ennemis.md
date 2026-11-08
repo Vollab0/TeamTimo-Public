@@ -17,6 +17,8 @@ D'après le brainstorming :
 - **Escalade :** les mobs ne changent pas avec les fragments ; seule menace ajoutée, le **gardien dont on a pris le fragment rôde dans tout le labyrinthe** (décidé le 2026-11-08) — [[Fragments_et_Cle]].
 - Le **Loup** appelle des renforts pour être en supériorité numérique — [[Loup]].
 - Les **Aigles** se placent sur le haut des murs (zone NavMesh `WallTop` déjà prévue), dans **toutes les zones**, mais en **faible nombre** (mob rare) — [[Aigle]].
+- La **Souris**, mob de base, est présente **dans toutes les zones** (ajoutée le 2026-11-08) — [[Souris]].
+- **Nombre de joueurs (décidé le 2026-11-08) :** le **nombre de mobs** est multiplié selon le nombre de joueurs (1 à 4) ; c'est le seul paramètre d'équilibrage qui s'adapte — [[Multijoueur]].
 
 > [!question] Densité par zone, réapparition des mobs tués ?
 
@@ -37,9 +39,10 @@ D'après le brainstorming :
 | `obstacleLayer` | LayerMask | — | Murs + piliers |
 | largeur min. couloir (taureau) | float | 6 | **Codé en dur** |
 | distance min. entre taureaux | float | 8 | **Codé en dur** |
+| *multiplicateur de mobs par joueur* | — | à créer | Décidé le 2026-11-08 ; valeurs à régler en playtest |
 
 ## 5. Liens
-- Ennemis : [[Bestiaire]] ([[Taureau]], [[Araignee]], [[Loup]], [[Taupe]], [[Aigle]])
+- Ennemis : [[Bestiaire]] ([[Souris]], [[Taureau]], [[Araignee]], [[Loup]], [[Taupe]], [[Aigle]])
 - Dépend de : [[Generation_Labyrinthe]]
 
 ## 6. Implémentation technique
