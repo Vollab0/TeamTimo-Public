@@ -25,14 +25,14 @@ Deux phases au rôle opposé :
   - les mobs deviennent des **mobs de nuit** : buff de vitesse et de dégâts, **rayon d'aggro augmenté**, apparence différente (yeux rouges, textures sombres) — [[Bestiaire]] ;
   - les **gardiens dorment** et sont **plus faibles** → fenêtre pour voler le fragment — [[Gardiens]] ;
   - idée : les « monstres importants » dorment → possibilité de récupérer des objets importants.
-- Les joueurs peuvent **sauter la nuit** s'ils le veulent (vote ? tous au Lobby ? à préciser).
+- Les joueurs peuvent **sauter la nuit** : si **tous les joueurs vivants sont dans la grange**, ils peuvent dormir et passer directement au matin (décidé le 2026-11-08). C'est aussi la **veillée** qui ramène un allié mort quand le Médecin est enlevé — [[Sante_et_Degats]].
 - **Event System :** le passage à la nuit déclenche le changement de stats des monstres.
 - Transition d'éclairage : lumière directionnelle, skybox, post-process.
 
 ### Existant (code)
 - Cycle continu de `dayDurationInSeconds` ; `timeOfDay` : 0 = midi, 0.5 = minuit.
 - Pilote soleil, lune (gradients), lumière ambiante, brouillard et `_DayNightBlend` de la skybox.
-- **Purement visuel** : aucun événement n'est émis, pas de répartition 60/40 (le cycle est symétrique), pas de compteur de jours.
+- **Purement visuel** : aucun événement n'est émis, pas de répartition 70/30 (le cycle est symétrique), pas de compteur de jours.
 - `[ExecuteAlways]` : tourne aussi en mode édition.
 
 ## 3. Paramètres de tuning
@@ -61,4 +61,4 @@ Deux phases au rôle opposé :
 ## 7. Questions ouvertes
 - [x] Durée d'un jour → **~18 min** (2026-11-08)
 - [x] Ratio → **70/30** (2026-11-08)
-- [ ] Conditions pour sauter la nuit (tous d'accord ? tous au Lobby ?).
+- [x] Conditions pour sauter la nuit → **tous les joueurs vivants dans la grange** (2026-11-08)

@@ -22,14 +22,30 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
   - chez le [[Medecin]] (contre des pièces) ;
   - avec des **Baies** (soignent 1 cœur) — seul moyen de se soigner si le Médecin a été enlevé.
 - **Mort & réanimation :**
-  - le [[Medecin]] peut réanimer un joueur mort ; **gratuit (ou peu cher) si les autres joueurs ont ramené son corps** au Lobby ;
-  - le **Kit de réanimation** permet de réanimer un allié sur place.
+  - le [[Medecin]] ressuscite un joueur mort : **gratuitement** si ses alliés lui **ramènent son corps** au Lobby, **contre paiement** sinon (il va chercher le corps lui-même) ;
+  - le **Kit de réanimation** relève sur place un allié **à terre**.
 
 > [!success] Décidé le 2026-11-08 — déroulé de la mort
 > 1. À 0 cœur, le joueur passe **à terre** quelques secondes : un allié peut le relever sur place avec un **Kit de réanimation**.
-> 2. Passé ce délai, il est **mort** : son **corps** devient un objet transportable que les alliés ramènent au [[Medecin]] pour le ressusciter.
+> 2. Passé ce délai, il est **mort**. Deux façons de le faire revenir chez le [[Medecin]] (précisé le 2026-11-08) :
+>    - **corps ramené** : son **corps** est un objet transportable ; si les alliés le rapportent au Médecin, la résurrection est **gratuite** ;
+>    - **corps laissé sur place** : les alliés **paient** le Médecin, qui va récupérer le corps lui-même en râlant (ex. : « Il va encore falloir que j'aille récupérer le corps moi-même… »). Le joueur **réapparaît au Lobby**.
 > 3. En attendant, le joueur mort est **spectateur**. Son or porté tombe au sol — [[Economie]].
 > 4. Game Over si tous les joueurs sont morts — [[Cycle_de_Partie]].
+>
+> **Médecin enlevé — la veillée** (décidé le 2026-11-08 : une mort définitive serait trop punitive) :
+> - si les alliés **ramènent le corps à la grange** et y **dorment** (ce qui saute la nuit — [[Cycle_Jour_Nuit]]), le mort **se réveille au matin** ;
+> - si personne ne ramène le corps, il se réveille quand même **à la grange au matin suivant**, mais en ayant perdu son **or porté** et son **inventaire**.
+>
+> **Séquelles** (précisé le 2026-11-08) : un joueur revenu **sans le Médecin** (veillée, réveil au matin, solo) ou relevé au **kit** perd **½ cœur max** à chaque fois. Les séquelles se cumulent, mais la vie max ne descend **jamais sous ½ cœur**. On les soigne chez le [[Medecin]] (½ cœur par soin) ou avec le **Baume de séquelle** du [[Pharmacien]]. Le Médecin enlevé, elles s'accumulent plus vite qu'on ne les soigne.
+>
+> **Chirurgie** (Médecin) : **+½ cœur max** par opération, **2 fois au maximum** (+1 cœur entier). La vie max va donc de ½ cœur à 4 cœurs.
+>
+> **Prix d'un demi-cœur — loi quadratique** (décidé le 2026-11-08) : `prix = k × n²`, où `n` est le nombre de demi-cœurs que le joueur a **avant** l'achat (sa vie actuelle pour un soin, sa vie max pour une séquelle ou une chirurgie). **Moins on a de cœurs, moins c'est cher.** `k` est à régler en playtest.
+>
+> **En solo** (personne pour ramener le corps ni payer) : le joueur mort **se réveille à la grange au matin suivant**, en perdant son **or porté** et le reste de la journée, avec une **séquelle**. Pas de Game Over immédiat.
+>
+> **Affichage :** la vie reste en **cœurs** (demi-cœurs), comme le prototype.
 - **Bouclier :** permet d'encaisser des coups — [[Combat_Attaque]].
 - Les mobs de nuit font plus de dégâts — [[Cycle_Jour_Nuit]].
 
@@ -55,6 +71,10 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
 | `knockbackForce` | float | 15 | Force de recul |
 | `deathForceMultiplier` | float | 1.5 | Force du ragdoll à la mort |
 | `DamageDealer.damageAmount` | int | 1 | Dégâts d'un `DamageDealer` |
+| *séquelle : vie max perdue par mort* | — | 1 demi-cœur | Voir « Séquelles » |
+| *vie max minimale* | — | 1 demi-cœur | Les séquelles ne descendent pas plus bas |
+| *chirurgie : gain par opération / opérations max* | — | 1 demi-cœur / 2 | Améliorations du [[Medecin]] |
+| *coefficient de prix `k`* | — | ? | `prix = k × n²` (soin, séquelle, chirurgie) |
 
 ## 4. Feedback
 - HUD : cœurs pleins / demi / vides dans `HeartsContainer` (`HeartUIManager`).
@@ -71,7 +91,11 @@ La mort n'est pas la fin : en coopération, un joueur tombé peut être **réani
 - [x] Le corps d'un joueur mort est-il transportable ? → **oui** (2026-11-08)
 - [x] Que fait un joueur mort en attendant ? → **spectateur** (2026-11-08)
 - [ ] Durée de l'état « à terre » ? Peut-on ramper / appeler à l'aide ?
-- [ ] Si le [[Medecin]] est enlevé, un joueur mort ne peut plus revenir (seul le kit pendant l'état « à terre ») ?
+- [x] Si le Médecin est enlevé, un joueur mort peut-il revenir ? → **oui** : veillée à la grange, ou réveil au matin en perdant or et inventaire (2026-11-08)
+- [x] Séquelles → **½ cœur max par mort sans Médecin** (ou relevé au kit), cumulables jusqu'à **½ cœur** de vie max ; soin au prix quadratique (2026-11-08)
+- [ ] Valeur de `k` ; la loi quadratique s'applique-t-elle aussi à la résurrection payante ?
 - [ ] Porter un corps : ralentit-il comme un fragment ? Bloque-t-il l'inventaire ?
-- [ ] Le HUD affiche-t-il des **cœurs** (prototype) ou des **barres de vie** (brainstorming, HUD) ?
+- [ ] Résurrection payante : quel prix (fixe, croissant à chaque mort) ? Qui paie (or porté, banque commune) ? Réapparition immédiate ou au matin ?
+- [x] Le HUD affiche-t-il des cœurs ou des barres de vie ? → **cœurs** (2026-11-08)
+- [x] Comment afficher la stamina ? → **petite jauge discrète** près du personnage, visible quand on court / roule (2026-11-08) — [[Deplacement_Joueur]]
 - [ ] À faire dans le code : stamina, mort → état « à terre », réanimation, perte des touches de debug.

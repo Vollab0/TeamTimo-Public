@@ -14,11 +14,12 @@ updated: 2026-11-08
 ## 1. Intention de design
 D'après le brainstorming :
 - Déplacements : **marche, course, accroupissement** (l'accroupissement sert la discrétion — [[Discretion_et_Aggro]]).
-- **Stamina** associée à la santé (cœurs) — limite la course.
+- **Stamina** — limite la course et la roulade. Affichée par une **petite jauge discrète** près du personnage, visible seulement quand on la consomme (décidé le 2026-11-08).
+- **Saut conservé** et **roulade ajoutée** (décidé le 2026-11-08) : une esquive au sol en plus du saut du prototype.
 - ~~Caméra : Top-Down ou Isométrique.~~ → **Décidé le 2026-11-08 : 3e personne**, comme le prototype (murs hauts qui bouchent la vue : le labyrinthe reste oppressant et la carte précieuse).
 
 > [!success] Caméra tranchée (2026-11-08)
-> On garde la **3e personne** (Cinemachine FreeLook) du prototype. La vue 1re personne n'a pas été retenue comme option joueur. Restent à coder : accroupissement et stamina.
+> On garde la **3e personne** (Cinemachine FreeLook) du prototype. La vue 1re personne n'a pas été retenue comme option joueur. Restent à coder : accroupissement, stamina et roulade.
 
 ## 2. Règles et comportement (état actuel du code)
 - **Contrôleur :** `CharacterController`, déplacement relatif à la caméra.
@@ -45,11 +46,12 @@ D'après le brainstorming :
 | `knockbackDecay` | float | 5 | Vitesse d'amortissement du recul |
 | *stamina max, coût du sprint, régénération* | — | à créer | |
 | *vitesse accroupi* | — | à créer | |
+| *roulade : distance, durée, coût en stamina* | — | à créer | |
 
 ## 4. Feedback
 - VFX Graph : événements `StartSprint`/`StopSprint` (`SprintSmoke`), `OnJump` (`JumpSmoke`), `OnLand` (`LandSmoke`).
 - Animator piloté par `AnimationStateController` via `PlayerController.GetState()`.
-- Animations prévues : Idle, Walk, Run, Attack, Hit, Die — [[Direction_Artistique]].
+- Animations prévues : Idle, Walk, Run, Jump, Roll (roulade), Attack, Push (poussée), Hit, Die — [[Direction_Artistique]].
 - Sons de pas différents selon le sol.
 
 ## 5. Liens
@@ -64,5 +66,6 @@ D'après le brainstorming :
 ## 7. Questions ouvertes
 - [x] **Caméra** → **3e personne** (2026-11-08)
 - [ ] La vue 1re personne du prototype : la retirer, ou la garder pour le debug ?
-- [ ] Garde-t-on le saut ? (pas mentionné dans le brainstorming)
+- [x] Garde-t-on le saut ? → **oui**, et on ajoute une **roulade** (2026-11-08)
+- [ ] Roulade : coûte-t-elle de la stamina ? Donne-t-elle une invincibilité courte ? Quelle touche ?
 - [ ] Stamina partagée entre course et autres actions (attaque) ?

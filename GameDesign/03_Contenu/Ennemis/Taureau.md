@@ -7,7 +7,7 @@ prefab: Assets/Prefabs/Characters/Bull.prefab
 scripts:
   - Assets/Scripts/BullAI.cs
 tags: [gdd, contenu, ennemi]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Taureau (Bull)
 
@@ -24,8 +24,8 @@ Mob qui **prend toute la largeur des couloirs** : dès qu'il aperçoit le joueur
 - Une fois arrêté, il est **étourdi quelques secondes** puis reprend sa patrouille.
 - Animation spécifique : charge.
 
-> [!note] Taureau = mob **et** boss ?
-> Le tableau « Boss » propose aussi un **Taureau, chef du troupeau de veaux**, et le tableau « Nuit » montre un taureau endormi qui garde un fragment. Voir [[Gardiens]].
+> [!success] Décidé le 2026-11-08 : le Taureau est un **mob classique**
+> Il n'est ni gardien (le « Taureau chef du troupeau de veaux » du tableau Boss est abandonné) ni Forgeron (devenu un Cheval). L'illustration du taureau endormi sur le fragment reste un simple exemple du vol de nuit — [[Gardiens]].
 
 ## Comportement — état actuel du code
 ```mermaid

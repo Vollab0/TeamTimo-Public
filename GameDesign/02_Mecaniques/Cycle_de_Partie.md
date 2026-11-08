@@ -15,11 +15,11 @@ La « **Moisson** » : la partie dure exactement **10 jours in-game** de **~18 m
 
 ## 2. Règles et comportement
 - **Timer global :** 10 jours, chacun découpé en jour / nuit — [[Cycle_Jour_Nuit]].
-- **Chaque matin :** enlèvement d'un PNJ important et de figurants — [[Enlevement_des_PNJ]].
+- **Chaque matin :** enlèvement de figurants ; **un matin sur deux** (jours 2, 4, 6, 8, 10), d'un PNJ important — [[Enlevement_des_PNJ]].
 - **Victoire :** Clé Maîtresse assemblée **et** porte de sortie atteinte / ouverte avant le coucher du soleil du jour 10 — [[Fragments_et_Cle]].
 - **Game Over :** fin du jour 10, **ou** tous les joueurs morts — [[Sante_et_Degats]].
-- **Escalade :** chaque fragment débloqué augmente la difficulté globale, et le gardien volé erre dans le labyrinthe jusqu'à être vaincu — [[Gardiens]].
-- **Zones en ordre libre :** les 4 zones sont accessibles dès le jour 1 ; c'est l'escalade qui rend les dernières plus dures — [[Labyrinthe]].
+- **Escalade :** à chaque fragment, le gardien de la zone dont on a pris le fragment **rôde désormais dans tout le labyrinthe** jusqu'à ce qu'on le vainque. Il n'y a pas d'autre hausse de difficulté (décidé le 2026-11-08) — [[Gardiens]].
+- **Zones en ordre libre :** les 4 zones sont accessibles dès le jour 1 ; ce sont les gardiens en liberté qui rendent les dernières plus dures — [[Labyrinthe]].
 - **Sauvegarde :** automatique au **début de chaque jour**, par l'hôte. On reprend au dernier matin (décidé le 2026-11-08).
 - **Entre deux parties :** rien ne rend plus fort ; seuls les **indices de lore** découverts sont archivés — [[Univers]].
 
@@ -44,6 +44,6 @@ La « **Moisson** » : la partie dure exactement **10 jours in-game** de **~18 m
 
 ## 7. Questions ouvertes
 - [x] Durée réelle d'un jour → **~18 min** (2026-11-08)
-- [x] Un joueur mort peut-il revenir ? → **oui** : corps ramené au Médecin — [[Sante_et_Degats]] (2026-11-08)
+- [x] Un joueur mort peut-il revenir ? → **oui**, chez le Médecin : gratuit si le corps est ramené, payant sinon — [[Sante_et_Degats]] (2026-11-08)
 - [ ] Que contient la sauvegarde (graine du labyrinthe, PNJ restants, inventaires, fragments, gardiens errants, corps au sol) ?
 - [ ] Lore : que débloque-t-on exactement entre les parties, et où le consulte-t-on ?

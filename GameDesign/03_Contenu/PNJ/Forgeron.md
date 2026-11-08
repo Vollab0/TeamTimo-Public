@@ -1,10 +1,10 @@
 ---
 type: pnj
 status: draft
-animal: Taureau
+animal: Cheval
 stand: Forge
 tags: [gdd, contenu, pnj]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Le Forgeron
 
@@ -21,6 +21,6 @@ updated: 2026-11-07
 - *Le coffre du Lobby est améliorable* (note collée sous le Forgeron sur le tableau « PNJs morts ») — [[Lobby]].
 
 ## Questions ouvertes
-- [ ] Animal : la liste de tâches dit **Taureau**, l'illustration du tableau ressemble plutôt à un **cheval**. Et un Taureau est déjà mob et candidat boss.
+- [x] Animal → **Cheval**, comme sur l'illustration (2026-11-08) ; le Taureau reste un mob.
 
 Voir : [[PNJ]] · [[Enlevement_des_PNJ]] · [[Economie]]

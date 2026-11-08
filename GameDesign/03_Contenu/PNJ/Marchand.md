@@ -4,7 +4,7 @@ status: draft
 animal: Blaireau
 stand: Étal du marchand
 tags: [gdd, contenu, pnj]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Le Marchand
 
@@ -13,7 +13,7 @@ updated: 2026-11-07
 ## Rôle
 - **Vendre des objets** aux joueurs.
 - Ce ne sont **pas des objets de valeur**, mais ils sont **indispensables au commencement** du jeu (ex. : cailloux, allumettes…).
-- Objets marqués « Marchand » dans le tableau : Tomate, Cailloux, Allumettes, Baies, Boussole — [[Catalogue_Objets]].
+- Objets marqués « Marchand » dans le tableau : Tomate, Cailloux, Allumettes, Baies, Boussole, et la **Plume** (ajoutée le 2026-11-08) — [[Catalogue_Objets]].
 
 ## S'il est enlevé
 - Aucun impact.

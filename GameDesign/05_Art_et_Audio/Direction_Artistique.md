@@ -2,7 +2,7 @@
 type: art
 status: in-progress
 tags: [gdd, art, audio]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Direction artistique et audio
 
@@ -14,22 +14,24 @@ Moodboard : [[Moodboard_Visuel.canvas|Moodboard visuel]] · images dans `99_Atta
 ## Personnages (chara design)
 | Élément | Liste | Note |
 |---|---|---|
-| Joueurs | Renard, Poule, Mouton | [[Personnages_Jouables]] |
-| PNJ (6) | Forgeron Taureau, Médecin Chat, Marchand Blaireau, Cartographe Hibou, Arnaqueur Raton, Banquier Castor | [[PNJ]] |
+| Joueurs | Renard, Poule, Mouton, Lapin (à illustrer) | [[Personnages_Jouables]] |
+| PNJ (6 + 1) | Forgeron Cheval, Médecin Chat, Marchand Blaireau, Cartographe Hibou, Arnaqueur Raton, Banquier Castor + **Pharmacien Hérisson** (caché, à illustrer) | [[PNJ]], [[Pharmacien]] |
 | Mobs (5) | Taureau, Araignée, Loup, Taupe, Aigle + **variantes de nuit** | [[Bestiaire]] |
-| Boss | Taureau, Rat, Coq (à revoir) — versions musclées | [[Gardiens]] |
+| Boss | Rat, Coq, Oie, Truie — versions musclées (Oie et Truie à illustrer) | [[Gardiens]] |
 
 ## Objets (props)
-Les 21 objets du [[Catalogue_Objets]].
+Les 23 objets du [[Catalogue_Objets]] (dont la Plume et les Herbes) + 3 remèdes du Pharmacien.
 
 ## Environnement (level art)
-- **Kit modulaire du labyrinthe :** murs, sol, plafond, portes — **variantes pour les 4 zones**.
+- **Kit modulaire du labyrinthe :** murs, sol, plafond, portes — **variantes pour les 4 zones** (indépendantes du gardien, tiré au sort).
+- **4 arènes de gardiens** faites à la main (Rat, Coq, Oie, Truie) — [[Gardiens]].
 - **Lobby :** stands / étals des vendeurs (forge, tente médecin, table du cartographe…), grange, maisons, feu de camp, enclos, murs d'enceinte — [[Lobby]].
 - **Décor :** coffres, toiles d'araignées, arbres, panneaux explicatifs.
 
 ## Animations
-- Communes : **Idle, Walk, Run, Attack, Hit, Die**.
-- Spécifiques : charge du taureau, enfouissement de la taupe, vol de l'aigle.
+- Communes (joueurs) : **Idle, Walk, Run, Jump, Roll, Attack, Push, Hit, Die**, état « à terre » et corps porté.
+- Spécifiques : charge du taureau, enfouissement de la taupe, vol de l'aigle, phases des 4 gardiens (terriers du Rat, chant du Coq…).
+- Cinématiques : silhouette du Fermier à l'aube (chaque matin), fin (fuite et révélation) — [[Univers]].
 
 ## Déjà en place dans le projet
 - URP (`Assets/URP/`, `Assets/Settings/`), skybox jour/nuit (`MySkybox.mat`, [[Cycle_Jour_Nuit]]).

@@ -5,19 +5,18 @@ priority: high
 owner:
 scripts: []
 tags: [gdd, mecanique, ia, discretion]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Discrétion, sens des monstres et aggro
 
 ## 1. Intention de design
-Chaque zone du labyrinthe a une **thématique sensorielle** qui dicte le gameplay (voir [[Piliers_de_Design]]) :
-- **Exemple zone A — ennemis aveugles :** sensibles au **bruit** → il faut être discret (s'accroupir, ne pas courir).
-- **Exemple zone B — ennemis sourds :** détectent le **mouvement ou la lumière** → il faut se cacher visuellement.
+> [!info] Décidé le 2026-11-08
+> Il n'y a **plus de thème sensoriel par zone**. Ce sont les **mobs** qui ont chacun leur règle, et ils sont mélangés dans toutes les zones (pilier « Chaque mob a sa règle » — [[Piliers_de_Design]]). Chaque mob détecte les joueurs avec ses propres sens — [[Bestiaire]].
 
 Les objets servent à **manipuler l'aggro** des monstres.
 
 ## 2. Règles et comportement
-### Sources de détection (à définir par zone)
+### Sources de détection (à définir par mob)
 | Sens | Déclenché par | Contre-mesure |
 |---|---|---|
 | Vue (cône) | Être dans le champ de vision | Carton (immobile), Sable (aveugle 3 s) |
@@ -47,12 +46,12 @@ Rayon d'aggro augmenté — [[Cycle_Jour_Nuit]].
 | Multiplicateur d'aggro de nuit | ? | |
 
 ## 5. Liens
-- [[Bestiaire]] · [[Deplacement_Joueur]] (accroupissement) · [[Generation_Labyrinthe]] (thème par zone) · [[Gardiens]] (boss aveugle à leurrer par le son)
+- [[Bestiaire]] · [[Deplacement_Joueur]] (accroupissement) · [[Gardiens]] (chaque gardien a sa stratégie de raid)
 
 ## 6. Implémentation technique
 - Prévoir un système de **stimuli** commun (bruit / visuel) émis par le joueur et les objets, et écouté par toutes les IA, plutôt que de coder chaque sens dans chaque mob.
 - Existant : `EnemySight` (vision en cône + raycast) et `BullAI` (BoxCast) — aucune gestion du bruit.
 
 ## 7. Questions ouvertes
-- [ ] Quels thèmes pour les zones C et D ?
-- [ ] Les mobs « classiques » (taureau, araignée…) suivent-ils aussi le thème de leur zone ?
+- [x] Quels thèmes pour les zones C et D ? → **abandonné** : plus de thèmes par zone (2026-11-08)
+- [ ] Quels sens pour chaque mob (vue, ouïe, vibrations…) ?

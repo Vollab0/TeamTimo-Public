@@ -15,11 +15,11 @@ updated: 2026-11-08
 
 ## 1. Intention de design
 L'environnement n'est pas un bloc uniforme mais **4 petits labyrinthes interconnectés** (zones A, B, C, D) autour du [[Lobby]] central.
-- **4 zones, 4 ambiances :** chaque zone a une **thématique sensorielle** qui dicte le gameplay (ennemis aveugles, sourds…) — [[Discretion_et_Aggro]] — et des **variantes de kit modulaire** (murs, sol, plafond, portes).
-- **Salle des gardiens** au fond de chaque zone : arène **non procédurale**, conçue pour favoriser les stratégies de raid — [[Gardiens]].
+- **4 zones, 4 ambiances :** chaque zone a son **gardien** et des **variantes de kit modulaire** (murs, sol, plafond, portes). Pas de thème sensoriel (abandonné le 2026-11-08) : les mobs sont **mélangés dans toutes les zones** — [[Bestiaire]].
+- **Salle des gardiens** au fond de chaque zone : arène **non procédurale**, conçue pour favoriser les stratégies de raid. Le gardien de chaque zone (et donc son arène) est **tiré au sort à chaque partie** (décidé le 2026-11-08) — [[Gardiens]].
 - **Placement aléatoire** des **coffres** (loot) et des **spawners** de monstres — [[Economie]], [[Apparition_Ennemis]].
 - **Porte de sortie finale** à localiser, **placée à un endroit différent à chaque partie** (décidé le 2026-11-08) — [[Fragments_et_Cle]].
-- **Zones en ordre libre** : toutes accessibles dès le jour 1 (décidé le 2026-11-08) ; la difficulté monte avec chaque fragment récupéré — [[Cycle_de_Partie]].
+- **Zones en ordre libre** : toutes accessibles dès le jour 1 (décidé le 2026-11-08) ; chaque fragment récupéré lâche un gardien de plus dans le labyrinthe — [[Cycle_de_Partie]].
 - Les **anciens bataillons** ont laissé des indices dans le labyrinthe — [[Univers]].
 - Algorithme envisagé dans les tâches : **tile-based ou Wave Function Collapse** (le prototype utilise un parcours en profondeur sur grille).
 

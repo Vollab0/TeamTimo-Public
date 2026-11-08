@@ -7,7 +7,7 @@ scripts:
   - Assets/Scripts/PlayerController.cs
   - Assets/Scripts/Items/WeaponItem.cs
 tags: [gdd, mecanique, combat]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Combat et outils
 
@@ -16,6 +16,7 @@ On combat avec des **outils de ferme**. Tuer des mobs rapporte de l'or ([[Econom
 
 ## 2. Règles et comportement
 ### Design (brainstorming)
+- **Sans arme : poussée seulement** (décidé le 2026-11-08) — aucun dégât, mais on repousse un mob… ou un allié.
 - **Corps-à-corps** avec hitbox : **Bâton** (rare), **Pelle** (épique), **Fourche** (légendaire).
 - **Projectiles :** **Lance-pierre** — seul moyen de faire tomber les [[Aigle|aigles]] des murs.
 - **Défense :** **Bouclier** — encaisse des coups ; **parer le [[Taureau]]** stoppe sa charge.
@@ -46,6 +47,6 @@ On combat avec des **outils de ferme**. Tuer des mobs rapporte de l'or ([[Econom
 - **ScriptableObjects :** `WeaponItem` (`Assets/Data item/Shovel.asset`) — à étendre (durabilité, portée, type mêlée / projectile).
 
 ## 7. Questions ouvertes
-- [ ] Attaque à mains nues possible ?
+- [x] Attaque à mains nues possible ? → **poussée sans dégâts** (repousse mobs et alliés) (2026-11-08)
 - [ ] Combien de PV ont les mobs ? Équilibrage dégâts des mobs vs PV du joueur.
 - [ ] Le bouclier occupe-t-il la main de l'arme ?

@@ -14,7 +14,8 @@ Partir du [[Lobby]] central, explorer les **4 zones** (A, B, C, D), récupérer 
 ## Structure
 - **Lobby** au centre (zone sûre).
 - **4 petits labyrinthes interconnectés**, chacun avec :
-  - un **thème sensoriel** (ex. : A = ennemis aveugles, B = ennemis sourds) — [[Discretion_et_Aggro]] ;
+  - un **gardien** — [[Gardiens]] ;
+  - des **mobs mélangés** (Taureau, Araignée, Loup, Taupe, et l'Aigle, plus rare) : pas de thème sensoriel (abandonné le 2026-11-08) — [[Bestiaire]] ;
   - des **variantes visuelles** du kit modulaire (murs, sol, plafond, portes) ;
   - des **coffres** et des **spawners** placés aléatoirement ;
   - une **Salle des Gardiens** au fond (arène non procédurale) — [[Gardiens]].
@@ -22,12 +23,14 @@ Partir du [[Lobby]] central, explorer les **4 zones** (A, B, C, D), récupérer 
 - **Indices** laissés par les anciens bataillons — [[Univers]].
 - Génération : [[Generation_Labyrinthe]].
 
-| Zone | Thème sensoriel | Mobs | Gardien |
-|---|---|---|---|
-| A | Aveugles (bruit) — exemple | ? | ? |
-| B | Sourds (mouvement / lumière) — exemple | ? | ? |
-| C | ? | ? | ? |
-| D | ? | ? | ? |
+| Zone | Ambiance visuelle | Gardien |
+|---|---|---|
+| A | ? | tiré au sort |
+| B | ? | tiré au sort |
+| C | ? | tiré au sort |
+| D | ? | tiré au sort |
+
+Les 4 gardiens (Rat, Coq, Oie, Truie) sont **répartis aléatoirement entre les zones à chaque partie** (décidé le 2026-11-08) : la colonne « Gardien » change d'une partie à l'autre — [[Gardiens]].
 
 ## Ennemis et objets présents
 - Mobs : [[Bestiaire]] — configurés dans `SpawnerManager.waves` ([[Apparition_Ennemis]])

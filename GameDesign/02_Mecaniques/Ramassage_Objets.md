@@ -14,7 +14,7 @@ updated: 2026-11-08
 
 ## 1. Intention de design
 Le lancer d'objet sert la **diversion** : Tomate et Sable changent l'aggro, Cailloux font du bruit, Réveil attire tous les monstres, Allumettes peuvent être jetées au sol pour éclairer — voir [[Discretion_et_Aggro]] et [[Catalogue_Objets]].
-Le ramassage concerne aussi le **loot des coffres** et des mobs ([[Economie]]) et le **corps d'un allié mort** à ramener au [[Medecin]] (confirmé le 2026-11-08 — [[Sante_et_Degats]]).
+Le ramassage concerne aussi le **loot des coffres** et des mobs ([[Economie]]) et le **corps d'un allié mort** à ramener au [[Medecin]] pour une résurrection gratuite (confirmé le 2026-11-08 — [[Sante_et_Degats]]).
 
 ## 2. Règles et comportement (état actuel du code)
 - **Détection :** l'objet visé à moins de `detectionRange` est surligné (matériau `GameManager.globalOutlineMaterial`).

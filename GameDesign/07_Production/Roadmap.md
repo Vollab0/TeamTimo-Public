@@ -21,7 +21,7 @@ updated: 2026-11-08
 - [x] Multijoueur : 1-4 joueurs en ligne (2026-11-08) — [[Multijoueur]]
 - [ ] Technologie réseau → ADR — [[Multijoueur]]
 - [x] Durée et ratio du jour → 18 min, 70/30 (2026-11-08)
-- [ ] Les 4 gardiens et les 4 thèmes de zone
+- [x] Les 4 gardiens → Rat, Coq, Oie, Truie ; thèmes de zone abandonnés (2026-11-08)
 
 ## Jalon 1 — Vertical slice *(date : ?)*
 Objectif : **une boucle complète sur une seule zone**.
@@ -34,11 +34,11 @@ Objectif : **une boucle complète sur une seule zone**.
 - [ ] Mort / réanimation — [[Sante_et_Degats]]
 
 ## Jalon 2 — Contenu complet *(date : ?)*
-- [ ] 4 zones avec thèmes sensoriels — [[Discretion_et_Aggro]]
+- [ ] 4 zones (ambiance + gardien), mobs mélangés — [[Labyrinthe]]
 - [ ] 5 mobs + variantes de nuit — [[Bestiaire]]
 - [ ] 4 gardiens
-- [ ] 6 PNJ + figurants + enlèvements — [[Enlevement_des_PNJ]]
-- [ ] 21 objets — [[Catalogue_Objets]]
+- [ ] 6 PNJ + Pharmacien + figurants + enlèvements — [[Enlevement_des_PNJ]]
+- [ ] 23 objets (21 du brainstorming + Plume + Herbes) + 3 remèdes du Pharmacien — [[Catalogue_Objets]]
 - [ ] Carte / minimap — [[Carte_et_Navigation]]
 - [ ] Multijoueur
 

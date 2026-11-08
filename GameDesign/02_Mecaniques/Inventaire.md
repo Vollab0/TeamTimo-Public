@@ -10,7 +10,7 @@ scripts:
   - Assets/Scripts/Items/WeaponItem.cs
   - Assets/Scripts/Items/ConsumableItem.cs
 tags: [gdd, mecanique, inventaire]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Inventaire
 
@@ -18,12 +18,13 @@ updated: 2026-11-07
 Inventaire de survie **à slots limités** : ce qu'on emporte est un choix. Le **fragment de clé** le rend encore plus contraignant.
 
 ## 2a. Règles — design (brainstorming)
-- **Slots limités** ; le **Sac** (épique) ajoute un slot.
+- **3 slots au départ** (décidé le 2026-11-08) ; le **Sac** (épique) ajoute un slot.
 - **Stacking** pour les consommables (cailloux, baies, allumettes…).
-- **Mécanique du fragment** : l'objet « Fragment » **bloque tous les slots** et **réduit la vitesse de déplacement** (encombrement, à confirmer) — [[Fragments_et_Cle]].
+- **Mécanique du fragment** : l'objet « Fragment » **bloque tous les slots** et **réduit la vitesse de déplacement** (encombrement confirmé le 2026-11-08 ; le fragment se pose ou se passe à un allié) — [[Fragments_et_Cle]].
 - **Durabilité** des objets (si applicable), réparée par le [[Forgeron]].
 - Objets revendables à l'[[Arnaqueur]] ; coffre du Lobby améliorable pour stocker — [[Lobby]].
-- Catalogue des 21 objets : [[Catalogue_Objets]].
+- La **Plume** (carte) occupe un emplacement comme un autre objet — [[Carte_et_Navigation]].
+- Catalogue des 23 objets et des remèdes du Pharmacien : [[Catalogue_Objets]].
 
 ## 2b. Règles et comportement (état actuel du code)
 - **Barre rapide** de `inventorySize` emplacements (5).
@@ -38,7 +39,7 @@ Inventaire de survie **à slots limités** : ce qu'on emporte est un choix. Le *
 ## 3. Paramètres de tuning
 | Paramètre | Type | Défaut | Rôle |
 |---|---|---|---|
-| `inventorySize` | int | 5 | Nombre d'emplacements |
+| `inventorySize` | int | 5 | Nombre d'emplacements — **cible design : 3** (2026-11-08) |
 | `InventoryUI.containerName` | string | `InventoryContainer` | Élément UI Toolkit hôte |
 
 ## 4. Feedback
@@ -56,5 +57,5 @@ Inventaire de survie **à slots limités** : ce qu'on emporte est un choix. Le *
 ## 7. Questions ouvertes
 - [ ] Quelle touche pour « utiliser » un objet ?
 - [ ] Taille max d'une pile (stack) ?
-- [ ] Nombre de slots de départ : 5 (prototype) ?
+- [x] Nombre de slots de départ → **3** (2026-11-08)
 - [ ] À faire dans le code : stacking, `Utiliser()` par type d'objet, slots bloqués par le fragment, slot bonus du Sac, durabilité.

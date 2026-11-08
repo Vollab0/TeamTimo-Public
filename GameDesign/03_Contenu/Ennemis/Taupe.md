@@ -6,7 +6,7 @@ owner:
 prefab:
 scripts: []
 tags: [gdd, contenu, ennemi]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Taupe
 
@@ -25,7 +25,7 @@ stateDiagram-v2
     Vulnerable --> Sous_terre : rien détecté
     Fonce --> Emergence : sous la position du joueur
 ```
-- Se déplace **sous terre** : **invisible et invulnérable**.
+- Se déplace **sous terre** : **invisible et invulnérable**, et **passe sous les murs** du labyrinthe (sa règle, d'après le pilier « Chaque mob a sa règle » — [[Piliers_de_Design]]).
 - **Fait surface toutes les 5 secondes** ; à l'émergence, inflige des **dégâts de zone** et **scanne** les environs.
 - Si elle détecte une **vibration**, elle **fonce sous terre** vers la position du joueur.
 - Une fois sortie, elle reste **immobile quelques instants** → **fenêtre d'attaque** pour les joueurs.

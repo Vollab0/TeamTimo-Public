@@ -8,7 +8,7 @@ updated: 2026-11-08
 # Pitch — TeamTimo
 
 > [!abstract] Le jeu en une phrase
-> Des petits animaux mignons, cobayes d'un « Fermier » scientifique, ont **10 jours** pour vaincre les gardiens de 4 labyrinthes, réassembler une clé et s'évader, pendant que le Fermier enlève chaque matin les habitants de leur village.
+> Des petits animaux mignons, cobayes d'un « Fermier » scientifique, ont **10 jours** pour arracher aux gardiens de 4 labyrinthes les fragments d'une clé, la réassembler et s'évader, pendant que le Fermier enlève chaque matin les habitants de leur village.
 
 ## Fiche
 | | |
@@ -17,7 +17,7 @@ updated: 2026-11-08
 | **Genre** | Survie / évasion **coopérative** en labyrinthe, avec compte à rebours |
 | **Joueurs** | Coopératif **en ligne, 1 à 4 joueurs** (jouable en solo, pensé pour 2-4) — voir [[Multijoueur]] |
 | **Durée d'une partie** | 10 jours in-game de ~18 min (~3 h réelles), **sauvegarde automatique chaque matin** — voir [[Cycle_de_Partie]] |
-| **Personnages jouables** | Renard, Poule, Mouton + un 4e à définir — choix **purement cosmétique** — [[Personnages_Jouables]] |
+| **Personnages jouables** | Renard, Poule, Mouton, Lapin — choix **purement cosmétique** — [[Personnages_Jouables]] |
 | **Caméra** | **3e personne** (comme le prototype ; décidé le 2026-11-08) — [[Deplacement_Joueur]] |
 | **Moteur** | Unity 6.3 LTS (6000.3), URP |
 | **Ton** | Mignon en surface, sombre en dessous. Ressenti visé : **tension + humour** (horreur coop légère à la *Lethal Company*) — [[Univers]] |
@@ -26,7 +26,7 @@ updated: 2026-11-08
 1. Les joueurs apparaissent dans la **grange** du [[Lobby]], un village sûr peuplé de [[PNJ|PNJ]] marchands et artisans.
 2. **Le jour**, ils explorent les 4 zones du [[Labyrinthe]], récupèrent de l'or et des objets (coffres, monstres) et s'équipent au village.
 3. **La nuit**, les monstres sont plus forts, mais les [[Gardiens|boss]] dorment : c'est le moment de voler les **fragments de clé** (on peut aussi les arracher de jour en battant le gardien en raid) — [[Cycle_Jour_Nuit]].
-4. Chaque matin, le **Fermier enlève un PNJ important** (son service disparaît pour le reste de la partie) **et des villageois figurants** : on voit le village se vider — [[Enlevement_des_PNJ]].
+4. Un matin sur deux, le **Fermier enlève un PNJ important** (son service disparaît pour le reste de la partie) ; chaque matin, il emporte aussi **des villageois figurants** : on voit le village se vider — [[Enlevement_des_PNJ]].
 5. Avec les 4 fragments, le Forgeron reconstruit la **Clé Maîtresse** ; il faut ensuite **trouver** la porte de sortie (grâce aux indices des anciens bataillons) et l'ouvrir avant la fin du 10e jour — [[Fragments_et_Cle]].
 
 ## Conditions de fin

@@ -4,7 +4,7 @@ status: draft
 animal: Hibou
 stand: Table du cartographe
 tags: [gdd, contenu, pnj]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # Le Cartographe
 
@@ -13,10 +13,10 @@ updated: 2026-11-07
 ## Rôle (indispensable)
 - **Dessiner la carte des joueurs.**
 - **Dessiner la carte globale du Lobby.**
-- Au retour d'une exploration, les joueurs peuvent **mettre à jour leurs cartes** grâce à lui, moyennant quelques pièces.
-- Note collée (texte coupé) : « Chaque joueur possède sa… » — probablement *sa propre carte*.
+- Au retour d'une exploration, **tous les joueurs lui donnent leur carte** (croquis dessiné avec la **Plume**) : il en fait une **version propre** qui réunit **les chemins trouvés par tous les joueurs** (décidé le 2026-11-08) — [[Carte_et_Navigation]].
+- Chaque joueur possède **sa propre carte** (note collée « Chaque joueur possède sa… », confirmée).
 
 ## S'il est enlevé
-- Carte mal dessinée → moins d'informations.
+- Plus de mise au propre ni de fusion : chacun garde son **croquis artisanal** dessiné avec la Plume, moins lisible et incomplet (à confirmer).
 
 Voir : [[Carte_et_Navigation]] · [[PNJ]] · [[Enlevement_des_PNJ]]

@@ -12,15 +12,17 @@ updated: 2026-11-08
 > - Les tâches 1 à 8 viennent de la liste « Tâches » du brainstorming.
 
 ## ⚠️ Design à trancher (incohérences relevées dans le brainstorming)
+> Toutes tranchées le 2026-11-08. Les points encore flous sont listés dans [[Questions_Ouvertes_GDD]].
+
 - [x] **Caméra** → **3e personne** (2026-11-08) — [[Deplacement_Joueur]]
 - [x] **Durée d'un jour** → **~18 min** (2026-11-08) — [[Cycle_Jour_Nuit]]
 - [x] **Ratio jour/nuit** → **70/30** (2026-11-08)
-- [x] **Nombre de PNJ enlevés par matin** → **1 important + des figurants** (2026-11-08) — [[Enlevement_des_PNJ]]
-- [ ] **Gardiens** : 3 candidats « à revoir » (Taureau, Rat, Coq) pour 4 zones — [[Gardiens]]
-- [ ] **Taureau** à la fois mob, boss et Forgeron ? — [[Taureau]], [[Forgeron]]
-- [ ] **Vie** : cœurs (prototype) ou barres de vie (HUD du brainstorming) ? — [[Sante_et_Degats]]
+- [x] **Nombre de PNJ enlevés** → **1 important tous les 2 jours (jours 2, 4, 6, 8, 10) + des figurants chaque matin** (2026-11-08) — [[Enlevement_des_PNJ]]
+- [x] **Gardiens** → **Rat, Coq, Oie, Truie** (2026-11-08) — [[Gardiens]]
+- [x] **Taureau** → **mob seulement** ; Forgeron = Cheval (2026-11-08) — [[Taureau]], [[Forgeron]]
+- [x] **Vie** → **cœurs** (2026-11-08) — [[Sante_et_Degats]]
 - [x] **Encombrement du fragment** → **confirmé**, lâchable (2026-11-08) — [[Fragments_et_Cle]]
-- [ ] Thèmes sensoriels des zones C et D — [[Discretion_et_Aggro]]
+- [x] Thèmes sensoriels des zones C et D → **abandonnés**, chaque mob a sa règle (2026-11-08) — [[Discretion_et_Aggro]]
 - [x] Nombre de joueurs → **1-4 en ligne** (2026-11-08) — [[Multijoueur]]
 - [x] Écrire / valider les piliers (revus en équipe le 2026-11-08) — [[Piliers_de_Design]]
 
@@ -33,28 +35,33 @@ updated: 2026-11-08
   - [ ] Timer journalier (18 min, 70 % jour / 30 % nuit)
   - [ ] Transition d'éclairage (lumière directionnelle, skybox, post-process) — *visuel déjà en place*
   - [ ] Event System : changement de stats des monstres à la tombée de la nuit
+  - [ ] Sauter la nuit : dormir à la grange si tous les joueurs vivants y sont
 - [ ] **Génération procédurale (labyrinthe)** — [[Generation_Labyrinthe]]
   - [ ] Algorithme de génération de salles (tile-based ou WFC) — *un générateur DFS existe déjà*
   - [ ] Logique des 4 zones connectées (A, B, C, D) — *déjà en place*
   - [ ] Placement aléatoire du loot (coffres) et des spawners
 - [ ] **PNJ & événements (Lobby)** — [[Enlevement_des_PNJ]]
-  - [ ] « RNG du Fermier » : chaque matin, calculer quel PNJ important disparaît (+ des figurants)
+  - [ ] « RNG du Fermier » : les jours 2, 4, 6, 8, 10, tirer le PNJ important enlevé ; chaque matin, des figurants
   - [ ] Désactiver le PNJ enlevé et fermer son stand
+  - [ ] Pharmacien : tirer sa cachette au sort ; fabrication des remèdes — [[Pharmacien]]
+  - [ ] Séquence de l'aube : silhouette du Fermier — [[Univers]]
+  - [ ] Figurants : dialogues de rumeurs et d'indices
 
 ## 2. Programmation — joueur & interactions
 - [ ] **Contrôleur personnage** — [[Deplacement_Joueur]]
-  - [ ] Marche, course *(fait)*, accroupissement
+  - [ ] Marche, course *(fait)*, saut *(fait)*, accroupissement, roulade
   - [x] Caméra 3e personne *(décidée le 2026-11-08, déjà en place)*
   - [ ] Santé (cœurs, *fait*) et stamina
-  - [ ] Mort : état « à terre », kit de réa, corps transportable, spectateur — [[Sante_et_Degats]]
+  - [ ] Mort : état « à terre », kit de réa, corps transportable, spectateur, résurrection chez le Médecin (gratuite si corps ramené, payante sinon), veillée à la grange, séquelles (−½ cœur max), chirurgie (+½ cœur max ×2), prix quadratique des soins — [[Sante_et_Degats]]
 - [ ] **Inventaire** — [[Inventaire]]
-  - [ ] UI à slots limités *(fait)*
+  - [ ] UI à slots limités *(fait)* — passer de 5 à **3** emplacements
   - [ ] Stacking des consommables
   - [ ] Objet « Fragment » : bloque tous les slots + ralentit (encombrement)
 - [ ] **Combat & outils** — [[Combat_Attaque]]
   - [ ] Hitbox corps-à-corps (Pelle, Fourche) + `WeaponItem.damage`
   - [ ] Projectiles (Lance-pierre)
   - [ ] Durabilité des objets (si applicable)
+  - [ ] Poussée à mains nues (sans dégâts, repousse mobs et alliés)
 
 ## 3. Intelligence artificielle — [[Bestiaire]]
 - [ ] IA de base (state machine) : patrouille, détection, poursuite, attaque, retour
@@ -67,21 +74,22 @@ updated: 2026-11-08
 - [ ] IA des boss : phases des 4 gardiens — [[Gardiens]]
 
 ## 4. Art 3D & animation — [[Direction_Artistique]]
-- [ ] Personnage joueur (base animale mignonne) — [[Personnages_Jouables]]
-- [ ] 6 PNJ (Forgeron Taureau, Médecin Chat, Marchand Blaireau, Cartographe Hibou, Arnaqueur Raton, Banquier Castor) — [[PNJ]]
+- [ ] Personnages joueurs : Renard, Poule, Mouton, Lapin (base animale mignonne) — [[Personnages_Jouables]]
+- [ ] 6 PNJ (Forgeron Cheval, Médecin Chat, Marchand Blaireau, Cartographe Hibou, Arnaqueur Raton, Banquier Castor) + le Pharmacien Hérisson (caché) — [[PNJ]], [[Pharmacien]]
 - [ ] 5 mobs (Taureau, Araignée, Loup, Taupe, Aigle) + variantes « nuit » (yeux rouges, textures sombres)
-- [ ] 21 objets — [[Catalogue_Objets]]
+- [ ] 4 gardiens (Rat, Coq, Oie, Truie) — [[Gardiens]]
+- [ ] 23 objets (21 du brainstorming + Plume + Herbes) + 3 remèdes du Pharmacien — [[Catalogue_Objets]]
 - [ ] Kit modulaire du labyrinthe (murs, sol, plafond, portes) × 4 zones
 - [ ] Lobby : stands des vendeurs (forge, tente médecin, table du cartographe…)
 - [ ] Décor : coffres, toiles d'araignées, arbres, panneaux explicatifs
-- [ ] Animations : Idle, Walk, Run, Attack, Hit, Die + charge du taureau, enfouissement de la taupe, vol de l'aigle
+- [ ] Animations : Idle, Walk, Run, Jump, Roll, Attack, Push, Hit, Die + charge du taureau, enfouissement de la taupe, vol de l'aigle
 
 ## 5. Level design & UI
 - [ ] Lobby (zone sûre), PNJ placés de manière logique — [[Lobby]]
 - [ ] 4 arènes de boss non procédurales, favorisant les stratégies de raid — [[Gardiens]]
 - [ ] HUD : vie, inventaire rapide, timer jour/nuit, compteur de jours (x/10), argent — [[UI_UX]]
 - [ ] Menus : principal, pause, Game Over, victoire
-- [ ] Minimap (brouillard de guerre) + carte globale via Cartographe — [[Carte_et_Navigation]]
+- [ ] Minimap : croquis artisanal avec la Plume + fusion / mise au propre par le Cartographe — [[Carte_et_Navigation]]
 - [ ] Panneaux tuto du Lobby (textures / illustrations)
 
 ## 6. Audio — [[Direction_Artistique]]
@@ -90,6 +98,7 @@ updated: 2026-11-08
 
 ## 7. Scripting des objets spéciaux — [[Catalogue_Objets]]
 - [ ] Tomate / Sable : changement de cible de l'IA (aggro) — [[Discretion_et_Aggro]]
+- [ ] Plume : dessin automatique de la carte du porteur — [[Carte_et_Navigation]]
 - [ ] Stylo / Craie : decal pour laisser une marque sur le mur
 - [ ] Carton : invisibilité si `velocity == 0`
 - [ ] Rappel : téléportation au Lobby (avec délai d'incantation)
@@ -127,4 +136,4 @@ updated: 2026-11-08
 ## Idées
 - Monstres importants qui dorment la nuit → récupérer des objets importants — [[Cycle_Jour_Nuit]]
 - Coffre du Lobby améliorable — [[Lobby]]
-- Indices des anciens bataillons dans le labyrinthe — [[Univers]]
+- ~~Indices des anciens bataillons dans le labyrinthe~~ → décidé le 2026-11-08 : ils mènent à la porte de sortie — [[Univers]]

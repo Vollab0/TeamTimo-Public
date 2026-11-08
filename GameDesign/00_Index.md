@@ -1,17 +1,17 @@
 ---
 type: index
 tags: [index]
-updated: 2026-11-07
+updated: 2026-11-08
 ---
 # TeamTimo — Game Design Document
 
 > [!abstract] Le jeu
-> Des animaux-cobayes ont **10 jours** pour vaincre les gardiens de 4 labyrinthes, réassembler une clé et s'évader, pendant que le Fermier enlève chaque matin les habitants de leur village.
-> Commence par le [[Pitch]], puis la [[Boucle_Gameplay.canvas|boucle de gameplay]]. Les décisions en attente sont en tête du [[Backlog]].
+> Des animaux-cobayes ont **10 jours** pour arracher aux gardiens de 4 labyrinthes les fragments d'une clé, la réassembler et s'évader, pendant que le Fermier enlève chaque matin les habitants de leur village.
+> Commence par le [[Pitch]], puis la [[Boucle_Gameplay.canvas|boucle de gameplay]]. Les points de design encore flous sont listés dans [[Questions_Ouvertes_GDD]].
 
 ## 🎯 01 — Vision
 - [[Pitch]] — le jeu en une page
-- [[Piliers_de_Design]] — les principes qui tranchent les débats (proposition)
+- [[Piliers_de_Design]] — les principes qui tranchent les débats (validés en équipe)
 - [[Boucle_Gameplay.canvas|Boucle de gameplay]] (canvas)
 - [[Glossaire]] — vocabulaire design ↔ code
 
@@ -25,11 +25,11 @@ updated: 2026-11-07
 | | [[Ramassage_Objets]] | | |
 
 ## 📦 03 — Contenu
-- **Personnages :** [[Personnages_Jouables]] (Renard, Poule, Mouton)
+- **Personnages :** [[Personnages_Jouables]] (Renard, Poule, Mouton, Lapin)
 - **Ennemis :** [[Bestiaire]] — [[Taureau]] · [[Araignee]] · [[Loup]] · [[Taupe]] · [[Aigle]]
 - **Boss :** [[Gardiens]]
-- **PNJ :** [[PNJ]] — [[Forgeron]] · [[Medecin]] · [[Marchand]] · [[Cartographe]] · [[Arnaqueur]] · [[Banquier]]
-- **Objets :** [[Catalogue_Objets]] (21 objets)
+- **PNJ :** [[PNJ]] — [[Forgeron]] · [[Medecin]] · [[Marchand]] · [[Cartographe]] · [[Arnaqueur]] · [[Banquier]] · [[Pharmacien]] (Hérisson, semi-important, caché)
+- **Objets :** [[Catalogue_Objets]] (23 objets + 3 remèdes du Pharmacien)
 - **Niveaux :** [[Lobby]] · [[Labyrinthe]]
 
 ## 📖 04 — Univers & Lore
@@ -46,6 +46,7 @@ updated: 2026-11-07
 
 ## 📅 07 — Production
 - [[Roadmap]] · [[Backlog]] · [[Equipe]]
+- [[Questions_Ouvertes_GDD]] — tous les points de design encore flous, par priorité
 - Dossiers : `Bugs/`, `Playtests/`, `Reunions/`
 
 ## 📊 Suivi

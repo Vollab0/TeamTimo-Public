@@ -21,9 +21,9 @@ La difficulté dépend des **statistiques et de l'équipement** : affronter un g
 Coopération indispensable : réanimer un allié, ramener son corps, partager les pièces, combattre les gardiens en « raid ».
 - Sert : [[Multijoueur]], [[Sante_et_Degats]], [[PNJ]]
 
-## 4. Chaque zone a sa règle
-Chaque labyrinthe impose un **thème sensoriel** (ennemis aveugles → discrétion sonore, ennemis sourds → se cacher visuellement) que les objets permettent d'exploiter.
-- Sert : [[Discretion_et_Aggro]], [[Generation_Labyrinthe]], [[Catalogue_Objets]]
+## 4. Chaque mob a sa règle
+Chaque monstre a **un comportement unique et lisible** (le Taureau charge tout le couloir, l'Araignée tisse des toiles, le Loup appelle sa meute, la Taupe passe sous les murs, l'Aigle tire du haut des murs) que les **bons objets** permettent de contrer. Les mobs sont mélangés dans toutes les zones : on reconnaît la menace, pas la zone. *(Reformulé le 2026-11-08 : les thèmes sensoriels par zone sont abandonnés.)*
+- Sert : [[Bestiaire]], [[Discretion_et_Aggro]], [[Catalogue_Objets]]
 
 ## 5. Mignon dehors, sombre dedans
 Des animaux adorables… qui sont des cobayes de laboratoire. Le décalage nourrit le ton, l'art et le lore.
