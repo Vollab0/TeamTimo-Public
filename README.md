@@ -6,6 +6,8 @@
 A **co-op survival / escape game** made with **Unity 6** (URP, C#) by a team of friends.
 **Work in progress** — in particular, the online multiplayer has to be rebuilt.
 
+![The Fox in the maze, with the heart-based health bar and the inventory slots](docs/screenshots/gameplay.jpg)
+
 ## The game in short
 
 1. Players (Fox, Hen, Sheep) start in the **barn** of the Lobby, a safe village of merchant and craftsman NPCs.
@@ -18,6 +20,10 @@ The full Game Design Document (in French) lives in [`GameDesign/`](GameDesign/00
 start with the [pitch](GameDesign/01_Vision/Pitch.md).
 
 ## Technical highlights
+
+<img src="docs/screenshots/maze-top-view.jpg" alt="Top view of a generated maze: four zones around the central Lobby, with open rooms" width="480">
+
+*A maze generated at runtime, seen from above: four zones around the central Lobby. Every run produces a new layout.*
 
 | System | Scripts |
 | --- | --- |
