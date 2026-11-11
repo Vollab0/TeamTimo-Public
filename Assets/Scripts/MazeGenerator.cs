@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,6 +43,10 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private bool _slowMotion = false;
     [Range(0.001f, 1f)] [SerializeField] private float _stepDelay = 0.01f;
 
+    [Header("6. Graine (seed)")]
+    [Tooltip("Graine de génération. 0 = tirée au hasard à chaque partie. Une autre valeur redonne toujours le même labyrinthe (debug, bug à reproduire).")]
+    [SerializeField] private int _seed = 0;
+
     #endregion
 
     #region --- PRIVATE VARIABLES ---
@@ -49,6 +54,46 @@ public class MazeGenerator : MonoBehaviour
     private MazeCell[,] _mazeGrid;
     private GameObject _mazeParent;
     private List<RectInt> _roomsRects = new List<RectInt>();
+
+    // Tout le hasard de la génération passe par ce générateur : même graine = même labyrinthe sur toutes les machines.
+    private System.Random _random;
+    private bool _waitForExternalSeed;
+
+    #endregion
+
+    #region --- GRAINE (MULTIJOUEUR) ---
+
+    /// <summary>Graine utilisée pour la génération en cours (0 tant que rien n'est généré).</summary>
+    public int Seed { get; private set; }
+
+    /// <summary>Déclenché au début de la génération, avec la graine (TerrainGenerator s'y abonne).</summary>
+    public event Action<int> OnGenerationStarted;
+
+    /// <summary>Vrai quand les murs, salles et portes sont en place (le NavMesh peut encore être en calcul).</summary>
+    public bool IsGenerated { get; private set; }
+
+    /// <summary>
+    /// À appeler dans Awake : le labyrinthe ne se génère pas au Start mais attend GenerateWithSeed()
+    /// (en réseau, l'hôte choisit la graine et l'envoie aux clients — voir MazeSeedSync).
+    /// </summary>
+    public void WaitForExternalSeed() { _waitForExternalSeed = true; }
+
+    /// <summary>Graine à utiliser pour une nouvelle partie : celle de l'Inspector si elle est fixée, sinon au hasard.</summary>
+    public int PickSeed()
+    {
+        return _seed != 0 ? _seed : UnityEngine.Random.Range(1, int.MaxValue);
+    }
+
+    /// <summary>Lance la génération avec une graine donnée.</summary>
+    public void GenerateWithSeed(int seed)
+    {
+        Seed = seed;
+        IsGenerated = false;
+        _random = new System.Random(seed);
+        Debug.Log($"Labyrinthe : génération avec la graine {seed}");
+        OnGenerationStarted?.Invoke(seed);
+        StartCoroutine(Generate());
+    }
 
     #endregion
 
@@ -60,6 +105,10 @@ public class MazeGenerator : MonoBehaviour
     
     // Retourne le Transform parent pour que le NavMeshBuilder puisse s'y attacher
     public Transform GetMazeParent() { return _mazeParent != null ? _mazeParent.transform : transform; }
+
+    /// <summary>Position réelle (monde) d'une cellule générée. Les cellules sont placées en coordonnées monde,
+    /// indépendamment de la position de l'objet Maze dans la scène : utiliser ceci plutôt qu'un calcul à partir du parent.</summary>
+    public Vector3 GetCellWorldPosition(int x, int z) { return _mazeGrid[x, z].transform.position; }
 
     // Retourne la liste des 4 zones calculées
     public List<RectInt> GetAllZones() { return CalculateQuadrants(); }
@@ -97,11 +146,15 @@ public class MazeGenerator : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(Generate());
+        if (_waitForExternalSeed) return;
+        GenerateWithSeed(PickSeed());
     }
 
     public IEnumerator Generate()
     {
+        if (_random == null) _random = new System.Random(PickSeed());
+        System.Diagnostics.Stopwatch timer = System.Diagnostics.Stopwatch.StartNew();
+
         // 1. Nettoyage et Création du Parent
         if (_mazeParent != null) Destroy(_mazeParent);
         _mazeParent = new GameObject("MazeEnvironment");
@@ -138,6 +191,8 @@ public class MazeGenerator : MonoBehaviour
 
         // 10. Centrage du Labyrinthe
         CenterMaze();
+        Debug.Log($"Labyrinthe : {_mazeWidth * _mazeDepth} cellules générées en {timer.Elapsed.TotalSeconds:F1} s");
+        IsGenerated = true;
 
         // 11. Lancement du calcul NavMesh (si le builder est assigné)
         if (navMeshBuilder != null)
@@ -212,8 +267,8 @@ public class MazeGenerator : MonoBehaviour
                 if (zone.width - w <= 1 || zone.height - h <= 1) continue;
 
                 // Random avec marge (+1) pour ne pas toucher les murs séparateurs
-                int rx = Random.Range(zone.x + 1, zone.x + zone.width - w - 1);
-                int rz = Random.Range(zone.y + 1, zone.y + zone.height - h - 1);
+                int rx = _random.Next(zone.x + 1, zone.x + zone.width - w - 1);
+                int rz = _random.Next(zone.y + 1, zone.y + zone.height - h - 1);
 
                 RectInt newRoom = new RectInt(rx, rz, w, h);
 
@@ -365,7 +420,7 @@ public class MazeGenerator : MonoBehaviour
             neighbors.Add(_mazeGrid[x, z - 1]);
 
         if (neighbors.Count == 0) return null;
-        return neighbors[Random.Range(0, neighbors.Count)];
+        return neighbors[_random.Next(0, neighbors.Count)];
     }
 
     private void RemoveWallBetween(MazeCell a, MazeCell b)
@@ -469,7 +524,7 @@ public class MazeGenerator : MonoBehaviour
             int attempts = 0;
             while (attempts++ < 20)
             {
-                int randomZ = Random.Range(zStart, zEnd);
+                int randomZ = _random.Next(zStart, zEnd);
                 if (fixedX > 0 && randomZ < _mazeDepth)
                 {
                     _mazeGrid[fixedX - 1, randomZ].SetWallState("right", false);
@@ -486,7 +541,7 @@ public class MazeGenerator : MonoBehaviour
             int attempts = 0;
             while (attempts++ < 20)
             {
-                int randomX = Random.Range(xStart, xEnd);
+                int randomX = _random.Next(xStart, xEnd);
                 if (fixedZ > 0 && randomX < _mazeWidth)
                 {
                     _mazeGrid[randomX, fixedZ - 1].SetWallState("front", false);
@@ -498,9 +553,9 @@ public class MazeGenerator : MonoBehaviour
 
     private void CreateRandomExit()
     {
-        int side = Random.Range(0, 4);
-        int randX = Random.Range(0, _mazeWidth);
-        int randZ = Random.Range(0, _mazeDepth);
+        int side = _random.Next(0, 4);
+        int randX = _random.Next(0, _mazeWidth);
+        int randZ = _random.Next(0, _mazeDepth);
 
         switch (side)
         {

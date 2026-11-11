@@ -125,7 +125,8 @@ public class BullAI : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            PlayerHealth playerHP = hit.GetComponent<PlayerHealth>();
+            // Multijoueur : les dégâts passent par l'hôte vers la machine du joueur touché.
+            PlayerDamageReceiver playerHP = hit.GetComponent<PlayerDamageReceiver>();
 
             if (playerHP != null)
             {
@@ -136,7 +137,7 @@ public class BullAI : MonoBehaviour
                 if (distance <= zoneRadius && Time.time >= _nextZoneHitTime)
                 {
                     // Debug.Log("Hit Zone !");
-                    playerHP.Blesser(zoneDamage, transform.position);
+                    playerHP.ReceiveDamage(zoneDamage, transform.position);
                     _nextZoneHitTime = Time.time + zoneCooldown;
                 }
 
@@ -146,7 +147,7 @@ public class BullAI : MonoBehaviour
                 if (distance <= contactThreshold && Time.time >= _nextContactHitTime)
                 {
                     // Debug.Log("Hit Contact !");
-                    playerHP.Blesser(contactDamage, transform.position);
+                    playerHP.ReceiveDamage(contactDamage, transform.position);
                     _nextContactHitTime = Time.time + contactCooldown;
                 }
 

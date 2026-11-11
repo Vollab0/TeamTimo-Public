@@ -16,21 +16,25 @@ public class HeartUIManager : MonoBehaviour
 
 void OnEnable()
     {
-
-        // --- NOUVELLE LIGNE (La version corrigée) ---
-        scriptDuJoueur = FindFirstObjectByType<PlayerHealth>();
-
-        if (scriptDuJoueur == null)
-        {
-            Debug.LogError("Pas de PlayerHealth trouvé dans la scène !");
-            return;
-        }
-
-        // Le reste ne change pas...
-        scriptDuJoueur.OnSanteChangee += MettreAJourLesCoeurs;
-        
         var racine = monDocumentUI.rootVisualElement;
         conteneurCoeurs = racine.Q<VisualElement>("HeartsContainer");
+
+        // Scène sans réseau : le joueur est déjà posé dans la scène.
+        // En réseau, il apparaît plus tard et PlayerNetworkSetup appelle SetPlayer().
+        PlayerHealth joueurDeLaScene = FindFirstObjectByType<PlayerHealth>();
+        if (joueurDeLaScene != null) SetPlayer(joueurDeLaScene);
+    }
+
+    /// <summary>Branche l'affichage des cœurs sur un joueur (appelé pour le joueur local en réseau).</summary>
+    public void SetPlayer(PlayerHealth joueur)
+    {
+        if (scriptDuJoueur != null) scriptDuJoueur.OnSanteChangee -= MettreAJourLesCoeurs;
+
+        scriptDuJoueur = joueur;
+        if (scriptDuJoueur == null) return;
+
+        scriptDuJoueur.OnSanteChangee += MettreAJourLesCoeurs;
+        MettreAJourLesCoeurs(scriptDuJoueur.VieActuelle);
     }
 
     void OnDisable()

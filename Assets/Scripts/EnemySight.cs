@@ -40,14 +40,13 @@ public class EnemySight : MonoBehaviour
         _agent.autoBraking = true;
         _agent.speed = patrolSpeed;
 
-        GameObject p = GameObject.FindGameObjectWithTag("Player");
-        if (p != null) _player = p.transform;
-        
         StartCoroutine(PatrolRoutine());
     }
 
     void Update()
     {
+        // Multijoueur : tant qu'elle ne poursuit personne, l'araignée vise le joueur visible le plus proche.
+        if (!_isChasing) _player = FindClosestVisiblePlayer();
         if (_player == null) return;
 
         bool canSee = CanSeePlayer();
@@ -84,10 +83,35 @@ public class EnemySight : MonoBehaviour
     }
 
     // --- LOGIQUE DE VISION ---
+    Transform FindClosestVisiblePlayer()
+    {
+        Transform best = null;
+        float bestDistance = float.MaxValue;
+        var players = PlayerRegistry.Players;
+        for (int i = 0; i < players.Count; i++)
+        {
+            Transform candidate = players[i];
+            if (candidate == null || !CanSee(candidate)) continue;
+
+            float distance = (candidate.position - transform.position).sqrMagnitude;
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                best = candidate;
+            }
+        }
+        return best;
+    }
+
     bool CanSeePlayer()
     {
-        Vector3 dirToPlayer = (_player.position - transform.position).normalized;
-        float dstToPlayer = Vector3.Distance(transform.position, _player.position);
+        return _player != null && CanSee(_player);
+    }
+
+    bool CanSee(Transform target)
+    {
+        Vector3 dirToPlayer = (target.position - transform.position).normalized;
+        float dstToPlayer = Vector3.Distance(transform.position, target.position);
 
         if (dstToPlayer > viewRadius) return false;
 

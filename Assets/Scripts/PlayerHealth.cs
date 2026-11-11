@@ -43,6 +43,7 @@ public class PlayerHealth : MonoBehaviour
 
     // États
     private int vieActuelle;
+    public int VieActuelle => vieActuelle;
     private Coroutine _flashRoutine;
     private Color[] _originalColors;
     private Material[] _materials;

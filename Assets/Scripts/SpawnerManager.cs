@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,6 +17,12 @@ public class SpawnerManager : MonoBehaviour
 
     private float calculatedMapSize;
     private List<Vector3> _bullSpawnHistory = new List<Vector3>();
+    private readonly List<GameObject> _spawnedEnemies = new List<GameObject>();
+    private Vector3 _mapCenter;
+
+    // En réseau, seul l'hôte fait apparaître les mobs (ils sont ensuite répliqués chez les clients).
+    private static bool IsNetworked => NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
+    private static bool CanSpawnHere => !IsNetworked || NetworkManager.Singleton.IsServer;
 
     [System.Serializable]
     public class WaveSettings
@@ -30,6 +37,7 @@ public class SpawnerManager : MonoBehaviour
 
     public void StartSpawning()
     {
+        if (!CanSpawnHere) return;
         CalculateMapSize();
         _bullSpawnHistory.Clear();
 
@@ -49,7 +57,14 @@ public class SpawnerManager : MonoBehaviour
     {
         StopAllCoroutines();
         _bullSpawnHistory.Clear();
-        foreach (Transform child in transform) Destroy(child.gameObject);
+        foreach (GameObject enemy in _spawnedEnemies)
+        {
+            if (enemy == null) continue;
+            NetworkObject networkObject = enemy.GetComponent<NetworkObject>();
+            if (networkObject != null && networkObject.IsSpawned) networkObject.Despawn(true);
+            else Destroy(enemy);
+        }
+        _spawnedEnemies.Clear();
         Debug.Log("--- ALL ENEMIES CLEARED ---");
     }
 
@@ -94,7 +109,7 @@ public class SpawnerManager : MonoBehaviour
 
             if (validPositionFound)
             {
-                GameObject newEnemy = Instantiate(wave.enemyPrefab, spawnPos, Quaternion.identity, transform);
+                GameObject newEnemy = SpawnEnemy(wave.enemyPrefab, spawnPos);
                 NavMeshAgent agent = newEnemy.GetComponent<NavMeshAgent>();
 
                 if (agent != null)
@@ -107,6 +122,24 @@ public class SpawnerManager : MonoBehaviour
             }
             if (spawnedCount % 5 == 0) yield return null;
         }
+    }
+
+    private GameObject SpawnEnemy(GameObject prefab, Vector3 position)
+    {
+        GameObject enemy;
+        NetworkObject networkObject = prefab.GetComponent<NetworkObject>();
+        if (IsNetworked && networkObject != null)
+        {
+            // Pas de parent : un objet réseau ne peut pas être rangé sous un objet non réseau.
+            enemy = Instantiate(prefab, position, Quaternion.identity);
+            enemy.GetComponent<NetworkObject>().Spawn(true);
+        }
+        else
+        {
+            enemy = Instantiate(prefab, position, Quaternion.identity, transform);
+        }
+        _spawnedEnemies.Add(enemy);
+        return enemy;
     }
 
     // --- LOGIQUE INTELLIGENTE ---
@@ -152,7 +185,7 @@ public class SpawnerManager : MonoBehaviour
         Vector3 randomRaw = GetRandomPointInMap();
         NavMeshHit hit;
         // SearchRadius large (10f) pour trouver le sol même s'il est haut ou bas
-        if (NavMesh.SamplePosition(randomRaw, out hit, 10.0f, areaMask))
+        if (NavMesh.SamplePosition(randomRaw, out hit, searchRadius, areaMask))
         {
             return hit.position;
         }
@@ -178,14 +211,24 @@ public class SpawnerManager : MonoBehaviour
     private Vector3 GetRandomPointInMap()
     {
         float half = calculatedMapSize / 2f;
-        return new Vector3(Random.Range(-half, half), 0, Random.Range(-half, half));
+        // Centré sur les cellules réelles, un peu au-dessus de leur pied (l'objet Maze peut être déplacé dans la scène).
+        Vector3 center = _mapCenter + Vector3.up * 5f;
+        return center + new Vector3(Random.Range(-half, half), 0, Random.Range(-half, half));
     }
 
     private void CalculateMapSize()
     {
         if (mazeGenerator != null)
+        {
             calculatedMapSize = Mathf.Max(mazeGenerator.GetMazeWidth(), mazeGenerator.GetMazeDepth()) * mazeGenerator.GetCellSize();
+            Vector3 first = mazeGenerator.GetCellWorldPosition(0, 0);
+            Vector3 last = mazeGenerator.GetCellWorldPosition(mazeGenerator.GetMazeWidth() - 1, mazeGenerator.GetMazeDepth() - 1);
+            _mapCenter = (first + last) / 2f;
+        }
         else
+        {
             calculatedMapSize = 100f;
+            _mapCenter = Vector3.zero;
+        }
     }
 }

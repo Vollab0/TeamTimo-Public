@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,6 +27,12 @@ public class MazeNavMeshBuilder : MonoBehaviour
     [Header("Réglages Précision")]
     [Tooltip("Décalage manuel appliqué à TOUTES les zones (Sols + WallTop)")]
     [SerializeField] private Vector3 _zonePositionOffset = Vector3.zero;
+
+    [Tooltip("Hauteur des volumes de zone (sols). Doit englober le relief du terrain sous le labyrinthe.")]
+    [SerializeField] private float _zoneVolumeHeight = 30f;
+
+    [Tooltip("Hauteur du centre des volumes de zone au-dessus du pied des cellules.")]
+    [SerializeField] private float _zoneVolumeCenterY = 10f;
     
     [Header("Debug")]
     [SerializeField] private bool _showDebugGizmos = true;
@@ -39,6 +46,9 @@ public class MazeNavMeshBuilder : MonoBehaviour
     private int _areaLobby;
     private int _areaWallTop;
 
+    /// <summary>Vrai quand le NavMesh est calculé et l'apparition des mobs lancée (ou quand il n'y a rien à faire chez un client).</summary>
+    public bool IsReady { get; private set; }
+
     // Pour les Gizmos
     private Vector3 _debugWallTopCenter;
     private Vector3 _debugWallTopSize;
@@ -47,6 +57,16 @@ public class MazeNavMeshBuilder : MonoBehaviour
 
     public void BuildNavMeshForZones()
     {
+        IsReady = false;
+
+        // Client en réseau : l'IA ne tourne que chez l'hôte, inutile de calculer le NavMesh.
+        NetworkManager manager = NetworkManager.Singleton;
+        if (manager != null && manager.IsListening && !manager.IsServer)
+        {
+            IsReady = true;
+            return;
+        }
+
         UpdateNavMeshAreaIDs();
         ClearOldModifiers();
 
@@ -149,14 +169,12 @@ private void ClearOldModifiers()
         float rawWidth = mazeGenerator.GetMazeWidth() * mazeGenerator.GetCellSize();
         float rawDepth = mazeGenerator.GetMazeDepth() * mazeGenerator.GetCellSize();
 
-        // Calcul du centre de la grille (inchangé pour rester aligné)
-        float centerX = (rawWidth / 2f) - (mazeGenerator.GetCellSize() / 2f);
-        float centerZ = (rawDepth / 2f) - (mazeGenerator.GetCellSize() / 2f);
-        float centerY = _wallZoneStartHeight + (_wallZoneHeight / 2f);
+        // Centre calé sur les cellules réelles (l'objet Maze peut être déplacé dans la scène)
+        Vector3 center = GetWorldCenter(new RectInt(0, 0, mazeGenerator.GetMazeWidth(), mazeGenerator.GetMazeDepth()));
+        center.y += _wallZoneStartHeight + (_wallZoneHeight / 2f);
 
         // Position finale avec l'offset manuel
-        Vector3 finalPos = new Vector3(centerX, centerY, centerZ) + _zonePositionOffset;
-        modifierObj.transform.localPosition = finalPos;
+        modifierObj.transform.position = center + _zonePositionOffset;
 
         NavMeshModifierVolume volume = modifierObj.AddComponent<NavMeshModifierVolume>();
         volume.area = _areaWallTop;
@@ -179,17 +197,25 @@ private void ClearOldModifiers()
         float width = rect.width * cellSize;
         float depth = rect.height * cellSize;
 
-        float centerX = (rect.x * cellSize) + (width / 2f) - (cellSize / 2f);
-        float centerZ = (rect.y * cellSize) + (depth / 2f) - (cellSize / 2f);
+        // Centre calé sur les cellules réelles : avant, il était calculé par rapport à l'objet Maze,
+        // et les volumes se décalaient dès que cet objet n'était pas à l'origine de la scène.
+        Vector3 center = GetWorldCenter(rect);
+        center.y += yOffset + _zoneVolumeCenterY;
 
-        Vector3 finalPos = new Vector3(centerX, yOffset + 2f, centerZ) + _zonePositionOffset;
-
-        modifierObj.transform.localPosition = finalPos;
+        modifierObj.transform.position = center + _zonePositionOffset;
 
         NavMeshModifierVolume volume = modifierObj.AddComponent<NavMeshModifierVolume>();
         volume.area = areaIndex;
-        volume.size = new Vector3(width, 10f, depth);
+        volume.size = new Vector3(width, _zoneVolumeHeight, depth);
         volume.center = Vector3.zero;
+    }
+
+    /// <summary>Centre (monde) d'un rectangle de cellules, au pied des cellules.</summary>
+    private Vector3 GetWorldCenter(RectInt rect)
+    {
+        Vector3 first = mazeGenerator.GetCellWorldPosition(rect.x, rect.y);
+        Vector3 last = mazeGenerator.GetCellWorldPosition(rect.x + rect.width - 1, rect.y + rect.height - 1);
+        return (first + last) / 2f;
     }
 
     private IEnumerator BakeNavMeshDelayed()
@@ -199,12 +225,27 @@ private void ClearOldModifiers()
         {
             if (surface != null)
             {
-                surface.BuildNavMesh();
+                System.Diagnostics.Stopwatch timer = System.Diagnostics.Stopwatch.StartNew();
+
+                // Calcul asynchrone : le jeu et le réseau continuent de tourner pendant le calcul.
+                if (surface.navMeshData == null)
+                {
+                    surface.navMeshData = new NavMeshData(surface.agentTypeID)
+                    {
+                        position = surface.transform.position,
+                        rotation = surface.transform.rotation
+                    };
+                    surface.AddData();
+                }
+                yield return surface.UpdateNavMesh(surface.navMeshData);
+
+                Debug.Log($"NavMesh : surface « {surface.name} » calculée en {timer.Elapsed.TotalSeconds:F1} s");
             }
         }
 
         yield return null;
         if (spawnerManager != null) spawnerManager.StartSpawning();
+        IsReady = true;
     }
 
     private void OnDrawGizmos()

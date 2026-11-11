@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="../Style/LoadingScreenStyle.uss" />
+    <ui:VisualElement name="LoadingScreen" class="loading-screen">
+        <ui:VisualElement class="loading-screen__content">
+            <ui:Label name="LoadingLore" text="« Le Fermier aiguise sa faux… »" class="loading-screen__lore" />
+            <ui:Label name="LoadingStep" text="Chargement…" class="loading-screen__step" />
+            <ui:VisualElement class="loading-screen__row">
+                <ui:VisualElement name="LoadingBar" class="loading-screen__bar">
+                    <ui:VisualElement name="LoadingFill" class="loading-screen__fill" />
+                </ui:VisualElement>
+                <ui:Label name="LoadingPercent" text="0 %" class="loading-screen__percent" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

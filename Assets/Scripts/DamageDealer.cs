@@ -29,13 +29,12 @@ public class DamageDealer : MonoBehaviour
     // On ajoute un paramètre 'damageSourcePosition'
     private void TryDealDamage(GameObject target, Vector3 damageSourcePosition)
     {
-        // On cherche le script PlayerHealth sur le joueur
-        PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
+        // Multijoueur : les dégâts passent par l'hôte vers la machine du joueur touché.
+        PlayerDamageReceiver playerHealth = target.GetComponent<PlayerDamageReceiver>();
 
         if (playerHealth != null)
         {
-            // On appelle la nouvelle version de Blesser qui accepte la position source
-            playerHealth.Blesser(damageAmount, damageSourcePosition); 
+            playerHealth.ReceiveDamage(damageAmount, damageSourcePosition); 
             // Debug.Log($"AÏE ! Le joueur a pris {damageAmount} dégâts.");
         }
     }

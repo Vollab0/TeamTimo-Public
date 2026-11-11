@@ -11,6 +11,9 @@ public class DayNightCycle : MonoBehaviour
     [Range(0, 1)]
     public float timeOfDay = 0f;
 
+    [Tooltip("Décoché : le temps est figé sur « Time Of Day » (0 = plein jour). Le cycle sera repris plus tard (timer côté hôte, 70 % jour / 30 % nuit).")]
+    [SerializeField] private bool cycleEnabled = true;
+
     [Header("Réglages Shader (Skybox)")]
     public Material targetMaterial;
     public string variableName = "_DayNightBlend";
@@ -42,6 +45,21 @@ public class DayNightCycle : MonoBehaviour
     // Variables privées
     private int _variableID;
     private float _timeAccumulator;
+    // Dernière heure appliquée : on ne réécrit lumières, ciel et brouillard que si elle change
+    // (évite de modifier la scène et MySkybox.mat à chaque frame quand le temps est figé).
+    private float _lastAppliedCycle = float.NaN;
+
+    void OnEnable()
+    {
+        // Réapplique l'heure à l'activation (et après un changement dans l'Inspector).
+        _lastAppliedCycle = float.NaN;
+    }
+
+    void OnValidate()
+    {
+        _lastAppliedCycle = float.NaN;
+        if (targetMaterial != null) _variableID = Shader.PropertyToID(variableName);
+    }
 
     void Start()
     {
@@ -60,7 +78,7 @@ public class DayNightCycle : MonoBehaviour
 
         float currentCycle = 0f;
 
-        if (Application.isPlaying)
+        if (Application.isPlaying && cycleEnabled)
         {
             _timeAccumulator += Time.deltaTime;
             currentCycle = (_timeAccumulator % dayDurationInSeconds) / dayDurationInSeconds;
@@ -71,6 +89,8 @@ public class DayNightCycle : MonoBehaviour
             currentCycle = timeOfDay;
         }
 
+        if (currentCycle == _lastAppliedCycle) return;
+        _lastAppliedCycle = currentCycle;
         UpdateVisuals(currentCycle);
     }
 

@@ -1,5 +1,9 @@
-using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -37,12 +41,61 @@ public class TerrainGenerator : MonoBehaviour
     public float heightMultiplier = 10.0f;
     public Vector2 noiseOffset;
 
+    [Header("Chargement progressif")]
+    [Tooltip("Temps de calcul maximum par frame (ms) avant de laisser tourner le jeu et le réseau. Une tuile n'est jamais coupée en deux : une tuile lourde peut dépasser ce budget.")]
+    [SerializeField] private float maxMillisecondsPerFrame = 30f;
+
+    /// <summary>Vrai quand toutes les tuiles de terrain sont générées.</summary>
+    public bool IsReady { get; private set; }
+
+    /// <summary>Tuiles procédurales déjà générées / à générer (pour l'écran de chargement).</summary>
+    public int TilesBuilt { get; private set; }
+    public int TilesTotal { get; private set; }
+
+    /// <summary>Déclenché quand toutes les tuiles de terrain sont générées.</summary>
+    public event Action OnTerrainReady;
+
     private Vector2 worldCenterPoint;
     private int gridWidth;
     private int gridDepth;
 
+    // Même graine que le labyrinthe : les arbres (qui ont des colliders) sont au même endroit chez tous les joueurs.
+    private System.Random _random;
+    private const string ProceduralTilePrefix = "Terrain_Procedural_";
+
+    private Coroutine _buildRoutine;
+    // Carte d'herbe identique pour toutes les tuiles : calculée une seule fois (plusieurs centaines de Mo à haute résolution).
+    private int[,] _sharedDetailMap;
+
+    void OnEnable()
+    {
+        if (mazeGenerator != null) mazeGenerator.OnGenerationStarted += Build;
+    }
+
+    void OnDisable()
+    {
+        if (mazeGenerator != null) mazeGenerator.OnGenerationStarted -= Build;
+    }
+
     void Start()
     {
+        // Si le labyrinthe a déjà commencé sa génération avant notre abonnement, on se rattrape.
+        if (mazeGenerator != null && mazeGenerator.Seed != 0 && _random == null) Build(mazeGenerator.Seed);
+    }
+
+    /// <summary>Génère les tuiles de terrain à partir de la graine du labyrinthe, sur plusieurs frames.</summary>
+    public void Build(int seed)
+    {
+        if (_buildRoutine != null) StopCoroutine(_buildRoutine);
+        _buildRoutine = StartCoroutine(BuildRoutine(seed));
+    }
+
+    private IEnumerator BuildRoutine(int seed)
+    {
+        IsReady = false;
+        _random = new System.Random(seed ^ 0x5EED);
+        ClearProceduralTiles();
+
         if (manualCenterData != null)
         {
             terrainSize = manualCenterData.size;
@@ -62,11 +115,30 @@ public class TerrainGenerator : MonoBehaviour
 
         worldCenterPoint = Vector2.zero; 
 
-        GenerateGrid();
+        TilesBuilt = 0;
+        TilesTotal = gridWidth * gridDepth - 1; // la tuile centrale est posée à la main
+        Stopwatch total = Stopwatch.StartNew();
+        yield return GenerateGrid();
+
+        _sharedDetailMap = null; // libère la mémoire
+        _buildRoutine = null;
+        IsReady = true;
+        Debug.Log($"Terrain : {gridWidth * gridDepth - 1} tuiles générées en {total.Elapsed.TotalSeconds:F1} s");
+        OnTerrainReady?.Invoke();
     }
 
-    void GenerateGrid()
+    void ClearProceduralTiles()
     {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.name.StartsWith(ProceduralTilePrefix)) Destroy(child.gameObject);
+        }
+    }
+
+    IEnumerator GenerateGrid()
+    {
+        Stopwatch frameTimer = Stopwatch.StartNew();
         int centerX = gridWidth / 2;
         int centerZ = gridDepth / 2;
         float pivotOffsetX = terrainSize.x / 2f;
@@ -89,6 +161,14 @@ public class TerrainGenerator : MonoBehaviour
 
                 // TUILES PROCÉDURALES
                 CreateProceduralTile(x, z, tilePos);
+                TilesBuilt++;
+
+                // On rend la main au jeu (et au réseau) dès que le budget de la frame est dépassé.
+                if (frameTimer.Elapsed.TotalMilliseconds > maxMillisecondsPerFrame)
+                {
+                    yield return null;
+                    frameTimer.Restart();
+                }
             }
         }
     }
@@ -127,7 +207,7 @@ public class TerrainGenerator : MonoBehaviour
         // 5. Création de l'objet
         GameObject terrainObj = Terrain.CreateTerrainGameObject(tData);
         terrainObj.transform.position = position;
-        terrainObj.name = $"Terrain_Procedural_{gridX}_{gridZ}";
+        terrainObj.name = $"{ProceduralTilePrefix}{gridX}_{gridZ}";
         terrainObj.transform.SetParent(this.transform);
         // --- REGLAGES DE RENDU OBLIGATOIRES ---
         Terrain terrainComp = terrainObj.GetComponent<Terrain>();
@@ -237,10 +317,10 @@ public class TerrainGenerator : MonoBehaviour
 
                     float blendFactor = GetSquareBlendFactor(globalX, globalZ);
 
-                    if (blendFactor > 0.1f && Random.value < treeDensity)
+                    if (blendFactor > 0.1f && _random.NextDouble() < treeDensity)
                     {
-                        float offsetX = Random.Range(-0.01f, 0.01f);
-                        float offsetZ = Random.Range(-0.01f, 0.01f);
+                        float offsetX = Mathf.Lerp(-0.01f, 0.01f, (float)_random.NextDouble());
+                        float offsetZ = Mathf.Lerp(-0.01f, 0.01f, (float)_random.NextDouble());
 
                         TreeInstance tree = new TreeInstance();
                         tree.position = new Vector3(normX + offsetX, heightMap[z, x], normZ + offsetZ);
@@ -259,24 +339,29 @@ public class TerrainGenerator : MonoBehaviour
 // --- TEST DEBUG HERBE ---
         if (grassDetailTexture != null)
         {
-            int detailRes = tData.detailResolution;
-            int[,] detailMap = new int[detailRes, detailRes];
-
-            for (int z = 0; z < detailRes; z++)
-            {
-                for (int x = 0; x < detailRes; x++)
-                {
-                    // On force l'herbe partout, sans bruit ni blending, juste pour tester
-                    detailMap[z, x] = 1000000; // brins par case
-                }
-            }
-            tData.SetDetailLayer(0, 0, 0, detailMap);
+            tData.SetDetailLayer(0, 0, 0, GetSharedDetailMap(tData.detailResolution));
         }
     }
 
     // ---------------------------------------------------------
     // UTILITAIRES
     // ---------------------------------------------------------
+    int[,] GetSharedDetailMap(int detailRes)
+    {
+        if (_sharedDetailMap != null && _sharedDetailMap.GetLength(0) == detailRes) return _sharedDetailMap;
+
+        _sharedDetailMap = new int[detailRes, detailRes];
+        for (int z = 0; z < detailRes; z++)
+        {
+            for (int x = 0; x < detailRes; x++)
+            {
+                // On force l'herbe partout, sans bruit ni blending, juste pour tester
+                _sharedDetailMap[z, x] = 1000000; // brins par case
+            }
+        }
+        return _sharedDetailMap;
+    }
+
     float GetSquareBlendFactor(float globalX, float globalZ)
     {
         float distX = Mathf.Abs(globalX - worldCenterPoint.x);
