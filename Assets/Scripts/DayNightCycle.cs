@@ -14,6 +14,18 @@ public class DayNightCycle : MonoBehaviour
     [Tooltip("Décoché : le temps est figé sur « Time Of Day » (0 = plein jour). Le cycle sera repris plus tard (timer côté hôte, 70 % jour / 30 % nuit).")]
     [SerializeField] private bool cycleEnabled = true;
 
+    [Header("Horloge de la partie (Play Mode)")]
+    [Tooltip("Si assignée et lancée, c'est elle qui donne l'heure (jour 70 % / nuit 30 %, synchronisée en réseau) : « Day Duration », « Time Of Day » et « Cycle Enabled » sont alors ignorés.")]
+    [SerializeField] private GameClock gameClock;
+
+    [Tooltip("Valeur de « Time Of Day » qui correspond à l'aube (lever du soleil) dans les gradients")]
+    [Range(0, 1)]
+    [SerializeField] private float visualDawn = 0.75f;
+
+    [Tooltip("Valeur de « Time Of Day » qui correspond au crépuscule (coucher du soleil) dans les gradients")]
+    [Range(0, 1)]
+    [SerializeField] private float visualDusk = 0.25f;
+
     [Header("Réglages Shader (Skybox)")]
     public Material targetMaterial;
     public string variableName = "_DayNightBlend";
@@ -78,7 +90,12 @@ public class DayNightCycle : MonoBehaviour
 
         float currentCycle = 0f;
 
-        if (Application.isPlaying && cycleEnabled)
+        if (Application.isPlaying && gameClock != null && gameClock.HasStarted)
+        {
+            currentCycle = ClockToVisualCycle(gameClock.DayProgress, gameClock.DayRatio);
+            timeOfDay = currentCycle;
+        }
+        else if (Application.isPlaying && cycleEnabled)
         {
             _timeAccumulator += Time.deltaTime;
             currentCycle = (_timeAccumulator % dayDurationInSeconds) / dayDurationInSeconds;
@@ -92,6 +109,21 @@ public class DayNightCycle : MonoBehaviour
         if (currentCycle == _lastAppliedCycle) return;
         _lastAppliedCycle = currentCycle;
         UpdateVisuals(currentCycle);
+    }
+
+    /// <summary>
+    /// Convertit l'avancement du jour de l'horloge (0 = aube, dayRatio = crépuscule) en heure visuelle
+    /// (0 = midi, 0,5 = minuit) : le jour couvre l'arc aube → crépuscule, la nuit l'arc crépuscule → aube.
+    /// </summary>
+    float ClockToVisualCycle(float dayProgress, float dayRatio)
+    {
+        float dayArc = Mathf.Repeat(visualDusk - visualDawn, 1f);
+        float nightArc = 1f - dayArc;
+
+        if (dayProgress < dayRatio)
+            return Mathf.Repeat(visualDawn + dayProgress / dayRatio * dayArc, 1f);
+
+        return Mathf.Repeat(visualDusk + (dayProgress - dayRatio) / (1f - dayRatio) * nightArc, 1f);
     }
 
     void UpdateVisuals(float cycle)

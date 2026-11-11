@@ -1,0 +1,31 @@
+/* HUD de l'horloge : compteur de jours + temps avant la prochaine phase (en haut à droite) */
+.game-clock {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: rgba(30, 24, 16, 0.6);
+    align-items: flex-end;
+}
+
+.game-clock__day {
+    font-size: 28px;
+    -unity-font-style: bold;
+    color: rgb(255, 236, 190);
+}
+
+.game-clock__phase {
+    font-size: 16px;
+    color: rgb(240, 220, 170);
+}
+
+/* La nuit : teinte froide */
+.game-clock--night {
+    background-color: rgba(12, 16, 40, 0.7);
+}
+
+.game-clock--night .game-clock__day,
+.game-clock--night .game-clock__phase {
+    color: rgb(190, 205, 255);
+}
