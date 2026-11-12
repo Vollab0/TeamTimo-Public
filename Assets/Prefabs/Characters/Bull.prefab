@@ -526,4 +526,4 @@ MonoBehaviour:
   transformSmoke: {fileID: 8022968086509595871}
   transformSmokeEvent: OnLand
   visualSwapDelay: 0.25
-  smokeAtDawn: 0
+  smokeAtDawn: 1

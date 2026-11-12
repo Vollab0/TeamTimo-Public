@@ -393,7 +393,7 @@ MonoBehaviour:
   transformSmoke: {fileID: 495134350032266847}
   transformSmokeEvent: OnLand
   visualSwapDelay: 0.25
-  smokeAtDawn: 0
+  smokeAtDawn: 1
 --- !u!1 &8884677750430152709
 GameObject:
   m_ObjectHideFlags: 0
