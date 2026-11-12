@@ -4643,23 +4643,87 @@ PrefabInstance:
       objectReference: {fileID: 540709027}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.size
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].count
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].count
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[2].count
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[3].count
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[4].count
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].waveName
       value: Test
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].waveName
+      value: Souris SouthWest
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[2].waveName
+      value: Souris NorthWest
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[3].waveName
+      value: Souris NorthEast
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[4].waveName
+      value: Souris SouthEast
       objectReference: {fileID: 0}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].enemyPrefab
       value: 
       objectReference: {fileID: 4557885439320345782, guid: ca2aab1b340b98441ada6b5bd34d8556, type: 3}
     - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].enemyPrefab
+      value: 
+      objectReference: {fileID: 3339382512526336761, guid: 05190dc38c2ecae4fa6d11e822110505, type: 3}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[2].enemyPrefab
+      value: 
+      objectReference: {fileID: 3339382512526336761, guid: 05190dc38c2ecae4fa6d11e822110505, type: 3}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[3].enemyPrefab
+      value: 
+      objectReference: {fileID: 3339382512526336761, guid: 05190dc38c2ecae4fa6d11e822110505, type: 3}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[4].enemyPrefab
+      value: 
+      objectReference: {fileID: 3339382512526336761, guid: 05190dc38c2ecae4fa6d11e822110505, type: 3}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: waves.Array.data[0].navMeshAreaName
       value: NorthWest
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[1].navMeshAreaName
+      value: SouthWest
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[2].navMeshAreaName
+      value: NorthWest
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[3].navMeshAreaName
+      value: NorthEast
+      objectReference: {fileID: 0}
+    - target: {fileID: -2533169728837703908, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
+      propertyPath: waves.Array.data[4].navMeshAreaName
+      value: SouthEast
       objectReference: {fileID: 0}
     - target: {fileID: 430838865189649562, guid: 0d31e0f04c22c7f48add0265cbaf7a96, type: 3}
       propertyPath: mazeGenerator

@@ -54,10 +54,40 @@ public class BullAI : MonoBehaviour
     private float _nextZoneHitTime = 0f;
     private float _nextContactHitTime = 0f;
 
+    // Variante de nuit (facultative) : vitesse, dégâts et largeur de détection augmentés.
+    private EnemyNightMode _nightMode;
+    private float SpeedMultiplier => _nightMode != null ? _nightMode.SpeedMultiplier : 1f;
+    private float AggroMultiplier => _nightMode != null ? _nightMode.AggroMultiplier : 1f;
+    private float CurrentPatrolSpeed => patrolSpeed * SpeedMultiplier;
+    private float CurrentChargeSpeed => chargeSpeed * SpeedMultiplier;
+
+    void Awake()
+    {
+        _nightMode = GetComponent<EnemyNightMode>();
+    }
+
+    void OnEnable()
+    {
+        if (_nightMode != null) _nightMode.OnNightChanged += HandleNightChanged;
+    }
+
+    void OnDisable()
+    {
+        if (_nightMode != null) _nightMode.OnNightChanged -= HandleNightChanged;
+    }
+
+    void HandleNightChanged(bool isNight)
+    {
+        if (_agent == null || !_agent.enabled) return;
+        // En charge, la vitesse est mise à jour au prochain départ ; en patrouille, tout de suite.
+        if (_isCharging) _agent.speed = CurrentChargeSpeed;
+        else if (!_preparingCharge && !_isStunned) _agent.speed = CurrentPatrolSpeed;
+    }
+
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _agent.speed = patrolSpeed;
+        _agent.speed = CurrentPatrolSpeed;
         _agent.autoBraking = true;
         _actualBodyWidth = _agent.radius * 2f;
         _actualVisionWidth = _actualBodyWidth * visionWidthRatio;
@@ -137,7 +167,7 @@ public class BullAI : MonoBehaviour
                 if (distance <= zoneRadius && Time.time >= _nextZoneHitTime)
                 {
                     // Debug.Log("Hit Zone !");
-                    playerHP.ReceiveDamage(zoneDamage, transform.position);
+                    playerHP.ReceiveDamage(EnemyNightMode.ScaleDamage(_nightMode, zoneDamage), transform.position);
                     _nextZoneHitTime = Time.time + zoneCooldown;
                 }
 
@@ -147,7 +177,7 @@ public class BullAI : MonoBehaviour
                 if (distance <= contactThreshold && Time.time >= _nextContactHitTime)
                 {
                     // Debug.Log("Hit Contact !");
-                    playerHP.ReceiveDamage(contactDamage, transform.position);
+                    playerHP.ReceiveDamage(EnemyNightMode.ScaleDamage(_nightMode, contactDamage), transform.position);
                     _nextContactHitTime = Time.time + contactCooldown;
                 }
 
@@ -228,7 +258,7 @@ public class BullAI : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 center = transform.position + (Vector3.up * (visionHeight / 2f));
-        Vector3 halfExtents = new Vector3(_actualVisionWidth / 2f, visionHeight / 2f, 0.1f);
+        Vector3 halfExtents = new Vector3(_actualVisionWidth * AggroMultiplier / 2f, visionHeight / 2f, 0.1f);
         if (Physics.BoxCast(center, halfExtents, transform.forward, out hit, transform.rotation, maxVisionDistance, playerLayer))
         {
             Vector3 eyes = transform.position + Vector3.up * (visionHeight * 0.8f);
@@ -269,7 +299,7 @@ public class BullAI : MonoBehaviour
         else targetPos.z = _fixedAxisCoordinate; // Force Z
 
         _agent.isStopped = false;
-        _agent.speed = chargeSpeed;
+        _agent.speed = CurrentChargeSpeed;
         _agent.autoBraking = false;
         _agent.SetDestination(targetPos);
     }
@@ -292,7 +322,7 @@ public class BullAI : MonoBehaviour
         _agent.isStopped = true; _agent.velocity = Vector3.zero;
         _agent.Warp(transform.position - transform.forward * 4.0f);
         yield return new WaitForSeconds(stunDuration);
-        _isStunned = false; _agent.isStopped = false; _agent.speed = patrolSpeed; _agent.autoBraking = true;
+        _isStunned = false; _agent.isStopped = false; _agent.speed = CurrentPatrolSpeed; _agent.autoBraking = true;
         _agent.updateRotation = true;
         float distA = Vector3.Distance(transform.position, _patrolPointA);
         float distB = Vector3.Distance(transform.position, _patrolPointB);

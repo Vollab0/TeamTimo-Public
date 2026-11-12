@@ -31,6 +31,34 @@ public class EnemySight : MonoBehaviour
     private bool _isAlerted = false;
     private bool _isSearching = false; 
 
+    // Variante de nuit (facultative) : vitesse et rayon de vision augmentés.
+    private EnemyNightMode _nightMode;
+    private float SpeedMultiplier => _nightMode != null ? _nightMode.SpeedMultiplier : 1f;
+    private float CurrentViewRadius => viewRadius * (_nightMode != null ? _nightMode.AggroMultiplier : 1f);
+    private float CurrentPatrolSpeed => patrolSpeed * SpeedMultiplier;
+    private float CurrentChaseSpeed => chaseSpeed * SpeedMultiplier;
+
+    void Awake()
+    {
+        _nightMode = GetComponent<EnemyNightMode>();
+    }
+
+    void OnEnable()
+    {
+        if (_nightMode != null) _nightMode.OnNightChanged += HandleNightChanged;
+    }
+
+    void OnDisable()
+    {
+        if (_nightMode != null) _nightMode.OnNightChanged -= HandleNightChanged;
+    }
+
+    void HandleNightChanged(bool isNight)
+    {
+        if (_agent == null || !_agent.enabled) return;
+        _agent.speed = _isChasing ? CurrentChaseSpeed : CurrentPatrolSpeed;
+    }
+
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -38,7 +66,7 @@ public class EnemySight : MonoBehaviour
         // --- CONFIGURATION MOUVEMENT ---
         _agent.acceleration = 1000f; 
         _agent.autoBraking = true;
-        _agent.speed = patrolSpeed;
+        _agent.speed = CurrentPatrolSpeed;
 
         StartCoroutine(PatrolRoutine());
     }
@@ -113,7 +141,7 @@ public class EnemySight : MonoBehaviour
         Vector3 dirToPlayer = (target.position - transform.position).normalized;
         float dstToPlayer = Vector3.Distance(transform.position, target.position);
 
-        if (dstToPlayer > viewRadius) return false;
+        if (dstToPlayer > CurrentViewRadius) return false;
 
         if (Vector3.Angle(transform.forward, dirToPlayer) < viewAngle / 2)
         {
@@ -166,7 +194,7 @@ public class EnemySight : MonoBehaviour
         _isChasing = true;
         
         _agent.isStopped = false;
-        _agent.speed = chaseSpeed;
+        _agent.speed = CurrentChaseSpeed;
         
         StopCoroutine("PatrolRoutine");
         StopCoroutine("SearchRoutine");
@@ -176,7 +204,7 @@ public class EnemySight : MonoBehaviour
     void StopChase()
     {
         _isChasing = false;
-        _agent.speed = patrolSpeed;
+        _agent.speed = CurrentPatrolSpeed;
         StartCoroutine(SearchRoutine());
     }
 

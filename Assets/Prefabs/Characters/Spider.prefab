@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 6919326940328723730}
   - component: {fileID: 7150671936611779320}
   - component: {fileID: 6689366903836591196}
+  - component: {fileID: 6156766352464364967}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Untagged
@@ -292,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 59486938
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -368,3 +369,22 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   serverOnlyComponents:
   - {fileID: 8915497706467150413}
+--- !u!114 &6156766352464364967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4557885439320345782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0261369defd842543aa025c8bd0c566c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyNightMode
+  speedMultiplier: 1.3
+  damageMultiplier: 1.5
+  aggroMultiplier: 1.5
+  nightTint: {r: 0.45, g: 0.4, b: 0.5, a: 1}
+  tintedRenderers: []
+  nightOnlyObjects: []
+  dayOnlyObjects: []
