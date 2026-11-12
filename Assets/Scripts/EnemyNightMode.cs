@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 /// <summary>
 /// Variante de nuit d'un mob (Bestiaire, Cycle_Jour_Nuit) : plus rapide, plus fort, aggro plus large,
@@ -38,6 +40,20 @@ public class EnemyNightMode : MonoBehaviour
 
     [Tooltip("Objets affichés seulement le jour")]
     [SerializeField] private GameObject[] dayOnlyObjects;
+
+    [Header("Nuage de transformation")]
+    [Tooltip("VFX joué au changement d'apparence (nuage de fumée). Si vide, le changement est instantané, sans nuage")]
+    [SerializeField] private VisualEffect transformSmoke;
+
+    [Tooltip("Nom de l'événement envoyé au VFX pour lancer le nuage")]
+    [SerializeField] private string transformSmokeEvent = "OnLand";
+
+    [Tooltip("Délai (s) entre l'apparition du nuage et le changement d'apparence, qui se fait caché dans la fumée")]
+    [Min(0f)]
+    [SerializeField] private float visualSwapDelay = 0.25f;
+
+    [Tooltip("Jouer aussi le nuage au retour du jour (sinon seulement au passage en mode nuit)")]
+    [SerializeField] private bool smokeAtDawn;
 
     /// <summary>Un renderer et les matériaux qu'il porte la nuit (même ordre que ses matériaux de jour).</summary>
     [Serializable]
@@ -85,6 +101,10 @@ public class EnemyNightMode : MonoBehaviour
     private MaterialPropertyBlock _block;
     private bool _visualApplied;
 
+    private int _transformSmokeEventId;
+    private WaitForSeconds _swapWait;
+    private Coroutine _swapRoutine;
+
     /// <summary>Dégâts de nuit d'une attaque (en demi-cœurs, arrondis au-dessus).</summary>
     public int ScaleDamage(int baseDamage)
     {
@@ -115,6 +135,8 @@ public class EnemyNightMode : MonoBehaviour
             tintedRenderers = toTint.ToArray();
         }
         _block = new MaterialPropertyBlock();
+        _transformSmokeEventId = Shader.PropertyToID(transformSmokeEvent);
+        _swapWait = new WaitForSeconds(visualSwapDelay);
         ApplyVisual(false);
     }
 
@@ -127,12 +149,19 @@ public class EnemyNightMode : MonoBehaviour
         _clock.OnNightStarted += HandleNightStarted;
         _clock.OnTimeUp += HandleTimeUp;
 
-        // Mob apparu en pleine nuit : il ne recevra pas le crépuscule.
-        SetNight(_clock.HasStarted && _clock.IsNight);
+        // Mob apparu en pleine nuit : il ne recevra pas le crépuscule (pas de nuage, il apparaît déjà transformé).
+        SetNight(_clock.HasStarted && _clock.IsNight, false);
     }
 
     private void OnDisable()
     {
+        // Changement d'apparence en attente : on l'applique tout de suite (la coroutine s'arrête avec l'objet).
+        if (_swapRoutine != null)
+        {
+            _swapRoutine = null;
+            ApplyVisual(IsNight);
+        }
+
         if (_clock == null) return;
         _clock.OnDayStarted -= HandleDayStarted;
         _clock.OnNightStarted -= HandleNightStarted;
@@ -145,13 +174,44 @@ public class EnemyNightMode : MonoBehaviour
     private void HandleTimeUp() => SetNight(false);
 
     /// <summary>Force la version de jour ou de nuit (appelé par GameClock ; utile aussi pour tester).</summary>
-    public void SetNight(bool night)
+    public void SetNight(bool night) => SetNight(night, true);
+
+    /// <summary>
+    /// Bascule jour / nuit. Les bonus de stats s'appliquent tout de suite ; avec <paramref name="withSmoke"/>
+    /// et un VFX de transformation, l'apparence change un peu plus tard, cachée dans le nuage.
+    /// </summary>
+    private void SetNight(bool night, bool withSmoke)
     {
         if (night == IsNight && _visualApplied) return;
         bool changed = night != IsNight;
         IsNight = night;
-        ApplyVisual(night);
+
+        if (_swapRoutine != null)
+        {
+            StopCoroutine(_swapRoutine);
+            _swapRoutine = null;
+        }
+
+        bool playSmoke = withSmoke && changed && transformSmoke != null && (night || smokeAtDawn);
+        if (playSmoke)
+        {
+            transformSmoke.SendEvent(_transformSmokeEventId);
+            if (visualSwapDelay > 0f && isActiveAndEnabled) _swapRoutine = StartCoroutine(ApplyVisualAfterDelay());
+            else ApplyVisual(night);
+        }
+        else
+        {
+            ApplyVisual(night);
+        }
+
         if (changed) OnNightChanged?.Invoke(night);
+    }
+
+    private IEnumerator ApplyVisualAfterDelay()
+    {
+        yield return _swapWait;
+        _swapRoutine = null;
+        ApplyVisual(IsNight);
     }
 
     [ContextMenu("Debug : basculer jour / nuit")]
