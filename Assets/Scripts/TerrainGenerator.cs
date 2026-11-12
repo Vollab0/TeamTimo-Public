@@ -15,26 +15,35 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header("Design Visuel (Textures & Végétation)")]
     // Créez un Layer dans le projet (Clic droit -> Create -> Terrain Layer) et glissez-le ici
-    public TerrainLayer grassLayer; 
-    // Texture 2D simple pour l'herbe 3D (brins d'herbe)
-    public Texture2D grassDetailTexture; 
+    public TerrainLayer grassLayer;
+    [Tooltip("Couche de terre peinte en taches sur les tuiles procédurales (laisser vide = herbe partout).")]
+    [SerializeField] private TerrainLayer dirtLayer;
+    [Tooltip("Réglages de l'herbe (touffes, densité, distance), partagés avec le terrain du Lobby.")]
+    [SerializeField] private TerrainGrassSettings grassSettings;
     // Votre prefab d'arbre
     public GameObject treePrefab;
 
     [Header("Densité de la Végétation")]
     [Range(0, 1)] public float treeDensity = 0.02f; // Chance qu'un arbre apparaisse
     public float treeScaleFactor = 1f;
-    public int detailResolutionPerPatch = 16; // Qualité de l'herbe (défaut 16 ou 32)
+
+    [Header("Taches de terre (tuiles procédurales)")]
+    [Tooltip("Échelle du bruit des taches de terre (1 / taille en m). 0,012 = taches d'environ 80 m.")]
+    [SerializeField] private float dirtNoiseScale = 0.012f;
+    [Tooltip("Seuil du bruit au-dessus duquel le sol devient de la terre (0-1). Plus haut = moins de terre.")]
+    [Range(0, 1)] [SerializeField] private float dirtThreshold = 0.62f;
+    [Tooltip("Douceur de la transition herbe / terre (en unités de bruit).")]
+    [Range(0.01f, 0.3f)] [SerializeField] private float dirtSoftness = 0.06f;
+    [Tooltip("Résolution de la splatmap des tuiles procédurales (texels par côté).")]
+    [SerializeField] private int alphamapResolution = 256;
 
     [Header("Paramètres de Fusion (Lobby)")]
     public float safeZoneHalfExtent = 50f; // "Rayon" du carré (demi-largeur)
-    public float transitionDistance = 30f; 
+    public float transitionDistance = 30f;
 
     [Header("Paramètres Généraux")]
     public Vector3 terrainSize = new Vector3(100, 50, 100);
     public int heightmapResolution = 129;
-    // Résolution pour l'herbe (souvent plus élevée que le heightmap, ex: 512)
-    public int detailResolution = 512; 
 
     [Header("Paramètres du Bruit (Noise)")]
     public float noiseScale = 0.05f;
@@ -64,8 +73,12 @@ public class TerrainGenerator : MonoBehaviour
     private const string ProceduralTilePrefix = "Terrain_Procedural_";
 
     private Coroutine _buildRoutine;
-    // Carte d'herbe identique pour toutes les tuiles : calculée une seule fois (plusieurs centaines de Mo à haute résolution).
-    private int[,] _sharedDetailMap;
+    // Tampons réutilisés d'une tuile à l'autre (évite d'allouer plusieurs Mo par tuile).
+    private int[][,] _detailBuffers;
+    private float[,,] _alphamapBuffer;
+    private float[,] _grassWeightBuffer;
+    private Vector2 _dirtOffset;
+    private int _grassSeed;
 
     void OnEnable()
     {
@@ -94,6 +107,10 @@ public class TerrainGenerator : MonoBehaviour
     {
         IsReady = false;
         _random = new System.Random(seed ^ 0x5EED);
+        // Graines séparées : ne décale pas le tirage des arbres (qui ont des colliders).
+        var decorRandom = new System.Random(seed ^ 0xD127);
+        _dirtOffset = new Vector2(decorRandom.Next(-10000, 10000), decorRandom.Next(-10000, 10000));
+        _grassSeed = decorRandom.Next();
         ClearProceduralTiles();
 
         if (manualCenterData != null)
@@ -120,7 +137,10 @@ public class TerrainGenerator : MonoBehaviour
         Stopwatch total = Stopwatch.StartNew();
         yield return GenerateGrid();
 
-        _sharedDetailMap = null; // libère la mémoire
+        // libère la mémoire des tampons
+        _detailBuffers = null;
+        _alphamapBuffer = null;
+        _grassWeightBuffer = null;
         _buildRoutine = null;
         IsReady = true;
         Debug.Log($"Terrain : {gridWidth * gridDepth - 1} tuiles générées en {total.Elapsed.TotalSeconds:F1} s");
@@ -179,6 +199,15 @@ public class TerrainGenerator : MonoBehaviour
         {
             GameObject existingManualTile = GameObject.Find("Terrain_CENTRAL_MANUEL");
             if(existingManualTile != null) existingManualTile.transform.position = pos;
+
+            // Même distance / densité d'herbe que les tuiles procédurales (composant de scène, pas l'asset).
+            if (grassSettings != null)
+            {
+                foreach (Terrain terrain in Terrain.activeTerrains)
+                {
+                    if (terrain.terrainData == manualCenterData) grassSettings.ApplyRendering(terrain);
+                }
+            }
         }
     }
 
@@ -189,12 +218,9 @@ public class TerrainGenerator : MonoBehaviour
         // 1. Configuration de base
         tData.heightmapResolution = heightmapResolution;
         tData.size = terrainSize;
-        
-        // Configuration de la résolution de l'herbe (Details)
-        tData.SetDetailResolution(detailResolution, detailResolutionPerPatch);
 
-        // 2. Application de la Texture (Splatmap)
-        ApplyTextureLayer(tData);
+        // 2. Application des textures (herbe + taches de terre)
+        ApplyTextureLayers(tData, position);
 
         // 3. Génération du Relief
         float[,] heights = GenerateHeights(tData, position);
@@ -209,24 +235,58 @@ public class TerrainGenerator : MonoBehaviour
         terrainObj.transform.position = position;
         terrainObj.name = $"{ProceduralTilePrefix}{gridX}_{gridZ}";
         terrainObj.transform.SetParent(this.transform);
-        // --- REGLAGES DE RENDU OBLIGATOIRES ---
+        // --- REGLAGES DE RENDU (distance et densité de l'herbe, instancing) ---
         Terrain terrainComp = terrainObj.GetComponent<Terrain>();
-        terrainComp.detailObjectDensity = 1.0f; // Densité visuelle au max
+        if (grassSettings != null) grassSettings.ApplyRendering(terrainComp);
     }
 
     // ---------------------------------------------------------
     // SECTION 1 : TEXTURES
     // ---------------------------------------------------------
-    void ApplyTextureLayer(TerrainData tData)
+    void ApplyTextureLayers(TerrainData tData, Vector3 worldPos)
     {
-        if (grassLayer == null) return;
+        int res = Mathf.Max(16, alphamapResolution);
+        if (_grassWeightBuffer == null || _grassWeightBuffer.GetLength(0) != res) _grassWeightBuffer = new float[res, res];
 
-        TerrainLayer[] layers = new TerrainLayer[1];
-        layers[0] = grassLayer;
-        tData.terrainLayers = layers;
-        
-        // Pas besoin de SetAlphamaps complexe si on a une seule texture, 
-        // Unity remplit la couche 0 par défaut partout.
+        bool hasDirt = grassLayer != null && dirtLayer != null;
+        if (grassLayer != null)
+        {
+            tData.terrainLayers = hasDirt ? new[] { grassLayer, dirtLayer } : new[] { grassLayer };
+            tData.alphamapResolution = res;
+        }
+        if (!hasDirt)
+        {
+            // Une seule texture : Unity remplit la couche 0 partout.
+            for (int z = 0; z < res; z++) for (int x = 0; x < res; x++) _grassWeightBuffer[z, x] = 1f;
+            return;
+        }
+
+        if (_alphamapBuffer == null || _alphamapBuffer.GetLength(0) != res) _alphamapBuffer = new float[res, res, 2];
+        for (int z = 0; z < res; z++)
+        {
+            float globalZ = worldPos.z + (z + 0.5f) / res * terrainSize.z;
+            for (int x = 0; x < res; x++)
+            {
+                float globalX = worldPos.x + (x + 0.5f) / res * terrainSize.x;
+                float dirt = GetDirtWeight(globalX, globalZ);
+                _alphamapBuffer[z, x, 0] = 1f - dirt;
+                _alphamapBuffer[z, x, 1] = dirt;
+                _grassWeightBuffer[z, x] = 1f - dirt;
+            }
+        }
+        tData.SetAlphamaps(0, 0, _alphamapBuffer);
+    }
+
+    // Taches de terre : bruit sur deux octaves, coordonnées monde (continu d'une tuile à l'autre),
+    // absent près du Lobby pour raccorder avec le terrain fait main.
+    float GetDirtWeight(float globalX, float globalZ)
+    {
+        float blend = GetSquareBlendFactor(globalX, globalZ);
+        if (blend <= 0f) return 0f;
+        float n = Mathf.PerlinNoise(globalX * dirtNoiseScale + _dirtOffset.x, globalZ * dirtNoiseScale + _dirtOffset.y) * 0.7f
+                + Mathf.PerlinNoise(globalX * dirtNoiseScale * 3.3f + _dirtOffset.y, globalZ * dirtNoiseScale * 3.3f + _dirtOffset.x) * 0.3f;
+        float t = Mathf.InverseLerp(dirtThreshold - dirtSoftness, dirtThreshold + dirtSoftness, n);
+        return Mathf.SmoothStep(0f, 1f, t) * blend;
     }
 
     // ---------------------------------------------------------
@@ -263,34 +323,10 @@ public class TerrainGenerator : MonoBehaviour
     // ---------------------------------------------------------
     void GenerateVegetation(TerrainData tData, Vector3 worldPos, float[,] heightMap)
     {
-        // --- A. CONFIGURATION DES PROTOTYPES (D'après votre image) ---
-        
-        // 1. Configuration de l'Herbe (Détails)
-        if (grassDetailTexture != null)
-        {
-            DetailPrototype[] detailProtos = new DetailPrototype[1];
-            detailProtos[0] = new DetailPrototype 
-            { 
-                prototypeTexture = grassDetailTexture,
-                
-                // Case "Billboard" décochée dans votre image = Mode Grass
-                renderMode = DetailRenderMode.Grass, 
-                
-                // Dimensions (Min Width 1, Max Width 2, Min Height 0.5, Max Height 1.5)
-                minWidth = 1.0f, 
-                maxWidth = 2.0f,
-                minHeight = 0.5f, 
-                maxHeight = 1.5f,
-                
-                // Bruit (Noise Spread 0.9)
-                noiseSpread = 0.9f,
-                
-                // Couleurs (Healthy = Vert Fluo, Dry = Vert Foncé)
-                healthyColor = Color.green, // #00FF00
-                dryColor = new Color(0.0f, 0.5f, 0.0f) // Vert foncé approximatif
-            };
-            tData.detailPrototypes = detailProtos;
-        }
+        // --- A. CONFIGURATION DES PROTOTYPES ---
+
+        // 1. Herbe : touffes en meshes instanciés (voir TerrainGrassSettings)
+        if (grassSettings != null) grassSettings.ApplyPrototypes(tData);
 
         // 2. Configuration des Arbres
         if (treePrefab != null)
@@ -336,31 +372,16 @@ public class TerrainGenerator : MonoBehaviour
             tData.treeInstances = trees.ToArray();
         }
 
-// --- TEST DEBUG HERBE ---
-        if (grassDetailTexture != null)
+        // --- C. HERBE : suit la splatmap (herbe sur l'herbe, touffes sèches sur la terre) ---
+        if (grassSettings != null)
         {
-            tData.SetDetailLayer(0, 0, 0, GetSharedDetailMap(tData.detailResolution));
+            grassSettings.PaintDetails(tData, _grassWeightBuffer, worldPos, _grassSeed, ref _detailBuffers);
         }
     }
 
     // ---------------------------------------------------------
     // UTILITAIRES
     // ---------------------------------------------------------
-    int[,] GetSharedDetailMap(int detailRes)
-    {
-        if (_sharedDetailMap != null && _sharedDetailMap.GetLength(0) == detailRes) return _sharedDetailMap;
-
-        _sharedDetailMap = new int[detailRes, detailRes];
-        for (int z = 0; z < detailRes; z++)
-        {
-            for (int x = 0; x < detailRes; x++)
-            {
-                // On force l'herbe partout, sans bruit ni blending, juste pour tester
-                _sharedDetailMap[z, x] = 1000000; // brins par case
-            }
-        }
-        return _sharedDetailMap;
-    }
 
     float GetSquareBlendFactor(float globalX, float globalZ)
     {
