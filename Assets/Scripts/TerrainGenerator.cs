@@ -22,10 +22,14 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] private TerrainGrassSettings grassSettings;
     // Votre prefab d'arbre
     public GameObject treePrefab;
+    [Tooltip("Autres essences d'arbres, tirées au hasard avec treePrefab (même graine pour tous les joueurs).")]
+    [SerializeField] private GameObject[] treeVariants = Array.Empty<GameObject>();
 
     [Header("Densité de la Végétation")]
     [Range(0, 1)] public float treeDensity = 0.02f; // Chance qu'un arbre apparaisse
     public float treeScaleFactor = 1f;
+    [Tooltip("Variation aléatoire de la taille des arbres (± part de treeScaleFactor).")]
+    [Range(0, 0.5f)] [SerializeField] private float treeScaleJitter = 0.15f;
 
     [Header("Taches de terre (tuiles procédurales)")]
     [Tooltip("Échelle du bruit des taches de terre (1 / taille en m). 0,012 = taches d'environ 80 m.")]
@@ -328,15 +332,18 @@ public class TerrainGenerator : MonoBehaviour
         // 1. Herbe : touffes en meshes instanciés (voir TerrainGrassSettings)
         if (grassSettings != null) grassSettings.ApplyPrototypes(tData);
 
-        // 2. Configuration des Arbres
+        // 2. Configuration des Arbres : treePrefab + les variantes (essences tirées au hasard)
+        int treeTypeCount = 0;
         if (treePrefab != null)
         {
-            TreePrototype[] treeProtos = new TreePrototype[1];
-            treeProtos[0] = new TreePrototype { prefab = treePrefab };
-            tData.treePrototypes = treeProtos;
+            var treeProtos = new List<TreePrototype> { new TreePrototype { prefab = treePrefab } };
+            foreach (GameObject variant in treeVariants)
+                if (variant != null) treeProtos.Add(new TreePrototype { prefab = variant });
+            tData.treePrototypes = treeProtos.ToArray();
+            treeTypeCount = treeProtos.Count;
         }
 
-        // --- B. GÉNÉRATION DES ARBRES (Rien ne change ici) ---
+        // --- B. GÉNÉRATION DES ARBRES ---
         if (treePrefab != null)
         {
             List<TreeInstance> trees = new List<TreeInstance>();
@@ -360,9 +367,11 @@ public class TerrainGenerator : MonoBehaviour
 
                         TreeInstance tree = new TreeInstance();
                         tree.position = new Vector3(normX + offsetX, heightMap[z, x], normZ + offsetZ);
-                        tree.prototypeIndex = 0;
-                        tree.widthScale = treeScaleFactor;
-                        tree.heightScale = treeScaleFactor;
+                        tree.prototypeIndex = _random.Next(treeTypeCount);
+                        tree.rotation = (float)_random.NextDouble() * Mathf.PI * 2f;
+                        float scale = treeScaleFactor * (1f + Mathf.Lerp(-treeScaleJitter, treeScaleJitter, (float)_random.NextDouble()));
+                        tree.widthScale = scale;
+                        tree.heightScale = scale;
                         tree.color = Color.white;
                         tree.lightmapColor = Color.white;
                         trees.Add(tree);

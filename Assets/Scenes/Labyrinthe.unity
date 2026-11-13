@@ -3798,9 +3798,15 @@ MonoBehaviour:
   grassLayer: {fileID: 8574412962073106934, guid: cad26c36a0eee824f9e098d2f081d9d3, type: 2}
   dirtLayer: {fileID: 8574412962073106934, guid: cd395a0803b04cf42aa73e320050e759, type: 2}
   grassSettings: {fileID: 11400000, guid: b5fc5a7d922a7d24c87e19b9453931da, type: 2}
-  treePrefab: {fileID: 2275399831387296705, guid: 80134143588e09c4892e00879262fce3, type: 3}
+  treePrefab: {fileID: 4027994110903467618, guid: 74e432d80c76e4c44b85db0162b6e441, type: 3}
+  treeVariants:
+  - {fileID: 6758401562131935687, guid: 0c852b403abb2754c82200714a188ac5, type: 3}
+  - {fileID: 4186097766335570704, guid: 166563ae2dcd59b49b305c5972446a97, type: 3}
+  - {fileID: 3581226897898027372, guid: 9a4de7001fa6aa749935c5cc664381ac, type: 3}
+  - {fileID: 998541586277778815, guid: 3c0c7a6a7f3997e489b90ce6c4c743ce, type: 3}
   treeDensity: 0.01
   treeScaleFactor: 1.8
+  treeScaleJitter: 0.15
   dirtNoiseScale: 0.012
   dirtThreshold: 0.62
   dirtSoftness: 0.06

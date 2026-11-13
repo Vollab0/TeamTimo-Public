@@ -58,6 +58,66 @@ MonoBehaviour:
     clumpiness: 1
     alignToGround: 0.3
     positionJitter: 0.9
+  - label: Buisson rond
+    prefab: {fileID: 5556329413657465962, guid: 3510cb6088cc1fb459522bba4f142184, type: 3}
+    minWidth: 1.4
+    maxWidth: 2.2
+    minHeight: 1.4
+    maxHeight: 2.2
+    noiseSpread: 0.5
+    density: 0.42
+    coverageOnGrass: 0.7
+    coverageOnDirt: 0
+    coverageOnEdge: 0.5
+    clumpScale: 30
+    clumpiness: 0.6
+    alignToGround: 0.2
+    positionJitter: 1
+  - label: Buisson haut
+    prefab: {fileID: 1231131863540021103, guid: 8db795ad3c9dba64c8e02f7ce201c3fe, type: 3}
+    minWidth: 1.4
+    maxWidth: 2
+    minHeight: 1.4
+    maxHeight: 2
+    noiseSpread: 0.5
+    density: 0.45
+    coverageOnGrass: 0.6
+    coverageOnDirt: 0
+    coverageOnEdge: 0.3
+    clumpScale: 24
+    clumpiness: 0.7
+    alignToGround: 0.2
+    positionJitter: 1
+  - label: "Foug\xE8re"
+    prefab: {fileID: 4513984078192741927, guid: 1760d83fd21a1d8448803208797f2018, type: 3}
+    minWidth: 1.3
+    maxWidth: 2.2
+    minHeight: 1.3
+    maxHeight: 2.2
+    noiseSpread: 0.5
+    density: 0.45
+    coverageOnGrass: 0.8
+    coverageOnDirt: 0
+    coverageOnEdge: 0.3
+    clumpScale: 14
+    clumpiness: 0.75
+    alignToGround: 0.2
+    positionJitter: 1
+  - label: "Gen\xE9vrier"
+    prefab: {fileID: 3787286637684220045, guid: 5af05c993390a374c9ed1ce5a7a21ca3, type: 3}
+    minWidth: 1.4
+    maxWidth: 2.2
+    minHeight: 1.4
+    maxHeight: 2.2
+    noiseSpread: 0.5
+    density: 0.75
+    coverageOnGrass: 0.3
+    coverageOnDirt: 0.35
+    coverageOnEdge: 0.7
+    clumpScale: 20
+    clumpiness: 0.55
+    alignToGround: 0.2
+    positionJitter: 1
   detailResolution: 512
   detailResolutionPerPatch: 32
   detailDistance: 75

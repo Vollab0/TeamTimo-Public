@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_TreeFoliage_01
+  m_Shader: {fileID: 4800000, guid: b201c7f6621bcd047a1b564d38d43c0e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BackfaceDarkening: 0.55
+    - _BranchBend: 0.25
+    - _BranchSpeed: 1.6
+    - _ClusterVariation: 0.08
+    - _Cutoff: 0.5
+    - _FadeEnd: 0
+    - _FadeStart: 0
+    - _Flutter: 0.04
+    - _GradientPower: 1.2
+    - _GustScale: 40
+    - _GustStrength: 0.5
+    - _OcclusionStrength: 0.85
+    - _RampCenter: 0.4
+    - _RampSoftness: 0.35
+    - _ReceivedShadow: 0.3
+    - _RimPower: 4
+    - _RimStrength: 0.18
+    - _ShadowStrength: 0.25
+    - _TextureStrength: 1
+    - _Translucency: 0.2
+    - _TreeVariation: 0.1
+    - _WindSpeed: 0.9
+    - _WindStrength: 0.12
+    - _WrapLight: 0.3
+    m_Colors:
+    - _BaseColor: {r: 0.31999996, g: 0.56, b: 0.12999997, a: 1}
+    - _InnerColor: {r: 0.089999996, g: 0.24999997, b: 0.09999997, a: 1}
+    - _RimColor: {r: 0.9, g: 1, b: 0.6, a: 1}
+    - _TopColor: {r: 0.58, g: 0.78, b: 0.19999996, a: 1}
+    - _WindDirection: {r: 1, g: 0, b: 0.35, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
