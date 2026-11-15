@@ -93,9 +93,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3205c0d3c6068cf4686c62d9f5d41748, type: 2}
+      objectReference: {fileID: 2100000, guid: 8588ad155bcb19e4091a36c52d496cd2, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7bebdcf52c69af4478fed6b7d845bca3, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -6151705870580761207, guid: 01939831b9520464bb8d6150a141d893, type: 3}
     - target: {fileID: 919132149155446097, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
       propertyPath: m_Name
       value: Pillar
@@ -111,6 +123,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5824442520049578149}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2011142069399511908}
   m_SourcePrefab: {fileID: 100100000, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}
 --- !u!1 &6136672999534224019 stripped
 GameObject:
@@ -136,8 +151,21 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.09, y: 0.1364304, z: 0.5720001}
-  m_Center: {x: -0.0000000055879354, y: 0, z: 0.28597876}
+  m_Size: {x: 0.128, y: 0.128, z: 0.5720001}
+  m_Center: {x: 0, y: 0, z: 0.28597876}
+--- !u!114 &2011142069399511908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136672999534224019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f818c342cbe05b44081278958470d985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WallVariantRandomizer
+  _variantSet: {fileID: 11400000, guid: 21a9bfebbb920d049907ad1528e1271a, type: 2}
 --- !u!4 &6801006327692245033 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 70917d6fd5bfefd46b7555dd04ed4bd5, type: 3}

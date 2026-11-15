@@ -66,6 +66,7 @@ Shader "TeamTimo/StylizedFoliage"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "CameraOcclusion.hlsl" // flore en pointillé entre la caméra et le joueur
 
         CBUFFER_START(UnityPerMaterial)
             float4 _TopColor;
@@ -244,6 +245,7 @@ Shader "TeamTimo/StylizedFoliage"
 
             half4 frag(Varyings i, bool isFrontFace : SV_IsFrontFace) : SV_Target
             {
+                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 half4 tex = FoliageSampleClip(i.uv);
                 float occlusion = lerp(1.0, saturate(i.data.x), _OcclusionStrength);
                 float h = saturate(i.data.y);
@@ -406,6 +408,7 @@ Shader "TeamTimo/StylizedFoliage"
             {
                 float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
+                float3 positionWS : TEXCOORD1;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -415,13 +418,15 @@ Shader "TeamTimo/StylizedFoliage"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 float treeRand;
-                o.positionCS = TransformWorldToHClip(FoliageDisplace(v.positionOS.xyz, v.normalOS, v.color, treeRand));
+                o.positionWS = FoliageDisplace(v.positionOS.xyz, v.normalOS, v.color, treeRand);
+                o.positionCS = TransformWorldToHClip(o.positionWS);
                 o.uv = v.uv;
                 return o;
             }
 
             half frag(Varyings i) : SV_Target
             {
+                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 FoliageSampleClip(i.uv);
                 return i.positionCS.z;
             }
@@ -455,6 +460,7 @@ Shader "TeamTimo/StylizedFoliage"
                 float4 positionCS : SV_POSITION;
                 float3 normalWS : TEXCOORD0;
                 float2 uv : TEXCOORD1;
+                float3 positionWS : TEXCOORD2;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -464,7 +470,8 @@ Shader "TeamTimo/StylizedFoliage"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 float treeRand;
-                o.positionCS = TransformWorldToHClip(FoliageDisplace(v.positionOS.xyz, v.normalOS, v.color, treeRand));
+                o.positionWS = FoliageDisplace(v.positionOS.xyz, v.normalOS, v.color, treeRand);
+                o.positionCS = TransformWorldToHClip(o.positionWS);
                 o.normalWS = TransformObjectToWorldNormal(v.normalOS);
                 o.uv = v.uv;
                 return o;
@@ -472,6 +479,7 @@ Shader "TeamTimo/StylizedFoliage"
 
             half4 frag(Varyings i) : SV_Target
             {
+                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 FoliageSampleClip(i.uv);
                 float3 n = normalize(i.normalWS);
                 #if defined(_GBUFFER_NORMALS_OCT)

@@ -120,6 +120,6 @@ MonoBehaviour:
     positionJitter: 1
   detailResolution: 512
   detailResolutionPerPatch: 32
-  detailDistance: 75
+  detailDistance: 100
   densityScale: 1
   fadeStartRatio: 0.72

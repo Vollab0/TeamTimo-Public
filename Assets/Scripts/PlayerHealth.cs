@@ -126,6 +126,12 @@ void Update()
 
     public void Blesser(int degats, Vector3 sourcePosition)
     {
+        Blesser(degats, sourcePosition, knockbackForce);
+    }
+
+    /// <summary>Dégâts avec une force de recul propre à l'attaque (ex. charge du taureau) au lieu de knockbackForce.</summary>
+    public void Blesser(int degats, Vector3 sourcePosition, float forceRecul)
+    {
         if (_isDead) return;
 
         vieActuelle -= degats;
@@ -150,7 +156,7 @@ void Update()
         // 3. PHYSIQUE (Knockback)
         if (_playerController != null && vieActuelle > 0)
         {
-            _playerController.ApplyKnockback(sourcePosition, knockbackForce);
+            _playerController.ApplyKnockback(sourcePosition, forceRecul);
         }
 
         // 4. MORT

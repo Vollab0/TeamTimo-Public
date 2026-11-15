@@ -50,6 +50,7 @@ Shader "TeamTimo/StylizedGrass"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "CameraOcclusion.hlsl" // herbe en pointillé entre la caméra et le joueur
 
         CBUFFER_START(UnityPerMaterial)
             float4 _RootTint;
@@ -194,6 +195,7 @@ Shader "TeamTimo/StylizedGrass"
 
             half4 frag(Varyings i) : SV_Target
             {
+                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 float h = i.data.x;
 
                 // Couleur : pied = sol du terrain, pointes plus claires
@@ -279,6 +281,7 @@ Shader "TeamTimo/StylizedGrass"
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
+                float3 positionWS : TEXCOORD0;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -288,12 +291,14 @@ Shader "TeamTimo/StylizedGrass"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 float3 rootWS;
-                o.positionCS = TransformWorldToHClip(GrassDisplace(v.positionOS.xyz, saturate(v.uv0.y), rootWS));
+                o.positionWS = GrassDisplace(v.positionOS.xyz, saturate(v.uv0.y), rootWS);
+                o.positionCS = TransformWorldToHClip(o.positionWS);
                 return o;
             }
 
             half frag(Varyings i) : SV_Target
             {
+                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 return i.positionCS.z;
             }
             ENDHLSL
@@ -322,6 +327,7 @@ Shader "TeamTimo/StylizedGrass"
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
+                float3 positionWS : TEXCOORD0;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -331,12 +337,14 @@ Shader "TeamTimo/StylizedGrass"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 float3 rootWS;
-                o.positionCS = TransformWorldToHClip(GrassDisplace(v.positionOS.xyz, saturate(v.uv0.y), rootWS));
+                o.positionWS = GrassDisplace(v.positionOS.xyz, saturate(v.uv0.y), rootWS);
+                o.positionCS = TransformWorldToHClip(o.positionWS);
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
+                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 float3 n = float3(0, 1, 0);
                 #if defined(_GBUFFER_NORMALS_OCT)
                     float2 octNormal = PackNormalOctQuadEncode(n);

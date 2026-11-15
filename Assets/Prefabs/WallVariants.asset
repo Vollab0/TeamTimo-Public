@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5724e5a05471bb54c832dd02765c23d6, type: 3}
+  m_Name: WallVariants
+  m_EditorClassIdentifier: Assembly-CSharp::WallVariantSet
+  _variants:
+  - Mesh: {fileID: -6539744318458240006, guid: 975ab994e116226488de68991936c088, type: 3}
+    Weight: 0.5
+  - Mesh: {fileID: -3839880402244564278, guid: 975ab994e116226488de68991936c088, type: 3}
+    Weight: 0.25
+  - Mesh: {fileID: -4378775172736105277, guid: 975ab994e116226488de68991936c088, type: 3}
+    Weight: 0.25
+  _materials:
+  - {fileID: 2100000, guid: 8588ad155bcb19e4091a36c52d496cd2, type: 2}
+  - {fileID: 2100000, guid: 7bebdcf52c69af4478fed6b7d845bca3, type: 2}
+  - {fileID: 2100000, guid: 3d325098753538446894c8baf5ba711d, type: 2}
+  _seed: 1337
+  _randomFlip: 1

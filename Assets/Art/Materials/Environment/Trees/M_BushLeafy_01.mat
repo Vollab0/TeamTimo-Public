@@ -34,8 +34,8 @@ Material:
     - _BranchSpeed: 2
     - _ClusterVariation: 0.08
     - _Cutoff: 0.5
-    - _FadeEnd: 72.75
-    - _FadeStart: 54.000004
+    - _FadeEnd: 97
+    - _FadeStart: 72
     - _Flutter: 0.03
     - _GradientPower: 1.3
     - _GustScale: 40

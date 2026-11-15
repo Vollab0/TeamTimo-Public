@@ -23,6 +23,8 @@ public class MazeGenerator : MonoBehaviour
     [Header("3. Lobby & Rooms")]
     [SerializeField] private int _lobbyWidth = 6;
     [SerializeField] private int _lobbyDepth = 6;
+    [Tooltip("Vrai : le générateur ne crée AUCUN mur ni pilier sur le périmètre et dans le Lobby ; ils sont posés à la main dans la scène (objet LobbyWalls). Faux : ancien comportement, le Lobby est entouré de murs générés.")]
+    [SerializeField] private bool _lobbyHasPlacedWalls = true;
     [Space(5)]
     [Tooltip("Largeur des salles aléatoires")]
     [SerializeField] private int _roomWidth = 4;
@@ -126,6 +128,35 @@ public class MazeGenerator : MonoBehaviour
         int lx = (_mazeWidth - _lobbyWidth) / 2;
         int lz = (_mazeDepth - _lobbyDepth) / 2;
         return new RectInt(lx, lz, _lobbyWidth, _lobbyDepth);
+    }
+
+    /// <summary>
+    /// Emplacements des portes du Lobby, en indices de grille (même logique que ConnectRoomsToMaze).
+    /// frontDoors : cellules (x, z) dont le mur "front" (Z+) est une porte ; z = -1 désigne le bord Sud de la carte.
+    /// rightDoors : cellules (x, z) dont le mur "right" (X+) est une porte ; x = -1 désigne le bord Ouest de la carte.
+    /// Utilisé par l'outil éditeur qui pose les murs du Lobby (menu TeamTimo/Lobby).
+    /// </summary>
+    public void GetLobbyDoors(List<Vector2Int> frontDoors, List<Vector2Int> rightDoors)
+    {
+        RectInt room = GetLobbyRect();
+        int midX = room.x + (room.width / 2);
+        int midZ = room.y + (room.height / 2);
+
+        for (int k = 0; k < _doorsPerLobbySide; k++)
+        {
+            // HAUT
+            if (midX + k < room.x + room.width && room.y + room.height < _mazeDepth)
+                frontDoors.Add(new Vector2Int(midX + k, room.y + room.height - 1));
+            // BAS
+            if (midX - 1 - k >= room.x)
+                frontDoors.Add(new Vector2Int(midX - 1 - k, room.y > 0 ? room.y - 1 : -1));
+            // DROITE
+            if (midZ - 1 - k >= room.y && room.x + room.width < _mazeWidth)
+                rightDoors.Add(new Vector2Int(room.x + room.width - 1, midZ - 1 - k));
+            // GAUCHE
+            if (midZ + k < room.y + room.height)
+                rightDoors.Add(new Vector2Int(room.x > 0 ? room.x - 1 : -1, midZ + k));
+        }
     }
 
     // Récupère la liste des salles (sauf le lobby qui est à l'index 0)
@@ -298,8 +329,12 @@ public class MazeGenerator : MonoBehaviour
 
     private void CarveAllRooms()
     {
-        foreach (var room in _roomsRects)
+        for (int roomIndex = 0; roomIndex < _roomsRects.Count; roomIndex++)
         {
+            RectInt room = _roomsRects[roomIndex];
+            // Lobby (index 0) : son enceinte est posée à la main dans la scène, on ne la reconstruit pas.
+            bool skipEnclosure = roomIndex == 0 && _lobbyHasPlacedWalls;
+
             // 1. Vider l'intérieur
             for (int x = room.x; x < room.x + room.width; x++)
             {
@@ -321,6 +356,8 @@ public class MazeGenerator : MonoBehaviour
                     if (z > 0) _mazeGrid[x, z - 1].SetWallState("front", false);
                 }
             }
+
+            if (skipEnclosure) continue;
 
             // 2. Reconstruire l'enceinte de la salle
             for (int x = room.x; x < room.x + room.width; x++)
@@ -353,10 +390,21 @@ public class MazeGenerator : MonoBehaviour
                 // Ne pas mettre de pilier si on est DANS une salle
                 if (IsPointInsideAnyRoom(x, z)) continue;
 
+                // Piliers du périmètre du Lobby : posés à la main (LobbyWalls)
+                if (_lobbyHasPlacedWalls && IsPointOnLobbyOutline(x, z)) continue;
+
                 Vector3 pos = new Vector3(x * _cellSize - offset, 0, z * _cellSize - offset);
                 Instantiate(_pillarPrefab, pos, Quaternion.identity, pillarsParent.transform);
             }
         }
+    }
+
+    /// <summary>Vrai si le point d'intersection (x, z) est sur le contour du Lobby ou à l'intérieur (coins inclus).</summary>
+    private bool IsPointOnLobbyOutline(int x, int z)
+    {
+        RectInt lobby = GetLobbyRect();
+        return x >= lobby.x && x <= lobby.x + lobby.width &&
+               z >= lobby.y && z <= lobby.y + lobby.height;
     }
 
     private bool IsPointInsideAnyRoom(int x, int z)

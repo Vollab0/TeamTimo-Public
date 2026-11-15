@@ -29,8 +29,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FadeEnd: 72.75
-    - _FadeStart: 54.000004
+    - _FadeEnd: 97
+    - _FadeStart: 72
     - _Flutter: 0.06
     - _GradientPower: 1.4
     - _GroundTileSize: 25
