@@ -4,7 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
-/// Outil éditeur : crée Assets/Prefabs/Wall.prefab (un mur seul) et pose dans la scène ouverte l'objet "LobbyWalls"
+/// Outil éditeur : crée Assets/Prefabs/Maze/Wall.prefab (un mur seul) et pose dans la scène ouverte l'objet "LobbyWalls"
 /// (murs + piliers du périmètre du Lobby) exactement là où MazeGenerator les générait avant que
 /// _lobbyHasPlacedWalls ne les retire, avec une arche (Gate.prefab) dans chacune des 4 portes.
 /// Les positions sont lues sur le prefab MazeCell et sur le MazeGenerator de la scène.
@@ -12,10 +12,10 @@ using UnityEngine;
 /// </summary>
 public static class LobbyWallsBuilder
 {
-    private const string WallPrefabPath = "Assets/Prefabs/Wall.prefab";
-    private const string CellPrefabPath = "Assets/Prefabs/MazeCell.prefab";
-    private const string PillarPrefabPath = "Assets/Prefabs/Pillar.prefab";
-    private const string GatePrefabPath = "Assets/Prefabs/Gate.prefab";
+    private const string WallPrefabPath = "Assets/Prefabs/Maze/Wall.prefab";
+    private const string CellPrefabPath = "Assets/Prefabs/Maze/MazeCell.prefab";
+    private const string PillarPrefabPath = "Assets/Prefabs/Maze/Pillar.prefab";
+    private const string GatePrefabPath = "Assets/Prefabs/Maze/Gate.prefab";
     private const string GateModelPath = "Assets/Art/Models/Environment/Gate_Stylized.fbx";
     private const string GateMeshPrefix = "Gate_Arch_";
     private const string RootName = "LobbyWalls";

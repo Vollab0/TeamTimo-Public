@@ -32,6 +32,7 @@ Material:
     - _BackfaceDarkening: 0.55
     - _BranchBend: 0.35
     - _BranchSpeed: 1.4
+    - _CameraOcclusion: 1
     - _ClusterVariation: 0.08
     - _Cutoff: 0.5
     - _FadeEnd: 0

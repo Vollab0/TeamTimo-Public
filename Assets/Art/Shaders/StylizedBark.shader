@@ -1,6 +1,6 @@
 // Écorce des sapins (M_PineBark_01). Même éclairage PBR que URP/Lit (UniversalFragmentPBR) et
 // mêmes noms de propriétés (_BaseMap, _BaseColor, _BumpMap, _BumpScale, _Smoothness), plus la
-// flore « en pointillé » entre la caméra et le joueur (CameraOcclusion.hlsl), que URP/Lit ne sait pas faire.
+// flore en fondu entre la caméra et le joueur (CameraOcclusion.hlsl), que URP/Lit ne sait pas faire.
 // Les troncs ne bougent pas au vent (comme avant). Ombres portées pleines.
 Shader "TeamTimo/StylizedBark"
 {
@@ -19,7 +19,7 @@ Shader "TeamTimo/StylizedBark"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-        #include "CameraOcclusion.hlsl" // tronc en pointillé entre la caméra et le joueur
+        #include "CameraOcclusion.hlsl" // tronc en fondu entre la caméra et le joueur
 
         CBUFFER_START(UnityPerMaterial)
             float4 _BaseMap_ST;
@@ -56,83 +56,88 @@ Shader "TeamTimo/StylizedBark"
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "StylizedBarkForward.hlsl"
+            ENDHLSL
+        }
 
-            struct Attributes
-            {
-                float4 positionOS : POSITION;
-                float3 normalOS : NORMAL;
-                float4 tangentOS : TANGENT;
-                float2 uv : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
+        // Flore en fondu entre la caméra et le joueur : dessinée après les transparents par
+        // CameraFoliageOcclusion (profondeur seule, puis couleur mélangée). Voir CameraOcclusion.hlsl.
+        Pass
+        {
+            Name "CameraFadeDepth"
+            Tags { "LightMode" = "TeamTimoFadeDepth" }
+            ZWrite On
+            ColorMask 0
+            Cull Back
 
-            struct Varyings
-            {
-                float4 positionCS : SV_POSITION;
-                float3 positionWS : TEXCOORD0;
-                float3 normalWS : TEXCOORD1;
-                float4 tangentWS : TEXCOORD2; // w = signe de la bitangente
-                float2 uv : TEXCOORD3;
-                float fog : TEXCOORD4;
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_instancing
+            #define TT_FADE_PASS
+            #define TT_FADE_DEPTH
+            #include "StylizedBarkForward.hlsl"
+            ENDHLSL
+        }
 
-            Varyings vert(Attributes v)
-            {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                VertexPositionInputs pos = GetVertexPositionInputs(v.positionOS.xyz);
-                VertexNormalInputs nrm = GetVertexNormalInputs(v.normalOS, v.tangentOS);
-                o.positionCS = pos.positionCS;
-                o.positionWS = pos.positionWS;
-                o.normalWS = nrm.normalWS;
-                o.tangentWS = float4(nrm.tangentWS, v.tangentOS.w * GetOddNegativeScale());
-                o.uv = TRANSFORM_TEX(v.uv, _BaseMap);
-                o.fog = ComputeFogFactor(pos.positionCS.z);
-                return o;
-            }
+        Pass
+        {
+            Name "CameraFade"
+            Tags { "LightMode" = "TeamTimoFade" }
+            ZWrite Off
+            ZTest LEqual
+            // Léger décalage vers la caméra, par sécurité : cette passe et CameraFadeDepth sont compilées
+            // séparément et doivent retrouver exactement la même profondeur.
+            Offset -1, -1
+            Blend SrcAlpha OneMinusSrcAlpha
+            Cull Back
 
-            half4 frag(Varyings i) : SV_Target
-            {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+            #define TT_FADE_PASS
+            #include "StylizedBarkForward.hlsl"
+            ENDHLSL
+        }
 
-                half4 tex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv);
-                float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.uv), _BumpScale);
-                float3 normalWS = normalize(i.normalWS);
-                float3 tangentWS = normalize(i.tangentWS.xyz);
-                float3 bitangentWS = i.tangentWS.w * cross(normalWS, tangentWS);
-                half3x3 tangentToWorld = half3x3(tangentWS, bitangentWS, normalWS);
+        // Flore près de l'objectif : dessinée en dernier, de l'arrière vers l'avant, sans écrire la
+        // profondeur (elle ne cache jamais la flore en fondu derrière elle). Voir CameraOcclusion.hlsl.
+        Pass
+        {
+            Name "CameraFadeNear"
+            Tags { "LightMode" = "TeamTimoFadeNear" }
+            ZWrite Off
+            ZTest LEqual
+            Blend SrcAlpha OneMinusSrcAlpha
+            Cull Back
 
-                InputData inputData = (InputData)0;
-                inputData.positionWS = i.positionWS;
-                inputData.positionCS = i.positionCS;
-                inputData.normalWS = NormalizeNormalPerPixel(TransformTangentToWorld(normalTS, tangentToWorld));
-                inputData.viewDirectionWS = GetWorldSpaceNormalizeViewDir(i.positionWS);
-                inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(i.positionCS);
-                #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
-                    inputData.shadowCoord = float4(inputData.normalizedScreenSpaceUV, 0, 1);
-                #else
-                    inputData.shadowCoord = TransformWorldToShadowCoord(i.positionWS);
-                #endif
-                inputData.fogCoord = i.fog;
-                inputData.bakedGI = SampleSH(inputData.normalWS);
-                inputData.shadowMask = half4(1, 1, 1, 1);
-                inputData.tangentToWorld = tangentToWorld;
-
-                SurfaceData surface = (SurfaceData)0;
-                surface.albedo = tex.rgb * _BaseColor.rgb;
-                surface.alpha = 1;
-                surface.metallic = 0;
-                surface.smoothness = _Smoothness;
-                surface.occlusion = 1;
-                surface.normalTS = normalTS;
-
-                half4 color = UniversalFragmentPBR(inputData, surface);
-                color.rgb = MixFog(color.rgb, inputData.fogCoord);
-                return half4(color.rgb, 1);
-            }
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+            #define TT_FADE_PASS
+            #define TT_FADE_NEAR
+            #include "StylizedBarkForward.hlsl"
             ENDHLSL
         }
 
@@ -236,7 +241,7 @@ Shader "TeamTimo/StylizedBark"
 
             half frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
+                TT_CameraOcclusionClip(i.positionWS);
                 return i.positionCS.z;
             }
             ENDHLSL
@@ -284,7 +289,7 @@ Shader "TeamTimo/StylizedBark"
 
             half4 frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
+                TT_CameraOcclusionClip(i.positionWS);
                 float3 n = normalize(i.normalWS);
                 #if defined(_GBUFFER_NORMALS_OCT)
                     float2 octNormal = PackNormalOctQuadEncode(n);

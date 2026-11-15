@@ -57,6 +57,9 @@ Shader "TeamTimo/StylizedFoliage"
         [Header(Distance)]
         _FadeStart ("Début du rétrécissement (m, 0 = désactivé)", Float) = 0
         _FadeEnd ("Disparition complète (m, 0 = désactivé)", Float) = 0
+
+        [Header(Camera)]
+        [ToggleUI] _CameraOcclusion ("Transparente entre la caméra et le joueur (arbres : oui, buissons : non)", Float) = 1
     }
 
     SubShader
@@ -66,7 +69,6 @@ Shader "TeamTimo/StylizedFoliage"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-        #include "CameraOcclusion.hlsl" // flore en pointillé entre la caméra et le joueur
 
         CBUFFER_START(UnityPerMaterial)
             float4 _TopColor;
@@ -98,7 +100,12 @@ Shader "TeamTimo/StylizedFoliage"
             float _BranchSpeed;
             float _FadeStart;
             float _FadeEnd;
+            float _CameraOcclusion;
         CBUFFER_END
+
+        // Flore en fondu entre la caméra et le joueur, coupée par matériau (_CameraOcclusion = 0 sur les buissons).
+        #define TT_OCCLUSION_TOGGLE _CameraOcclusion
+        #include "CameraOcclusion.hlsl"
 
         TEXTURE2D(_BaseMap);
         SAMPLER(sampler_BaseMap);
@@ -195,123 +202,85 @@ Shader "TeamTimo/StylizedFoliage"
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "StylizedFoliageForward.hlsl"
+            ENDHLSL
+        }
 
-            struct Attributes
-            {
-                float4 positionOS : POSITION;
-                float3 normalOS : NORMAL;
-                float4 color : COLOR;
-                float2 uv : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
+        // Flore en fondu entre la caméra et le joueur : dessinée après les transparents par
+        // CameraFoliageOcclusion (profondeur seule, puis couleur mélangée). Voir CameraOcclusion.hlsl.
+        Pass
+        {
+            Name "CameraFadeDepth"
+            Tags { "LightMode" = "TeamTimoFadeDepth" }
+            ZWrite On
+            ColorMask 0
 
-            struct Varyings
-            {
-                float4 positionCS : SV_POSITION;
-                float3 positionWS : TEXCOORD0;
-                float3 normalWS : TEXCOORD1;
-                float4 data : TEXCOORD2; // x = occlusion, y = hauteur, z = aléa par amas, w = aléa par arbre
-                float fog : TEXCOORD3;
-                float2 uv : TEXCOORD4;
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_instancing
+            #define TT_FADE_PASS
+            #define TT_FADE_DEPTH
+            #include "StylizedFoliageForward.hlsl"
+            ENDHLSL
+        }
 
-            // Diffus en rampe douce ; s'éteint quand la lumière passe sous l'horizon (soleil la nuit).
-            float FoliageDiffuse(float3 N, float3 L)
-            {
-                float d = saturate((dot(N, L) + _WrapLight) / (1.0 + _WrapLight));
-                d = smoothstep(_RampCenter - _RampSoftness * 0.5, _RampCenter + _RampSoftness * 0.5, d);
-                float horizon = saturate(L.y * 5.0 + 0.2);
-                return d * horizon;
-            }
+        Pass
+        {
+            Name "CameraFade"
+            Tags { "LightMode" = "TeamTimoFade" }
+            ZWrite Off
+            ZTest LEqual
+            // Léger décalage vers la caméra, par sécurité : cette passe et CameraFadeDepth sont compilées
+            // séparément et doivent retrouver exactement la même profondeur.
+            Offset -1, -1
+            Blend SrcAlpha OneMinusSrcAlpha
 
-            Varyings vert(Attributes v)
-            {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+            #define TT_FADE_PASS
+            #include "StylizedFoliageForward.hlsl"
+            ENDHLSL
+        }
 
-                float treeRand;
-                float3 posWS = FoliageDisplace(v.positionOS.xyz, v.normalOS, v.color, treeRand);
-                o.positionWS = posWS;
-                o.positionCS = TransformWorldToHClip(posWS);
-                o.normalWS = TransformObjectToWorldNormal(v.normalOS);
-                o.data = float4(v.color.r, v.color.g, v.color.b, treeRand);
-                o.fog = ComputeFogFactor(o.positionCS.z);
-                o.uv = v.uv;
-                return o;
-            }
+        // Flore près de l'objectif : dessinée en dernier, de l'arrière vers l'avant, sans écrire la
+        // profondeur (elle ne cache jamais la flore en fondu derrière elle). Voir CameraOcclusion.hlsl.
+        Pass
+        {
+            Name "CameraFadeNear"
+            Tags { "LightMode" = "TeamTimoFadeNear" }
+            ZWrite Off
+            ZTest LEqual
+            Blend SrcAlpha OneMinusSrcAlpha
 
-            half4 frag(Varyings i, bool isFrontFace : SV_IsFrontFace) : SV_Target
-            {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
-                half4 tex = FoliageSampleClip(i.uv);
-                float occlusion = lerp(1.0, saturate(i.data.x), _OcclusionStrength);
-                float h = saturate(i.data.y);
-
-                // Couleur : bas -> haut, creux sombres, variations
-                float3 albedo = lerp(_BaseColor.rgb, _TopColor.rgb, pow(max(h, 1e-4), _GradientPower));
-                albedo = lerp(_InnerColor.rgb, albedo, occlusion);
-                albedo *= 1.0 + (i.data.z - 0.5) * 2.0 * _ClusterVariation + (i.data.w - 0.5) * 2.0 * _TreeVariation;
-                albedo *= lerp(1.0, tex.rgb * 1.2, _TextureStrength);
-                albedo = saturate(albedo);
-
-                float3 N = normalize(i.normalWS);
-                float3 V = GetWorldSpaceNormalizeViewDir(i.positionWS);
-                float2 screenUV = GetNormalizedScreenSpaceUV(i.positionCS);
-                #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
-                    float4 shadowCoord = float4(screenUV, 0, 1);
-                #else
-                    float4 shadowCoord = TransformWorldToShadowCoord(i.positionWS);
-                #endif
-                Light mainLight = GetMainLight(shadowCoord, i.positionWS, half4(1, 1, 1, 1));
-                float shadow = lerp(1.0, mainLight.shadowAttenuation, _ReceivedShadow) * mainLight.distanceAttenuation;
-                float diffuse = FoliageDiffuse(N, mainLight.direction);
-                diffuse = lerp(_ShadowStrength * saturate(mainLight.direction.y * 5.0 + 0.2), 1.0, diffuse);
-                float back = pow(saturate(dot(V, -mainLight.direction)), 4.0) * _Translucency * saturate(mainLight.direction.y * 5.0 + 0.2);
-                float3 direct = mainLight.color * (diffuse * shadow + back * occlusion);
-                float3 ambient = SampleSH(N) * lerp(0.6, 1.0, occlusion);
-
-                #if defined(_SCREEN_SPACE_OCCLUSION)
-                    AmbientOcclusionFactor ao = GetScreenSpaceAmbientOcclusion(screenUV);
-                    ambient *= ao.indirectAmbientOcclusion;
-                    direct *= ao.directAmbientOcclusion;
-                #endif
-
-                #if defined(_ADDITIONAL_LIGHTS)
-                    InputData inputData = (InputData)0;
-                    inputData.positionWS = i.positionWS;
-                    inputData.normalWS = N;
-                    inputData.viewDirectionWS = V;
-                    inputData.normalizedScreenSpaceUV = screenUV;
-                    uint pixelLightCount = GetAdditionalLightsCount();
-                    #if USE_CLUSTER_LIGHT_LOOP
-                    [loop] for (uint dirIndex = 0; dirIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); dirIndex++)
-                    {
-                        Light dl = GetAdditionalLight(dirIndex, i.positionWS, half4(1, 1, 1, 1));
-                        direct += dl.color * dl.distanceAttenuation * dl.shadowAttenuation * FoliageDiffuse(N, dl.direction);
-                    }
-                    #endif
-                    LIGHT_LOOP_BEGIN(pixelLightCount)
-                        Light al = GetAdditionalLight(lightIndex, i.positionWS, half4(1, 1, 1, 1));
-                        direct += al.color * al.distanceAttenuation * al.shadowAttenuation * saturate(dot(N, al.direction) * 0.5 + 0.5);
-                    LIGHT_LOOP_END
-                #endif
-
-                float3 color = albedo * (direct + ambient);
-
-                // Liseré : le contour des amas s'éclaire un peu (lecture de la silhouette)
-                float rim = pow(1.0 - saturate(dot(N, V)), _RimPower) * _RimStrength * occlusion;
-                color += rim * _RimColor.rgb * (ambient + mainLight.color * shadow * 0.5);
-
-                // Envers (dessous des branches, intérieur des volumes) : plus sombre
-                if (!isFrontFace)
-                    color *= _BackfaceDarkening;
-
-                color = MixFog(color, i.fog);
-                return half4(color, 1);
-            }
+            HLSLPROGRAM
+            #pragma target 3.5
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+            #define TT_FADE_PASS
+            #define TT_FADE_NEAR
+            #include "StylizedFoliageForward.hlsl"
             ENDHLSL
         }
 
@@ -426,7 +395,7 @@ Shader "TeamTimo/StylizedFoliage"
 
             half frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
+                TT_CameraOcclusionClip(i.positionWS);
                 FoliageSampleClip(i.uv);
                 return i.positionCS.z;
             }
@@ -479,7 +448,7 @@ Shader "TeamTimo/StylizedFoliage"
 
             half4 frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
+                TT_CameraOcclusionClip(i.positionWS);
                 FoliageSampleClip(i.uv);
                 float3 n = normalize(i.normalWS);
                 #if defined(_GBUFFER_NORMALS_OCT)

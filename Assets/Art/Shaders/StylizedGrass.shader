@@ -5,6 +5,7 @@
 // - Vent : balancement + rafales qui traversent le champ + frémissement des pointes (100 % GPU).
 // - Rétrécit en douceur avant la distance d'affichage des détails du terrain (pas de « pop »).
 // - Pas de passe ShadowCaster : l'herbe reçoit les ombres mais n'en projette pas (performance).
+// - Pas de fondu entre la caméra et le joueur (réservé aux arbres, voir CameraOcclusion.hlsl) : l'herbe reste opaque.
 // Conventions du mesh (voir ArtSource/Terrain/build_grass_tufts.py) :
 //   UV0.y = hauteur normalisée (0 pied, 1 pointe), UV1.x = aléa par brin,
 //   couleur de sommet : RGB = couleur propre (fleurs), A = 1 pour l'utiliser.
@@ -50,7 +51,6 @@ Shader "TeamTimo/StylizedGrass"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-        #include "CameraOcclusion.hlsl" // herbe en pointillé entre la caméra et le joueur
 
         CBUFFER_START(UnityPerMaterial)
             float4 _RootTint;
@@ -195,7 +195,6 @@ Shader "TeamTimo/StylizedGrass"
 
             half4 frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 float h = i.data.x;
 
                 // Couleur : pied = sol du terrain, pointes plus claires
@@ -253,7 +252,8 @@ Shader "TeamTimo/StylizedGrass"
                 #endif
 
                 float3 color = albedo * (direct + ambient);
-                color = MixFog(color, i.data.z);                return half4(color, 1);
+                color = MixFog(color, i.data.z);
+                return half4(color, 1);
             }
             ENDHLSL
         }
@@ -298,7 +298,6 @@ Shader "TeamTimo/StylizedGrass"
 
             half frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 return i.positionCS.z;
             }
             ENDHLSL
@@ -344,7 +343,6 @@ Shader "TeamTimo/StylizedGrass"
 
             half4 frag(Varyings i) : SV_Target
             {
-                TT_CameraOcclusionClip(i.positionWS, i.positionCS);
                 float3 n = float3(0, 1, 0);
                 #if defined(_GBUFFER_NORMALS_OCT)
                     float2 octNormal = PackNormalOctQuadEncode(n);
