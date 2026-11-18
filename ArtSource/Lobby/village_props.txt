@@ -1,0 +1,34 @@
+# Prefabs créés par unity_setup_village.cs en plus de sa liste (bâtiments, forge) : fbx;prefab;préfixe des objets;nav;calque
+# nav : auto = volume « Not Walkable » sur l'emprise du mesh ; none = rien (sol praticable, ou colliders seuls)
+# calque : wall = colliders sur Wall (la caméra s'y arrête) ; default = calque Default
+# Clôtures et étals (build_market.py)
+SM_Fence_Wood;P_Fence_Wood;FenceBay;none;default
+SM_Fence_Post;P_Fence_Post;FencePost;none;default
+SM_Fence_Broken;P_Fence_Broken;FenceBroken;none;default
+SM_Fence_Gate;P_Fence_Gate;FenceGate;none;default
+SM_Stall_Simple;P_Stall_Simple;StallSimple;none;default
+SM_Stall_Double;P_Stall_Double;StallDouble;none;default
+SM_Stall_LeanTo;P_Stall_LeanTo;StallLeanTo;none;default
+SM_Stall_Striped;P_Stall_Striped;StallStriped;none;default
+# Petits accessoires (build_props.py)
+SM_Campfire;P_Campfire;Campfire;auto;default
+SM_Trough;P_Trough;Trough;auto;default
+SM_HayBale;P_HayBale;HayBale;auto;default
+SM_Garden_Bed;P_Garden_Bed;GardenBed;none;default
+SM_LanternPost;P_LanternPost;LanternPost;auto;default
+SM_Sign_Small;P_Sign_Small;SignSmall;auto;default
+SM_Crate_01;P_Crate_01;Crate01;auto;default
+SM_Crate_02;P_Crate_02;Crate02;auto;default
+SM_Crate_03;P_Crate_03;Crate03;auto;default
+SM_Barrel;P_Barrel;Barrel;auto;default
+SM_Woodpile;P_Woodpile;Woodpile;auto;default
+SM_Stump;P_Stump;Stump;auto;default
+SM_LogRound;P_LogRound;LogRound;none;default
+SM_Wheelbarrow;P_Wheelbarrow;Wheelbarrow;auto;default
+SM_Cart;P_Cart;Cart;auto;default
+SM_Basket;P_Basket;Basket;auto;default
+SM_Sack;P_Sack;Sack;auto;default
+SM_Pot;P_Pot;Pot;auto;default
+SM_HayRack;P_HayRack;HayRack;auto;default
+SM_HayPile;P_HayPile;HayPile;auto;default
+SM_ChoppingBlock;P_ChoppingBlock;ChoppingBlock;auto;default

@@ -114,3 +114,7 @@ GameDesign/.trash/
 # ---------------------------------------------------------------------
 .claude/settings.local.json
 CLAUDE.local.md
+
+# Caches Python des scripts Blender (ArtSource/)
+__pycache__/
+*.pyc

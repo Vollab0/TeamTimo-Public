@@ -386,7 +386,7 @@ public class BullAI : NetworkBehaviour
         }
 
         // Il ne charge que s'il a la place de s'élancer : sinon il s'étourdirait sur place, en boucle.
-        if (TryFindPlayerInCorridor() && WallDistanceAhead(RailPosition(), FacingAxisDirection()) >= minChargeDistance)
+        if (TryFindPlayerInCorridor() && ChargeRoomAhead(RailPosition(), FacingAxisDirection()) >= minChargeDistance)
         {
             EnterState(State.Preparing);
             return;
@@ -712,7 +712,7 @@ public class BullAI : NetworkBehaviour
         _agent.updatePosition = false;
         transform.position = start;
 
-        _chargeRemaining = WallDistanceAhead(start, _chargeDir);
+        _chargeRemaining = ChargeRoomAhead(start, _chargeDir);
         _currentChargeSpeed = 0f;
         _resolvedThisCharge.Clear();
     }
@@ -739,6 +739,14 @@ public class BullAI : NetworkBehaviour
         if (_isAxisX) position.z = _fixedAxisCoordinate;
         else position.x = _fixedAxisCoordinate;
         return position;
+    }
+
+    // Distance (m) qu'il peut parcourir en charge : jusqu'au premier mur, et jamais dans le Lobby (interdit aux
+    // monstres) : il s'arrête à son bord, donc aux portes, même sans mur devant.
+    private float ChargeRoomAhead(Vector3 start, Vector3 dir)
+    {
+        return Mathf.Min(WallDistanceAhead(start, dir),
+            LobbyZone.DistanceBeforeEntering(start, dir, Mathf.Max(hornReach, BodyRadius)));
     }
 
     // Distance (m) que son pivot peut parcourir en ligne droite avant que ses cornes (hornReach) touchent un mur.

@@ -68,7 +68,7 @@ MonoBehaviour:
     density: 0.42
     coverageOnGrass: 0.7
     coverageOnDirt: 0
-    coverageOnEdge: 0.5
+    coverageOnEdge: 0
     clumpScale: 30
     clumpiness: 0.6
     alignToGround: 0.2
@@ -83,7 +83,7 @@ MonoBehaviour:
     density: 0.45
     coverageOnGrass: 0.6
     coverageOnDirt: 0
-    coverageOnEdge: 0.3
+    coverageOnEdge: 0
     clumpScale: 24
     clumpiness: 0.7
     alignToGround: 0.2
@@ -98,7 +98,7 @@ MonoBehaviour:
     density: 0.45
     coverageOnGrass: 0.8
     coverageOnDirt: 0
-    coverageOnEdge: 0.3
+    coverageOnEdge: 0
     clumpScale: 14
     clumpiness: 0.75
     alignToGround: 0.2
@@ -112,8 +112,8 @@ MonoBehaviour:
     noiseSpread: 0.5
     density: 0.75
     coverageOnGrass: 0.3
-    coverageOnDirt: 0.35
-    coverageOnEdge: 0.7
+    coverageOnDirt: 0
+    coverageOnEdge: 0
     clumpScale: 20
     clumpiness: 0.55
     alignToGround: 0.2

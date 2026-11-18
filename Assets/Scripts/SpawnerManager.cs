@@ -15,6 +15,9 @@ public class SpawnerManager : MonoBehaviour
     [Tooltip("Layer des Murs ET Piliers")]
     public LayerMask obstacleLayer;
 
+    /// <summary>Distance minimale (m) entre un point d'apparition et le Lobby.</summary>
+    private const float LobbySpawnMargin = 5f;
+
     private float calculatedMapSize;
     private List<Vector3> _bullSpawnHistory = new List<Vector3>();
     private readonly List<GameObject> _spawnedEnemies = new List<GameObject>();
@@ -185,7 +188,8 @@ public class SpawnerManager : MonoBehaviour
         Vector3 randomRaw = GetRandomPointInMap();
         NavMeshHit hit;
         // SearchRadius large (10f) pour trouver le sol même s'il est haut ou bas
-        if (NavMesh.SamplePosition(randomRaw, out hit, searchRadius, areaMask))
+        // Jamais dans le Lobby (zone interdite aux monstres), même si le NavMesh y était mal découpé.
+        if (NavMesh.SamplePosition(randomRaw, out hit, searchRadius, areaMask) && !LobbyZone.Contains(hit.position, LobbySpawnMargin))
         {
             return hit.position;
         }

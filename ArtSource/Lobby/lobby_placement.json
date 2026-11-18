@@ -1,0 +1,1827 @@
+{
+ "meta": {
+  "source": "GameDesign/99_Attachments/Brainstorming/Lobby_Vue.jpg",
+  "repere": "Centre du Lobby = origine du monde. +X = Est, +Z = Nord, Y = haut. Mètres.",
+  "lobby": "Carré de 400 m : murs à x = ±200 et z = ±200 (face intérieure ≈ ±196,5).",
+  "portes": {
+   "Nord": [
+    25,
+    200
+   ],
+   "Sud": [
+    -25,
+    -200
+   ],
+   "Est": [
+    200,
+    -25
+   ],
+   "Ouest": [
+    -200,
+    25
+   ]
+  },
+  "pignon": "pignon_en_facade = vrai : le faîtage suit la profondeur ; faux : il suit la façade.",
+  "yaw": "yaw_deg = rotation Y Unity ; à 0 la façade (porte) regarde +Z (Nord), à 90 elle regarde +X (Est).",
+  "coins": "coins = emprise au sol [x, z] (4 points).",
+  "precision": "Relevé par reprojection du concept art : ±3 m près de la place, ±8 m pour la grange et la forge.",
+  "camera_concept": {
+   "position": [
+    -246.2,
+    129.1,
+    -145.9
+   ],
+   "yaw_deg": 63.6,
+   "pitch_deg": 33.5,
+   "focale_px": 883.8,
+   "image": [
+    2000,
+    1116
+   ]
+  }
+ },
+ "batiments": [
+  {
+   "id": "G1",
+   "nom": "Grange",
+   "type": "Grange",
+   "toit": "gris ardoise",
+   "options": [],
+   "x": 109.7,
+   "z": 53.2,
+   "yaw_deg": 234,
+   "largeur_facade_m": 37,
+   "profondeur_m": 40,
+   "hauteur_m": 36,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     82.5,
+     56.4
+    ],
+    [
+     104.6,
+     26.3
+    ],
+    [
+     136.8,
+     50.0
+    ],
+    [
+     114.7,
+     80.1
+    ]
+   ],
+   "note": "Façade rouge à croisillons blancs, toit à la Mansart ; point d'apparition des joueurs."
+  },
+  {
+   "id": "M01",
+   "nom": "Maison rouge de l'enclos",
+   "type": "Maison_S",
+   "toit": "rouge",
+   "options": [
+    "cheminee"
+   ],
+   "x": -69.9,
+   "z": 20.2,
+   "yaw_deg": 252,
+   "largeur_facade_m": 12,
+   "profondeur_m": 12,
+   "hauteur_m": 16,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -73.9,
+     12.5
+    ],
+    [
+     -77.6,
+     24.2
+    ],
+    [
+     -66.0,
+     27.9
+    ],
+    [
+     -62.2,
+     16.2
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M02",
+   "nom": "Maison brune nord-ouest",
+   "type": "Maison_S",
+   "toit": "brun",
+   "options": [
+    "cheminee"
+   ],
+   "x": -127.1,
+   "z": 27.5,
+   "yaw_deg": 186,
+   "largeur_facade_m": 12,
+   "profondeur_m": 14,
+   "hauteur_m": 18,
+   "pignon_en_facade": false,
+   "coins": [
+    [
+     -133.8,
+     20.9
+    ],
+    [
+     -132.4,
+     35.4
+    ],
+    [
+     -120.5,
+     34.2
+    ],
+    [
+     -121.9,
+     19.7
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M03",
+   "nom": "Grande maison bleue",
+   "type": "Maison_L",
+   "toit": "bleu",
+   "options": [
+    "perron",
+    "caisses"
+   ],
+   "x": -108.8,
+   "z": -13.6,
+   "yaw_deg": 279,
+   "largeur_facade_m": 22,
+   "profondeur_m": 14,
+   "hauteur_m": 14,
+   "pignon_en_facade": false,
+   "coins": [
+    [
+     -117.4,
+     -23.3
+    ],
+    [
+     -114.0,
+     -1.8
+    ],
+    [
+     -100.2,
+     -4.0
+    ],
+    [
+     -103.6,
+     -25.4
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M04",
+   "nom": "Maison bleue de la place",
+   "type": "Maison_S",
+   "toit": "bleu",
+   "options": [],
+   "x": -112.1,
+   "z": -41.6,
+   "yaw_deg": 204,
+   "largeur_facade_m": 8,
+   "profondeur_m": 15,
+   "hauteur_m": 18,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -119.0,
+     -46.9
+    ],
+    [
+     -112.8,
+     -32.9
+    ],
+    [
+     -105.2,
+     -36.3
+    ],
+    [
+     -111.4,
+     -50.3
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M05",
+   "nom": "Maison bleue de l'ouest",
+   "type": "Maison_S",
+   "toit": "bleu",
+   "options": [
+    "cloture"
+   ],
+   "x": -163.7,
+   "z": 3.1,
+   "yaw_deg": 183,
+   "largeur_facade_m": 9,
+   "profondeur_m": 14,
+   "hauteur_m": 17,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -168.7,
+     -3.5
+    ],
+    [
+     -168.1,
+     10.1
+    ],
+    [
+     -158.7,
+     9.7
+    ],
+    [
+     -159.3,
+     -4.0
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M06",
+   "nom": "Petite maison jaune",
+   "type": "Maison_S",
+   "toit": "jaune",
+   "options": [
+    "cheminee",
+    "tas_de_bois"
+   ],
+   "x": -168.5,
+   "z": -34.1,
+   "yaw_deg": 196,
+   "largeur_facade_m": 8,
+   "profondeur_m": 15,
+   "hauteur_m": 15,
+   "pignon_en_facade": false,
+   "coins": [
+    [
+     -174.3,
+     -40.2
+    ],
+    [
+     -170.1,
+     -25.8
+    ],
+    [
+     -162.7,
+     -28.0
+    ],
+    [
+     -166.9,
+     -42.4
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M07",
+   "nom": "Maison rouge du mur ouest",
+   "type": "Maison_S",
+   "toit": "rouge",
+   "options": [
+    "auvent"
+   ],
+   "x": -162.4,
+   "z": -60.4,
+   "yaw_deg": 194,
+   "largeur_facade_m": 12,
+   "profondeur_m": 14,
+   "hauteur_m": 14,
+   "pignon_en_facade": false,
+   "coins": [
+    [
+     -169.8,
+     -65.9
+    ],
+    [
+     -166.3,
+     -52.1
+    ],
+    [
+     -155.0,
+     -55.0
+    ],
+    [
+     -158.4,
+     -68.7
+    ]
+   ],
+   "note": "Aux trois quarts cachée par le mur dans le concept : position approximative."
+  },
+  {
+   "id": "M08",
+   "nom": "Maison rouge à lucarne",
+   "type": "Maison_M",
+   "toit": "rouge",
+   "options": [
+    "lucarne",
+    "cheminee",
+    "appentis"
+   ],
+   "x": -107.0,
+   "z": -87.1,
+   "yaw_deg": 202,
+   "largeur_facade_m": 11,
+   "profondeur_m": 17,
+   "hauteur_m": 18,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -115.2,
+     -92.8
+    ],
+    [
+     -108.9,
+     -77.2
+    ],
+    [
+     -98.7,
+     -81.4
+    ],
+    [
+     -105.0,
+     -96.9
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M09",
+   "nom": "Maison rouge à auvent",
+   "type": "Maison_M",
+   "toit": "rouge",
+   "options": [
+    "lucarne",
+    "cheminee",
+    "auvent_toile"
+   ],
+   "x": -122.7,
+   "z": -117.8,
+   "yaw_deg": 284,
+   "largeur_facade_m": 13,
+   "profondeur_m": 11,
+   "hauteur_m": 18,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -129.7,
+     -122.8
+    ],
+    [
+     -126.6,
+     -110.1
+    ],
+    [
+     -115.7,
+     -112.9
+    ],
+    [
+     -118.8,
+     -125.5
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M10",
+   "nom": "Grande maison jaune",
+   "type": "Maison_L",
+   "toit": "jaune",
+   "options": [
+    "cheminee",
+    "cloture"
+   ],
+   "x": -84.5,
+   "z": -133.6,
+   "yaw_deg": 300,
+   "largeur_facade_m": 10,
+   "profondeur_m": 26,
+   "hauteur_m": 21,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -98.0,
+     -131.4
+    ],
+    [
+     -93.0,
+     -122.9
+    ],
+    [
+     -71.0,
+     -135.8
+    ],
+    [
+     -76.0,
+     -144.3
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M11",
+   "nom": "Maison bleue en croix",
+   "type": "Maison_S",
+   "toit": "bleu",
+   "options": [
+    "pignon_croise"
+   ],
+   "x": -95.5,
+   "z": -169.4,
+   "yaw_deg": 298,
+   "largeur_facade_m": 10,
+   "profondeur_m": 10,
+   "hauteur_m": 17,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -102.3,
+     -171.3
+    ],
+    [
+     -97.8,
+     -162.7
+    ],
+    [
+     -88.8,
+     -167.5
+    ],
+    [
+     -93.3,
+     -176.0
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "M12",
+   "nom": "Maison brune sud",
+   "type": "Maison_M",
+   "toit": "brun",
+   "options": [
+    "cheminee",
+    "cloture"
+   ],
+   "x": -121.8,
+   "z": -160.8,
+   "yaw_deg": 293,
+   "largeur_facade_m": 11,
+   "profondeur_m": 14,
+   "hauteur_m": 17,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -130.6,
+     -163.2
+    ],
+    [
+     -126.1,
+     -152.8
+    ],
+    [
+     -113.0,
+     -158.4
+    ],
+    [
+     -117.5,
+     -168.8
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "F1",
+   "nom": "Grand four de forge",
+   "type": "Forge_Four",
+   "toit": "tole bleue",
+   "options": [
+    "gueule_de_four"
+   ],
+   "x": -74.1,
+   "z": 161.7,
+   "yaw_deg": 190,
+   "largeur_facade_m": 18,
+   "profondeur_m": 23,
+   "hauteur_m": 20,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -85.0,
+     152.2
+    ],
+    [
+     -81.1,
+     174.4
+    ],
+    [
+     -63.2,
+     171.3
+    ],
+    [
+     -67.1,
+     149.1
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "J1",
+   "nom": "Potager (2 planches de terre)",
+   "type": "Potager",
+   "toit": "terre",
+   "options": [
+    "cloture",
+    "panonceau"
+   ],
+   "x": -134.6,
+   "z": -15.1,
+   "yaw_deg": 189,
+   "largeur_facade_m": 15,
+   "profondeur_m": 32,
+   "hauteur_m": 0.4,
+   "pignon_en_facade": false,
+   "coins": [
+    [
+     -144.4,
+     -29.7
+    ],
+    [
+     -139.6,
+     1.8
+    ],
+    [
+     -124.7,
+     -0.5
+    ],
+    [
+     -129.5,
+     -32.0
+    ]
+   ],
+   "note": ""
+  },
+  {
+   "id": "T1",
+   "nom": "Tente du médecin",
+   "type": "Tente_Medecin",
+   "toit": "toile blanche",
+   "options": [
+    "croix_rouge"
+   ],
+   "x": -138.9,
+   "z": 89.3,
+   "yaw_deg": 171,
+   "largeur_facade_m": 19,
+   "profondeur_m": 24,
+   "hauteur_m": 20,
+   "pignon_en_facade": true,
+   "coins": [
+    [
+     -146.2,
+     75.7
+    ],
+    [
+     -150.2,
+     99.8
+    ],
+    [
+     -131.6,
+     102.9
+    ],
+    [
+     -127.6,
+     78.8
+    ]
+   ],
+   "note": ""
+  }
+ ],
+ "elements": [
+  {
+   "id": "F2",
+   "nom": "Petit fourneau à cheminée",
+   "type": "Forge_Fourneau",
+   "x": -45.0,
+   "z": 152.1,
+   "yaw_deg": 204,
+   "largeur_facade_m": 16,
+   "profondeur_m": 18,
+   "hauteur_m": 17,
+   "coins": [
+    [
+     -41.3,
+     140.6
+    ],
+    [
+     -56.0,
+     147.1
+    ],
+    [
+     -48.6,
+     163.5
+    ],
+    [
+     -34.0,
+     157.0
+    ]
+   ]
+  },
+  {
+   "id": "F3",
+   "nom": "Plancher + enclume",
+   "type": "Forge_Plancher",
+   "x": -79.4,
+   "z": 133.4,
+   "yaw_deg": 205,
+   "largeur_facade_m": 16,
+   "profondeur_m": 14,
+   "hauteur_m": 1,
+   "coins": [
+    [
+     -75.1,
+     123.6
+    ],
+    [
+     -89.6,
+     130.4
+    ],
+    [
+     -83.6,
+     143.1
+    ],
+    [
+     -69.1,
+     136.3
+    ]
+   ]
+  },
+  {
+   "id": "E1",
+   "nom": "Étal double (2 travées)",
+   "type": "Etal_Double",
+   "x": -24.5,
+   "z": -13.3,
+   "yaw_deg": 204,
+   "largeur_facade_m": 22,
+   "profondeur_m": 8,
+   "hauteur_m": 10,
+   "coins": [
+    [
+     -16.1,
+     -21.4
+    ],
+    [
+     -36.2,
+     -12.5
+    ],
+    [
+     -32.9,
+     -5.2
+    ],
+    [
+     -12.8,
+     -14.1
+    ]
+   ]
+  },
+  {
+   "id": "E2",
+   "nom": "Étal appentis",
+   "type": "Etal_Appentis",
+   "x": -54.0,
+   "z": -10.4,
+   "yaw_deg": 161,
+   "largeur_facade_m": 12,
+   "profondeur_m": 10,
+   "hauteur_m": 9,
+   "coins": [
+    [
+     -46.7,
+     -13.2
+    ],
+    [
+     -58.0,
+     -17.1
+    ],
+    [
+     -61.3,
+     -7.7
+    ],
+    [
+     -49.9,
+     -3.8
+    ]
+   ]
+  },
+  {
+   "id": "E3",
+   "nom": "Étal à étagères",
+   "type": "Etal_Simple",
+   "x": -6.8,
+   "z": -70.1,
+   "yaw_deg": 302,
+   "largeur_facade_m": 11,
+   "profondeur_m": 9,
+   "hauteur_m": 10,
+   "coins": [
+    [
+     -13.6,
+     -72.4
+    ],
+    [
+     -7.7,
+     -63.1
+    ],
+    [
+     -0.1,
+     -67.9
+    ],
+    [
+     -5.9,
+     -77.2
+    ]
+   ]
+  },
+  {
+   "id": "E4",
+   "nom": "Étal aux caisses",
+   "type": "Etal_Simple",
+   "x": -59.2,
+   "z": -75.0,
+   "yaw_deg": 35,
+   "largeur_facade_m": 12,
+   "profondeur_m": 10,
+   "hauteur_m": 10,
+   "coins": [
+    [
+     -61.3,
+     -67.5
+    ],
+    [
+     -51.4,
+     -74.4
+    ],
+    [
+     -57.2,
+     -82.6
+    ],
+    [
+     -67.0,
+     -75.7
+    ]
+   ]
+  },
+  {
+   "id": "E5",
+   "nom": "Étal à auvent rayé",
+   "type": "Etal_Raye",
+   "x": -134.3,
+   "z": -85.3,
+   "yaw_deg": 236,
+   "largeur_facade_m": 13,
+   "profondeur_m": 6,
+   "hauteur_m": 9,
+   "coins": [
+    [
+     -133.1,
+     -92.4
+    ],
+    [
+     -140.4,
+     -81.6
+    ],
+    [
+     -135.4,
+     -78.3
+    ],
+    [
+     -128.1,
+     -89.0
+    ]
+   ]
+  },
+  {
+   "id": "C1",
+   "nom": "Feu de camp",
+   "type": "Feu_De_Camp",
+   "x": -40.6,
+   "z": -48.9,
+   "yaw_deg": 0,
+   "largeur_facade_m": 5,
+   "profondeur_m": 5,
+   "hauteur_m": 2,
+   "coins": [
+    [
+     -43.1,
+     -46.4
+    ],
+    [
+     -38.1,
+     -46.4
+    ],
+    [
+     -38.1,
+     -51.4
+    ],
+    [
+     -43.1,
+     -51.4
+    ]
+   ]
+  }
+ ],
+ "clotures": [
+  {
+   "id": "K1",
+   "nom": "Cour de la forge (ouest)",
+   "style": "blanc",
+   "points": [
+    [
+     -104.0,
+     196.0
+    ],
+    [
+     -101.8,
+     183.0
+    ],
+    [
+     -106.0,
+     129.8
+    ],
+    [
+     -95.6,
+     127.5
+    ]
+   ],
+   "longueur_m": 77
+  },
+  {
+   "id": "K2",
+   "nom": "Cour de la forge (est)",
+   "style": "blanc",
+   "points": [
+    [
+     -67.4,
+     116.1
+    ],
+    [
+     -44.9,
+     118.0
+    ],
+    [
+     -42.0,
+     196.0
+    ]
+   ],
+   "longueur_m": 101
+  },
+  {
+   "id": "K3",
+   "nom": "Enclos des bêtes",
+   "style": "bois",
+   "points": [
+    [
+     -67.6,
+     42.1
+    ],
+    [
+     -90.5,
+     54.7
+    ],
+    [
+     -105.5,
+     34.5
+    ],
+    [
+     -97.8,
+     15.4
+    ],
+    [
+     -80.9,
+     1.2
+    ],
+    [
+     -58.7,
+     13.6
+    ]
+   ],
+   "longueur_m": 119
+  },
+  {
+   "id": "K4",
+   "nom": "Potager",
+   "style": "bois",
+   "points": [
+    [
+     -139.6,
+     1.8
+    ],
+    [
+     -125.3,
+     -1.1
+    ],
+    [
+     -129.7,
+     -33.2
+    ],
+    [
+     -144.4,
+     -29.7
+    ],
+    [
+     -139.6,
+     1.8
+    ]
+   ],
+   "longueur_m": 94
+  },
+  {
+   "id": "K5",
+   "nom": "Jardin de la maison bleue ouest",
+   "style": "bois",
+   "points": [
+    [
+     -174.3,
+     -4.9
+    ],
+    [
+     -156.5,
+     -10.1
+    ],
+    [
+     -152.5,
+     2.3
+    ]
+   ],
+   "longueur_m": 32
+  },
+  {
+   "id": "K6",
+   "nom": "Jardin de la maison rouge à auvent",
+   "style": "bois",
+   "points": [
+    [
+     -128.9,
+     -103.7
+    ],
+    [
+     -114.8,
+     -106.8
+    ]
+   ],
+   "longueur_m": 14
+  },
+  {
+   "id": "K7",
+   "nom": "Entre M09 et M10",
+   "style": "bois",
+   "points": [
+    [
+     -104.7,
+     -122.5
+    ],
+    [
+     -104.0,
+     -132.8
+    ]
+   ],
+   "longueur_m": 10
+  },
+  {
+   "id": "K8",
+   "nom": "Jardin de la grande maison jaune",
+   "style": "bois",
+   "points": [
+    [
+     -115.3,
+     -140.8
+    ],
+    [
+     -82.5,
+     -151.6
+    ],
+    [
+     -72.0,
+     -144.4
+    ]
+   ],
+   "longueur_m": 47
+  },
+  {
+   "id": "K9",
+   "nom": "Bord du chemin sud (1)",
+   "style": "bois",
+   "points": [
+    [
+     -108.0,
+     -143.7
+    ],
+    [
+     -76.1,
+     -157.1
+    ]
+   ],
+   "longueur_m": 35
+  },
+  {
+   "id": "K10",
+   "nom": "Bord du chemin sud (2)",
+   "style": "bois",
+   "points": [
+    [
+     -66.3,
+     -161.8
+    ],
+    [
+     -33.6,
+     -174.1
+    ]
+   ],
+   "longueur_m": 35
+  },
+  {
+   "id": "K11",
+   "nom": "Jardin de la maison brune sud",
+   "style": "bois",
+   "points": [
+    [
+     -130.2,
+     -164.0
+    ],
+    [
+     -115.6,
+     -169.5
+    ]
+   ],
+   "longueur_m": 16
+  }
+ ],
+ "chemins": [
+  {
+   "id": "S1",
+   "nom": "Place → Grange",
+   "largeur_m": 13,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -26.7,
+     -37.1
+    ],
+    [
+     -6.2,
+     -30.7
+    ],
+    [
+     21.9,
+     -13.1
+    ],
+    [
+     43.8,
+     8.6
+    ],
+    [
+     76.9,
+     32.2
+    ]
+   ]
+  },
+  {
+   "id": "S2",
+   "nom": "Place → Forge → porte Nord",
+   "largeur_m": 10,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -45.9,
+     2.1
+    ],
+    [
+     -53.0,
+     19.8
+    ],
+    [
+     -57.0,
+     48.5
+    ],
+    [
+     -48.4,
+     82.5
+    ],
+    [
+     -33.6,
+     111.4
+    ],
+    [
+     -7.5,
+     146.2
+    ],
+    [
+     14.5,
+     175.2
+    ],
+    [
+     25.0,
+     196.0
+    ]
+   ]
+  },
+  {
+   "id": "S3",
+   "nom": "Entrée de la forge",
+   "largeur_m": 8,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -37.0,
+     108.0
+    ],
+    [
+     -50.3,
+     111.1
+    ]
+   ]
+  },
+  {
+   "id": "S4",
+   "nom": "Anneau ouest (forge → tente → maisons)",
+   "largeur_m": 9,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -37.8,
+     109.6
+    ],
+    [
+     -76.1,
+     87.7
+    ],
+    [
+     -100.2,
+     84.1
+    ],
+    [
+     -116.2,
+     77.1
+    ],
+    [
+     -129.0,
+     62.1
+    ],
+    [
+     -138.6,
+     45.2
+    ],
+    [
+     -143.0,
+     25.9
+    ],
+    [
+     -145.9,
+     7.9
+    ],
+    [
+     -151.2,
+     -20.8
+    ],
+    [
+     -153.2,
+     -37.2
+    ],
+    [
+     -151.7,
+     -52.8
+    ],
+    [
+     -152.6,
+     -78.3
+    ]
+   ]
+  },
+  {
+   "id": "S5",
+   "nom": "Anneau sud",
+   "largeur_m": 9,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -152.6,
+     -78.3
+    ],
+    [
+     -148.2,
+     -101.2
+    ],
+    [
+     -140.2,
+     -117.5
+    ],
+    [
+     -131.2,
+     -130.5
+    ],
+    [
+     -121.0,
+     -140.5
+    ],
+    [
+     -108.2,
+     -147.5
+    ],
+    [
+     -98.2,
+     -153.7
+    ],
+    [
+     -81.1,
+     -161.7
+    ],
+    [
+     -58.0,
+     -169.5
+    ],
+    [
+     -43.0,
+     -174.8
+    ],
+    [
+     -25.0,
+     -180.0
+    ]
+   ]
+  },
+  {
+   "id": "S6",
+   "nom": "Place → porte Sud",
+   "largeur_m": 11,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -45.0,
+     -72.0
+    ],
+    [
+     -47.5,
+     -83.0
+    ],
+    [
+     -48.0,
+     -96.0
+    ],
+    [
+     -48.5,
+     -112.0
+    ],
+    [
+     -39.1,
+     -137.8
+    ],
+    [
+     -26.9,
+     -154.3
+    ],
+    [
+     -24.5,
+     -166.5
+    ],
+    [
+     -25.0,
+     -176.5
+    ],
+    [
+     -25.0,
+     -186.5
+    ],
+    [
+     -25.0,
+     -198.0
+    ]
+   ]
+  },
+  {
+   "id": "S7",
+   "nom": "Anneau ouest → porte Ouest",
+   "largeur_m": 9,
+   "ajout_hors_concept": false,
+   "points": [
+    [
+     -151.2,
+     -20.8
+    ],
+    [
+     -164.3,
+     -19.0
+    ],
+    [
+     -173.3,
+     -15.0
+    ],
+    [
+     -196.0,
+     25.0
+    ]
+   ]
+  },
+  {
+   "id": "S8",
+   "nom": "Grange → porte Est (AJOUT, absent du concept)",
+   "largeur_m": 9,
+   "ajout_hors_concept": true,
+   "points": [
+    [
+     100.0,
+     22.0
+    ],
+    [
+     130.0,
+     -5.0
+    ],
+    [
+     165.0,
+     -22.0
+    ],
+    [
+     196.0,
+     -25.0
+    ]
+   ]
+  }
+ ],
+ "place": {
+  "polygone": [
+   [
+    -50.7,
+    4.5
+   ],
+   [
+    -67.8,
+    -9.1
+   ],
+   [
+    -84.5,
+    -19.9
+   ],
+   [
+    -88.3,
+    -44.6
+   ],
+   [
+    -82.8,
+    -66.8
+   ],
+   [
+    -71.6,
+    -76.5
+   ],
+   [
+    -57.7,
+    -85.9
+   ],
+   [
+    -44.1,
+    -94.4
+   ],
+   [
+    -18.5,
+    -83.1
+   ],
+   [
+    6.9,
+    -57.5
+   ],
+   [
+    20.2,
+    -33.6
+   ],
+   [
+    17.9,
+    -15.1
+   ],
+   [
+    -17.1,
+    -25.1
+   ],
+   [
+    -41.1,
+    -7.7
+   ]
+  ],
+  "centre": [
+   -41.4,
+   -43.9
+  ]
+ },
+ "foret": {
+  "polygone": [
+   [
+    -22,
+    194
+   ],
+   [
+    194,
+    194
+   ],
+   [
+    194,
+    -194
+   ],
+   [
+    -12,
+    -194
+   ],
+   [
+    2,
+    -120
+   ],
+   [
+    18,
+    -62
+   ],
+   [
+    22,
+    -8
+   ],
+   [
+    6,
+    58
+   ],
+   [
+    -18,
+    120
+   ]
+  ],
+  "clairieres": [
+   [
+    110,
+    53,
+    42
+   ],
+   [
+    70,
+    28,
+    34
+   ]
+  ],
+  "espacement_m": 15,
+  "note": "Zone à densifier en sapins du terrain (espacement moyen), hors chemins et clairières."
+ },
+ "zones_terre": [
+  {
+   "nom": "Place",
+   "polygone": [
+    [
+     -50.7,
+     4.5
+    ],
+    [
+     -67.8,
+     -9.1
+    ],
+    [
+     -84.5,
+     -19.9
+    ],
+    [
+     -88.3,
+     -44.6
+    ],
+    [
+     -82.8,
+     -66.8
+    ],
+    [
+     -71.6,
+     -76.5
+    ],
+    [
+     -57.7,
+     -85.9
+    ],
+    [
+     -44.1,
+     -94.4
+    ],
+    [
+     -18.5,
+     -83.1
+    ],
+    [
+     6.9,
+     -57.5
+    ],
+    [
+     20.2,
+     -33.6
+    ],
+    [
+     17.9,
+     -15.1
+    ],
+    [
+     -17.1,
+     -25.1
+    ],
+    [
+     -41.1,
+     -7.7
+    ]
+   ]
+  },
+  {
+   "nom": "Cour de la forge",
+   "polygone": [
+    [
+     -103,
+     196
+    ],
+    [
+     -103,
+     128
+    ],
+    [
+     -44,
+     118
+    ],
+    [
+     -44,
+     196
+    ]
+   ]
+  }
+ ],
+ "accessoires": [
+  {
+   "id": "P1",
+   "type": "Tonneaux_Couches",
+   "nom": "Tas de tonneaux couchés (forge)",
+   "x": -88.3,
+   "z": 160.7
+  },
+  {
+   "id": "P2",
+   "type": "Ratelier",
+   "nom": "Râtelier d'outils (forge)",
+   "x": -80.5,
+   "z": 183.1
+  },
+  {
+   "id": "P3",
+   "type": "Enclume",
+   "nom": "Enclume / coffre de forge sur le plancher",
+   "x": -72.4,
+   "z": 137.3
+  },
+  {
+   "id": "P4",
+   "type": "Treteau",
+   "nom": "Tréteau à l'entrée de la cour de la forge",
+   "x": -101.1,
+   "z": 119.9
+  },
+  {
+   "id": "P5",
+   "type": "Panneau",
+   "nom": "Panneau indicateur (forge)",
+   "x": -60.1,
+   "z": 115.9
+  },
+  {
+   "id": "P6",
+   "type": "Potence_Lanterne",
+   "nom": "Potence à lanterne (coin du potager)",
+   "x": -133.0,
+   "z": 11.8
+  },
+  {
+   "id": "P7",
+   "type": "Caisse",
+   "nom": "Caisses contre la grande maison bleue",
+   "x": -119.1,
+   "z": -1.5
+  },
+  {
+   "id": "P8",
+   "type": "Caisse",
+   "nom": "Caisse / perron de la grande maison bleue",
+   "x": -119.1,
+   "z": -11.0
+  },
+  {
+   "id": "P9",
+   "type": "Auge",
+   "nom": "Auge / mangeoire de l'enclos",
+   "x": -82.0,
+   "z": 40.5
+  },
+  {
+   "id": "P10",
+   "type": "Tas_De_Bois",
+   "nom": "Tas de bois contre la petite maison jaune",
+   "x": -173.9,
+   "z": -27.2
+  },
+  {
+   "id": "P11",
+   "type": "Caisse",
+   "nom": "Caisse au bord de la place",
+   "x": -76.7,
+   "z": -66.1
+  },
+  {
+   "id": "P12",
+   "type": "Tonneau",
+   "nom": "Tonneau près de la maison rouge à lucarne",
+   "x": -115.2,
+   "z": -75.9
+  },
+  {
+   "id": "P13",
+   "type": "Caisse",
+   "nom": "Caisse sous l'appentis de la maison rouge",
+   "x": -114.2,
+   "z": -87.6
+  },
+  {
+   "id": "P14",
+   "type": "Caisse",
+   "nom": "Caisse près de l'étal rayé",
+   "x": -140.5,
+   "z": -77.0
+  },
+  {
+   "id": "P15",
+   "type": "Souche",
+   "nom": "Souche / billot",
+   "x": -142.5,
+   "z": -72.5
+  },
+  {
+   "id": "P16",
+   "type": "Souche",
+   "nom": "Souche / billot",
+   "x": -140.0,
+   "z": -67.0
+  },
+  {
+   "id": "P17",
+   "type": "Brouette",
+   "nom": "Caisse à outils / brouette près de l'étal rayé",
+   "x": -133.2,
+   "z": -94.8
+  },
+  {
+   "id": "P18",
+   "type": "Caisse",
+   "nom": "Caisse devant la maison rouge à auvent",
+   "x": -130.3,
+   "z": -112.6
+  },
+  {
+   "id": "P19",
+   "type": "Panier",
+   "nom": "Paniers sous l'auvent de toile",
+   "x": -126.3,
+   "z": -124.1
+  },
+  {
+   "id": "P20",
+   "type": "Souche",
+   "nom": "Souche près du chemin sud",
+   "x": -116.5,
+   "z": -131.5
+  },
+  {
+   "id": "P21",
+   "type": "Rondin",
+   "nom": "Rondin (pas japonais) 1",
+   "x": -43.5,
+   "z": -183.0
+  },
+  {
+   "id": "P22",
+   "type": "Rondin",
+   "nom": "Rondin 2",
+   "x": -51.5,
+   "z": -180.0
+  },
+  {
+   "id": "P23",
+   "type": "Rondin",
+   "nom": "Rondin 3",
+   "x": -59.5,
+   "z": -177.0
+  },
+  {
+   "id": "P24",
+   "type": "Rondin",
+   "nom": "Rondin 4",
+   "x": -67.5,
+   "z": -174.0
+  },
+  {
+   "id": "P25",
+   "type": "Plate_Bande",
+   "nom": "Plate-bande de terre retournée",
+   "x": -59.0,
+   "z": -188.0
+  }
+ ],
+ "villageois": [
+  [
+   -130.0,
+   58.6
+  ],
+  [
+   -4.5,
+   150.5
+  ],
+  [
+   -149.8,
+   -14.3
+  ],
+  [
+   -152.2,
+   -37.2
+  ],
+  [
+   -154.3,
+   -75.0
+  ],
+  [
+   -123.7,
+   -142.6
+  ],
+  [
+   -68.7,
+   -165.3
+  ],
+  [
+   -41.9,
+   -128.9
+  ]
+ ],
+ "arbres_heros": [
+  [
+   -97.2,
+   -51.9
+  ],
+  [
+   -55.8,
+   -96.3
+  ],
+  [
+   -27.6,
+   143.6
+  ],
+  [
+   -114.9,
+   58.5
+  ],
+  [
+   -39.8,
+   61.3
+  ],
+  [
+   -33.5,
+   13.5
+  ],
+  [
+   -114.5,
+   -139.5
+  ],
+  [
+   -144.6,
+   -54.7
+  ],
+  [
+   -93.6,
+   -185.0
+  ],
+  [
+   -155.1,
+   -100.6
+  ],
+  [
+   -155.0,
+   -114.8
+  ],
+  [
+   -146.4,
+   -132.4
+  ],
+  [
+   -152.0,
+   -150.3
+  ]
+ ]
+}

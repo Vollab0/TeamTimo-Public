@@ -81,8 +81,10 @@ public class MazeNavMeshBuilder : MonoBehaviour
             CreateNavMeshModifier(zones[i], zoneAreaIDs[i], cellSize, $"ZoneModifier_{i}", 0);
         }
 
-        // 2. Le Lobby
-        CreateNavMeshModifier(mazeGenerator.GetLobbyRect(), _areaLobby, cellSize, "LobbyModifier", 0);
+        // 2. Le Lobby (aire « Lobby », hors du masque des monstres : ils s'arrêtent aux portes)
+        RectInt lobby = mazeGenerator.GetLobbyRect();
+        CreateNavMeshModifier(lobby, _areaLobby, cellSize, "LobbyModifier", 0);
+        LobbyZone.SetBounds(GetWorldCenter(lobby) + _zonePositionOffset, new Vector2(lobby.width * cellSize, lobby.height * cellSize));
 
         // 3. Les Salles Spécifiques
         List<RectInt> rooms = mazeGenerator.GetRandomRooms();

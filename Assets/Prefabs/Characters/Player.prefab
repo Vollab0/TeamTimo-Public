@@ -569,10 +569,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySystem: {fileID: 0}
-  objectHolder: {fileID: 0}
+  objectHolder: {fileID: 6024452661866037140}
   playerCamera: {fileID: 0}
-  handOffset: {x: 0, y: 0, z: 0}
-  handRotation: {x: 0, y: 0, z: 0}
+  handOffset: {x: -0.0186, y: -0.3145, z: 0.3458}
+  handRotation: {x: 282.68, y: 243.01, z: 330.09}
   detectionRange: 2
   showDebugGizmos: 1
   gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
