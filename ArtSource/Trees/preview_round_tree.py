@@ -1,4 +1,4 @@
-# Rendu d'aperçu de l'arbre rond (à lancer après build_round_tree.py, dans le même fichier).
+# Rendu d'aperçu d'un arbre (sapin : TREE_PREVIEW_PALETTE=pine, à lancer après build_pine_tree.py, dans le même fichier).
 # Le matériau du feuillage imite le shader TeamTimo/StylizedFoliage (couleur de sommet).
 import math
 import os
@@ -79,7 +79,7 @@ def bark_material():
     if not tex:  # matériau créé par script (sapin) : ajoute la texture d'écorce
         tex = [nt.nodes.new("ShaderNodeTexImage")]
     if tex and bsdf:
-        tex[0].image = bpy.data.images.load(os.path.join(TEX, "T_Tree_01_Base.png"), check_existing=True)
+        tex[0].image = bpy.data.images.load(os.path.join(TEX, "Trees", "T_PineBark_Albedo.png"), check_existing=True)
         for link in list(bsdf[0].inputs["Normal"].links):
             nt.links.remove(link)
         nt.links.new(tex[0].outputs["Color"], bsdf[0].inputs["Base Color"])

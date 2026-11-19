@@ -213,7 +213,7 @@ def build_foliage(cfg, name, lod_index):
 
 
 def build_trunk(cfg, lod_index):
-    """Tronc effilé avec évasement au pied ; UV sur la bande d'écorce de T_Tree_01_Base."""
+    """Tronc effilé avec évasement au pied ; UV sur la bande d'écorce de T_PineBark_Albedo (generate_bark_texture.py)."""
     sides = LODS[lod_index]["trunk_sides"]
     H = cfg["trunk_height"]
     levels = [(0.0, 1.5), (0.35, 1.12), (1.2, 1.0), (H * 0.32, 0.78), (H * 0.65, 0.5), (H, 0.12)]
