@@ -29,6 +29,14 @@ public class GrabObject : MonoBehaviour
     // État interne
     private GameObject currentVisualObject = null; // Ancien 'objetVisuelEnMain'
     private GameObject highlightedObject = null;
+    // Tampon réutilisé par la détection (évite d'allouer un tableau à chaque frame).
+    private readonly Collider[] _overlapBuffer = new Collider[32];
+
+    /// <summary>Objet ramassable le plus proche, ou null (lu par InteractionPromptUI).</summary>
+    public GameObject HighlightedObject => highlightedObject;
+
+    /// <summary>Déclenché quand l'objet ramassable le plus proche change (null = plus rien à portée).</summary>
+    public event System.Action<GameObject> OnHighlightChanged;
 
     private void Start()
     {
@@ -99,7 +107,12 @@ public class GrabObject : MonoBehaviour
 
             // Désactivation de la physique pour l'objet en main
             Rigidbody rb = currentVisualObject.GetComponent<Rigidbody>();
-            if (rb) rb.isKinematic = true;
+            if (rb)
+            {
+                rb.isKinematic = true;
+                // Sans ça, l'interpolation replace l'objet sur sa pose physique précédente au lieu de suivre la main.
+                rb.interpolation = RigidbodyInterpolation.None;
+            }
             
             Collider col = currentVisualObject.GetComponent<Collider>();
             if (col) col.enabled = false;
@@ -135,8 +148,12 @@ public class GrabObject : MonoBehaviour
             if (wasAdded)
             {
                 RemoveOutline(highlightedObject);
+                // Destroy n'agit qu'en fin de frame : on le cache tout de suite pour que la détection
+                // ne le resurligne pas entre-temps (l'invite « E » restait affichée).
+                highlightedObject.SetActive(false);
                 Destroy(highlightedObject);
                 highlightedObject = null;
+                OnHighlightChanged?.Invoke(null);
 
                 // Pas besoin d'appeler UpdateHandVisuals() ici manuellement,
                 // car AddItem déclenche l'event OnInventoryChanged qui va le faire tout seul !
@@ -197,6 +214,7 @@ public class GrabObject : MonoBehaviour
         if (rb)
         {
             rb.isKinematic = false;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
             // Utilise 'linearVelocity' si tu es sur Unity 6, sinon 'velocity'
             rb.linearVelocity = playerCamera.transform.forward * 5f; 
             
@@ -207,13 +225,21 @@ public class GrabObject : MonoBehaviour
 
     private void HandleOutlining()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange);
+        // Objet surligné détruit entre-temps (ramassé par quelqu'un d'autre, despawn...) : on prévient l'invite.
+        if (highlightedObject == null && !ReferenceEquals(highlightedObject, null))
+        {
+            highlightedObject = null;
+            OnHighlightChanged?.Invoke(null);
+        }
+
+        int count = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, _overlapBuffer);
         GameObject objectToHighlight = null;
         float minDistance = float.MaxValue;
 
-        foreach (Collider collider in colliders)
+        for (int i = 0; i < count; i++)
         {
-            if (collider.CompareTag("Ramassable"))
+            Collider collider = _overlapBuffer[i];
+            if (collider.enabled && collider.gameObject.activeInHierarchy && collider.CompareTag("Ramassable"))
             {
                 float distance = Vector3.Distance(transform.position, collider.transform.position);
                 if (distance < minDistance)
@@ -229,6 +255,7 @@ public class GrabObject : MonoBehaviour
             if (highlightedObject != null) RemoveOutline(highlightedObject);
             if (objectToHighlight != null) AddOutline(objectToHighlight);
             highlightedObject = objectToHighlight;
+            OnHighlightChanged?.Invoke(highlightedObject);
         }
     }
 

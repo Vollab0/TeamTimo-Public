@@ -28,6 +28,11 @@ public class RagdollController : MonoBehaviour
                  Physics.IgnoreCollision(mainCollider, boneCol, true);
         }
 
+        // Les morceaux du corps ne se cognent pas entre eux (bras contre bassin...), seulement contre le décor
+        for (int i = 0; i < _boneColliders.Length; i++)
+            for (int k = i + 1; k < _boneColliders.Length; k++)
+                Physics.IgnoreCollision(_boneColliders[i], _boneColliders[k], true);
+
         DisableRagdoll();
     }
 
@@ -41,6 +46,10 @@ public class RagdollController : MonoBehaviour
         {
             rb.isKinematic = true;
             rb.detectCollisions = false; 
+            // Pas d'interpolation tant que l'Animator pilote les os : l'interpolation réécrit la pose physique
+            // (en retard) dans les os, et l'Animator ne corrige pas les positions qui sont constantes dans tous
+            // les clips (épaules) -> le haut du corps restait en arrière et le renard s'étirait sur des mètres.
+            rb.interpolation = RigidbodyInterpolation.None;
         }
         
         foreach (var col in _boneColliders)
@@ -57,9 +66,12 @@ public class RagdollController : MonoBehaviour
         if(characterController) characterController.enabled = false;
         if(playerController) playerController.enabled = false;
 
-        // 2. On active la physique sur les os
+        // 2. On active la physique sur les os (en partant de la pose actuelle de l'animation :
+        //    sans interpolation, la physique ne relit les os qu'au pas fixe suivant)
+        Physics.SyncTransforms();
         foreach (var rb in _boneRigidbodies)
         {
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.isKinematic = false;
             rb.detectCollisions = true;
             rb.linearVelocity = Vector3.zero; // Reset pour éviter des mouvements bizarres

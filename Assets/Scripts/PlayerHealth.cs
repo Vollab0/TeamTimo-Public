@@ -29,9 +29,16 @@ public class PlayerHealth : MonoBehaviour
     [Range(0f, 1f)]
     public float maxOpacity = 1f;
 
-    [Header("Physique (Knockback & Mort)")]
+    [Header("Physique (Knockback)")]
     public float knockbackForce = 15f;
-    public float deathForceMultiplier = 1.5f; 
+
+    [Header("À terre et mort (GDD Santé et dégâts)")]
+    [Tooltip("Durée de l'état « à terre » à 0 cœur (s) : le joueur rampe et appelle à l'aide ; un allié peut le relever")]
+    [SerializeField] private float downedDuration = 30f;
+    [Tooltip("Durée de l'animation de mort (s) avant que le corps passe en ragdoll (corps transportable)")]
+    [SerializeField] private float deathAnimationDuration = 1.3f;
+    [Tooltip("Vie rendue quand un allié relève le joueur (en demi-cœurs)")]
+    [SerializeField] private int reviveHealth = 2;
     
     // Références internes
     private RagdollController _ragdollController;
@@ -40,6 +47,12 @@ public class PlayerHealth : MonoBehaviour
 
     // Events
     public event Action<int> OnSanteChangee;
+    /// <summary>Le joueur tombe à 0 cœur et passe « à terre ».</summary>
+    public event Action OnDowned;
+    /// <summary>Le délai « à terre » est écoulé : le joueur est mort.</summary>
+    public event Action OnDied;
+    /// <summary>Un allié a relevé le joueur « à terre ».</summary>
+    public event Action OnRevived;
 
     // États
     private int vieActuelle;
@@ -48,6 +61,10 @@ public class PlayerHealth : MonoBehaviour
     private Color[] _originalColors;
     private Material[] _materials;
     private bool _isDead = false; 
+    private bool _isDowned = false;
+    private Coroutine _downedRoutine;
+    public bool IsDowned => _isDowned;
+    public bool IsDead => _isDead;
 
     void Start()
     {
@@ -132,7 +149,9 @@ void Update()
     /// <summary>Dégâts avec une force de recul propre à l'attaque (ex. charge du taureau) au lieu de knockbackForce.</summary>
     public void Blesser(int degats, Vector3 sourcePosition, float forceRecul)
     {
-        if (_isDead) return;
+        if (_isDead || _isDowned) return;
+        // Frames d'invincibilité de la roulade
+        if (_playerController != null && _playerController.IsInvulnerable) return;
 
         vieActuelle -= degats;
         if (vieActuelle < 0) vieActuelle = 0;
@@ -159,10 +178,10 @@ void Update()
             _playerController.ApplyKnockback(sourcePosition, forceRecul);
         }
 
-        // 4. MORT
+        // 4. À TERRE (puis mort au bout de downedDuration)
         if (vieActuelle <= 0)
         {
-            Die(sourcePosition);
+            EnterDowned();
         }
     }
 
@@ -175,7 +194,7 @@ void Update()
 
     public void Soigner(int soin)
     {
-        if (_isDead) return;
+        if (_isDead || _isDowned) return;
         vieActuelle += soin;
         int maxVie = nombreDeCoeurs * 2;
         if (vieActuelle > maxVie) vieActuelle = maxVie;
@@ -187,22 +206,51 @@ void Update()
         OnSanteChangee?.Invoke(vieActuelle);
     }
 
-    private void Die(Vector3 fatalHitSource)
+    private void EnterDowned()
+    {
+        if (_isDowned || _isDead) return;
+        _isDowned = true;
+        Debug.Log("Joueur à terre");
+        if (_playerController != null) _playerController.SetDowned(true);
+        OnDowned?.Invoke();
+        _downedRoutine = StartCoroutine(DownedRoutine());
+    }
+
+    private IEnumerator DownedRoutine()
+    {
+        yield return new WaitForSeconds(downedDuration);
+        _downedRoutine = null;
+        Die();
+    }
+
+    /// <summary>Relève le joueur « à terre » (Kit de réanimation d'un allié). Sans effet s'il n'est pas à terre.</summary>
+    public void Reanimer()
+    {
+        if (!_isDowned || _isDead) return;
+        if (_downedRoutine != null) StopCoroutine(_downedRoutine);
+        _downedRoutine = null;
+        _isDowned = false;
+        vieActuelle = Mathf.Clamp(reviveHealth, 1, nombreDeCoeurs * 2);
+        NotifierLeChangement();
+        if (_playerController != null) _playerController.SetDowned(false);
+        OnRevived?.Invoke();
+    }
+
+    private void Die()
     {
         if (_isDead) return;
         _isDead = true;
+        _isDowned = false;
         Debug.Log("💀 Mort du joueur");
+        OnDied?.Invoke();
+        StartCoroutine(RagdollAfterDeathAnimation());
+    }
 
-        // Activation du Ragdoll
-        if (_ragdollController != null)
-        {
-            Vector3 pushDirection = (transform.position - fatalHitSource).normalized;
-            pushDirection += Vector3.up * 0.3f;
-            
-            Vector3 finalForce = pushDirection.normalized * knockbackForce * deathForceMultiplier;
-            
-            _ragdollController.EnableRagdoll(finalForce, transform.position);
-        }
+    private IEnumerator RagdollAfterDeathAnimation()
+    {
+        // L'animation de mort couche le renard, puis le corps devient physique (transportable par les alliés)
+        yield return new WaitForSeconds(deathAnimationDuration);
+        if (_ragdollController != null) _ragdollController.EnableRagdoll(Vector3.zero, transform.position);
     }
 
     private IEnumerator DamageFlashRoutine()

@@ -140,6 +140,7 @@ public class MouseAI : NetworkBehaviour
 
     private NavMeshAgent _agent;
     private EnemyNightMode _nightMode;
+    private EnemyHealth _health;
 
     // Vrai là où l'IA tourne : chez l'hôte, ou partout sans réseau.
     private bool _runsAI;
@@ -191,6 +192,7 @@ public class MouseAI : NetworkBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _nightMode = GetComponent<EnemyNightMode>();
+        _health = GetComponent<EnemyHealth>();
         if (animator == null) animator = GetComponentInChildren<Animator>();
         CacheAnimatorParameters();
 
@@ -204,12 +206,25 @@ public class MouseAI : NetworkBehaviour
     private void OnEnable()
     {
         if (_nightMode != null) _nightMode.OnNightChanged += HandleNightChanged;
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += Die;
+        }
     }
 
     private void OnDisable()
     {
         if (_nightMode != null) _nightMode.OnNightChanged -= HandleNightChanged;
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= Die;
+        }
     }
+
+    // Coup du joueur (EnemyHealth, chez l'hôte) : anim « Hit » et court étourdissement, même pour une poussée.
+    private void HandleDamaged(int damage, Vector3 sourcePosition) => TakeHit();
 
     public override void OnNetworkSpawn()
     {
@@ -595,10 +610,10 @@ public class MouseAI : NetworkBehaviour
     }
     #endregion
 
-    #region --- API publique (combat à venir) ---
+    #region --- API publique (appelée par EnemyHealth) ---
     /// <summary>
     /// La souris encaisse un coup : anim « Hit » et courte immobilisation.
-    /// À appeler chez l'hôte (ou sans réseau) ; ignoré ailleurs. Ne gère pas de points de vie.
+    /// À appeler chez l'hôte (ou sans réseau) ; ignoré ailleurs. Les PV sont dans EnemyHealth.
     /// </summary>
     public void TakeHit()
     {

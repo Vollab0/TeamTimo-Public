@@ -95,7 +95,7 @@ public static class LobbyVillageBuilder
             !EditorUtility.DisplayDialog("LobbyVillage existe déjà",
                 "Recréer LobbyVillage effacera les modifications faites à la main dans cet objet. Continuer ?", "Recréer", "Annuler"))
             return;
-        Debug.Log(Build());
+        Debug.Log(Build(force: true));
     }
 
     [MenuItem("TeamTimo/Lobby/Village/2. Peindre les chemins du Lobby")]
@@ -119,6 +119,24 @@ public static class LobbyVillageBuilder
         Debug.Log(FlattenInteriors());
     }
 
+    [MenuItem("TeamTimo/Lobby/Village/5. Recréer le décor de la place et du village (efface les retouches)")]
+    public static void RedecorateMenu()
+    {
+        if (!EditorUtility.DisplayDialog("Recréer le décor",
+                "PlazaDecor et VillageDecor seront effacés puis reposés d'après l'outil : les accessoires déplacés à la main reviendront à leur place d'origine. Continuer ?",
+                "Recréer", "Annuler"))
+            return;
+        GameObject root = GameObject.Find(RootName);
+        if (root == null) { Debug.Log("LobbyVillage n'existe pas : utiliser « 1. Poser le village »."); return; }
+        JObject data = LoadLayout(out string error);
+        if (data == null) { Debug.Log(error); return; }
+        Terrain terrain = FindLobbyTerrain();
+        DecoratePlaza(root.transform, terrain, rebuild: true);
+        DecorateVillage(root.transform, terrain, data, rebuild: true);
+        EditorSceneManager.MarkSceneDirty(root.scene);
+        Debug.Log("Décor de la place et du village recréé.");
+    }
+
     [MenuItem("TeamTimo/Lobby/Village/4. Photo de contrôle (caméra du concept)")]
     public static void PhotoMenu()
     {
@@ -129,14 +147,21 @@ public static class LobbyVillageBuilder
 
     #region --- VILLAGE ---
 
-    /// <summary>Crée (ou recrée) LobbyVillage dans la scène active. Retourne un résumé.</summary>
-    public static string Build()
+    /// <summary>
+    /// Crée LobbyVillage dans la scène active. Retourne un résumé.
+    /// La scène fait foi : si LobbyVillage existe déjà, rien n'est touché sauf avec force = true
+    /// (le village est alors recréé en entier et les retouches faites à la main sont perdues).
+    /// </summary>
+    public static string Build(bool force = false)
     {
         JObject data = LoadLayout(out string error);
         if (data == null) return error;
         Terrain terrain = FindLobbyTerrain();
 
         GameObject old = GameObject.Find(RootName);
+        if (old != null && !force)
+            return "LobbyVillage existe déjà : rien n'a été recréé, pour garder les retouches faites à la main " +
+                   "(utiliser ReplaceBlockouts, ou Build(force: true) seulement si Gabin le demande).";
         if (old != null) Object.DestroyImmediate(old);
         GameObject root = new GameObject(RootName);
         Transform buildings = NewChild(root.transform, "Buildings");
@@ -179,8 +204,10 @@ public static class LobbyVillageBuilder
 
     /// <summary>
     /// Remplace uniquement les maquettes de bâtiments / étals dont le prefab existe maintenant, sans toucher
-    /// au reste de LobbyVillage (retouches à la main conservées). Crée le village s'il n'existe pas.
+    /// au reste de LobbyVillage. Crée le village s'il n'existe pas.
     /// refreshPrefabs : repose aussi les éléments déjà en prefab (après avoir recréé un prefab).
+    /// Retouches à la main conservées : chaque élément remplacé garde la position, la rotation et l'échelle
+    /// qu'il avait dans la scène ; les clôtures déjà en prefab et le décor (PlazaDecor, VillageDecor) ne sont pas reposés.
     /// </summary>
     public static string ReplaceBlockouts(bool refreshPrefabs = false)
     {
@@ -205,12 +232,18 @@ public static class LobbyVillageBuilder
                 !blockouts.TryGetValue($"{id}_{type}", out old)) continue;
             Transform parent = old.parent;
             int index = old.GetSiblingIndex();
+            var kept = new HandPlacement(old);
+            // Rotation que l'outil donnait à une maquette (sans le calage de la porte appliqué aux prefabs).
+            Quaternion blockoutRot = Quaternion.Euler(0f, (float)e["yaw_deg"], 0f);
             Object.DestroyImmediate(old.gameObject);
             PlaceStructure(e, parent, terrain);
-            parent.GetChild(parent.childCount - 1).SetSiblingIndex(index);
+            Transform placed = parent.GetChild(parent.childCount - 1);
+            placed.SetSiblingIndex(index);
+            kept.ApplyTo(placed, blockoutRot);
             replaced++;
         }
-        // Clôtures : reposées en entier si le prefab de travée existe (les maquettes, ou toutes si refreshPrefabs).
+        // Clôtures : seules les maquettes sont remplacées. Une clôture déjà en prefab n'est jamais reposée
+        // (ses travées ont pu être retouchées à la main ; le prefab de travée se met à jour tout seul).
         if (AssetDatabase.LoadAssetAtPath<GameObject>($"{PrefabFolder}/P_Fence_Wood.prefab") != null)
         {
             Transform fencesRoot = root.transform.Find("Fences");
@@ -218,7 +251,6 @@ public static class LobbyVillageBuilder
             {
                 string id = (string)f["id"];
                 Transform old = fencesRoot != null ? fencesRoot.Find(id + " (maquette)") : null;
-                if (old == null && refreshPrefabs && fencesRoot != null) old = fencesRoot.Find(id);
                 if (old == null) continue;
                 int index = old.GetSiblingIndex();
                 Object.DestroyImmediate(old.gameObject);
@@ -236,16 +268,52 @@ public static class LobbyVillageBuilder
                 !blockouts.TryGetValue($"{id}_{type}", out old)) continue;
             Transform parent = old.parent;
             int index = old.GetSiblingIndex();
+            var kept = new HandPlacement(old);
             Object.DestroyImmediate(old.gameObject);
             PlaceProp(p, parent, terrain, data);
-            parent.GetChild(parent.childCount - 1).SetSiblingIndex(index);
+            Transform placed = parent.GetChild(parent.childCount - 1);
+            placed.SetSiblingIndex(index);
+            kept.ApplyTo(placed, placed.rotation); // maquette et prefab d'accessoire ont la même rotation d'outil
             replaced++;
         }
+        // Décor : posé seulement s'il n'existe pas encore (menu « 5. Recréer le décor » pour l'effacer et le reposer).
         DecoratePlaza(root.transform, terrain);
         DecorateVillage(root.transform, terrain, data);
         ClearDetailObstacles(terrain, data);
         EditorSceneManager.MarkSceneDirty(root.scene);
-        return $"LobbyVillage : {replaced} éléments (re)posés avec leur prefab.";
+        return $"LobbyVillage : {replaced} éléments (re)posés avec leur prefab, retouches à la main conservées.";
+    }
+
+    /// <summary>
+    /// Transform d'un élément de la scène avant son remplacement, pour que l'élément reposé garde
+    /// les retouches faites à la main (la scène fait foi, pas le relevé JSON).
+    /// </summary>
+    private readonly struct HandPlacement
+    {
+        private readonly Vector3 _position;
+        private readonly Quaternion _rotation;
+        private readonly Vector3 _scale;
+        private readonly bool _wasBlockout;
+
+        public HandPlacement(Transform old)
+        {
+            _position = old.position;
+            _rotation = old.rotation;
+            _scale = old.localScale;
+            _wasBlockout = old.name.EndsWith(" (maquette)");
+        }
+
+        /// <summary>
+        /// Remet l'élément reposé là où était l'ancien. blockoutRot : rotation que l'outil donnait à la maquette ;
+        /// l'écart entre elle et la rotation de l'ancien objet (retouche à la main) est reporté sur le nouveau.
+        /// </summary>
+        public void ApplyTo(Transform placed, Quaternion blockoutRot)
+        {
+            Quaternion rot = _wasBlockout ? _rotation * Quaternion.Inverse(blockoutRot) * placed.rotation : _rotation;
+            placed.SetPositionAndRotation(_position, rot);
+            // L'échelle d'une maquette est celle de ses cubes : seule celle d'un prefab est reprise.
+            if (!_wasBlockout) placed.localScale = _scale;
+        }
     }
 
     /// <summary>Pose un bâtiment / étal. Retourne vrai si un prefab a été utilisé, faux si c'est une maquette.</summary>
@@ -1274,11 +1342,13 @@ public static class LobbyVillageBuilder
     /// <summary>
     /// Décore la place autour du feu de camp et des 4 étals (E1 à E4) avec les prefabs disponibles,
     /// d'après la composition de GameDesign/99_Attachments/Lobby/Lobby_Place_Decoree_Proposition.png.
+    /// Si PlazaDecor existe déjà, il est laissé tel quel (retouches à la main conservées), sauf avec rebuild = true.
     /// </summary>
-    public static void DecoratePlaza(Transform root, Terrain terrain)
+    public static void DecoratePlaza(Transform root, Terrain terrain, bool rebuild = false)
     {
         if (root == null) return;
         Transform old = root.Find("PlazaDecor");
+        if (old != null && !rebuild) return;
         if (old != null) Object.DestroyImmediate(old.gameObject);
         Transform decor = NewChild(root, "PlazaDecor");
         var h = new DecorHelper(decor, terrain);
@@ -1382,11 +1452,13 @@ public static class LobbyVillageBuilder
     /// <summary>
     /// Décore le reste du village (enclos, parvis de la grange, cour de la forge, tente du médecin,
     /// potager, abords des maisons et carrefours) avec les accessoires du kit.
+    /// Si VillageDecor existe déjà, il est laissé tel quel (retouches à la main conservées), sauf avec rebuild = true.
     /// </summary>
-    public static void DecorateVillage(Transform root, Terrain terrain, JObject data)
+    public static void DecorateVillage(Transform root, Terrain terrain, JObject data, bool rebuild = false)
     {
         if (root == null) return;
         Transform old = root.Find("VillageDecor");
+        if (old != null && !rebuild) return;
         if (old != null) Object.DestroyImmediate(old.gameObject);
         Transform decor = NewChild(root, "VillageDecor");
         var h = new DecorHelper(decor, terrain, data);

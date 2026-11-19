@@ -36,6 +36,44 @@ public class PlayerController : MonoBehaviour
     private Vector3 _knockbackVelocity; // La force actuelle du recul
     // ----------------------------------------
 
+    [Header("Roulade")]
+    [Tooltip("Vitesse au début de la roulade (m/s) ; elle ralentit jusqu'à la fin")]
+    [SerializeField] private float rollSpeed = 26f;
+    [Tooltip("Vitesse en fin de roulade, en fraction de la vitesse de départ")]
+    [Range(0f, 1f)]
+    [SerializeField] private float rollEndSpeedRatio = 0.3f;
+    [Tooltip("Durée de la roulade (s). L'animation dure 0,6 s : elle est accélérée ou ralentie pour suivre")]
+    [SerializeField] private float rollDuration = 0.6f;
+    [Tooltip("Durée d'invincibilité au début de la roulade (s) : on passe à travers la charge du taureau ou un coup")]
+    [SerializeField] private float rollInvincibility = 0.35f;
+    [Tooltip("Temps minimum entre la fin d'une roulade et la suivante (s). La stamina viendra s'y ajouter")]
+    [SerializeField] private float rollCooldown = 0.3f;
+
+    [Header("À terre")]
+    [Tooltip("Vitesse de reptation quand le joueur est à terre (0 cœur)")]
+    [SerializeField] private float crawlSpeed = 3f;
+
+    [Header("Attaque")]
+    [Tooltip("Durée (s) pendant laquelle le joueur est immobilisé au début d'une attaque. Doit couvrir l'impact (0,27 s) : dès qu'elle est finie, l'Animator quitte l'attaque pour la marche / la course (fondu de 0,1 s) si le joueur se déplace")]
+    [Min(0f)]
+    [SerializeField] private float attackDuration = 0.3f;
+    [Tooltip("Délai minimal (s) entre deux attaques : laisse l'animation (0,6 s) aller jusqu'au coup avant d'en relancer une")]
+    [Min(0f)]
+    [SerializeField] private float attackCooldown = 0.45f;
+
+    /// <summary>Déclenché au début d'une roulade (animation).</summary>
+    public event Action OnRoll;
+
+    /// <summary>Déclenché au début d'une attaque (PlayerMeleeAttack applique le coup).</summary>
+    public event Action OnAttack;
+
+    private bool _isRolling;
+    private bool _isDowned;
+    private Vector3 _rollDirection;
+    private float _rollStartTime;
+    private float _nextRollTime;
+    private float _invulnerableUntil;
+
     private float _gravity = -9.81f;
     private float _potionSpeedMultiplier = 1f;
     private float _verticalVelocity;
@@ -52,7 +90,7 @@ public class PlayerController : MonoBehaviour
     private bool _isJumping = false;
     private bool _isWalking;
     private bool _isAttacking = false;
-    private float attackDuration = 0.15f;
+    private float _nextAttackTime;
 
     private bool IsGrounded() => _characterController.isGrounded;
 
@@ -140,7 +178,7 @@ public class PlayerController : MonoBehaviour
     // on arrête tout de suite.
     // Résultat : Le joueur garde sa dernière orientation (donc il continue de faire face à l'ennemi)
     // même s'il est poussé en arrière par le knockback.
-    if (_input.sqrMagnitude == 0) return;
+    if (_input.sqrMagnitude == 0 || _isRolling) return;
 
     Vector3 targetOrientation = Vector3.zero;
 
@@ -193,13 +231,31 @@ public class PlayerController : MonoBehaviour
         Quaternion cameraRotation = Quaternion.LookRotation(_cameraForward);
 
         // 2. Calcul du mouvement normal (Input + Gravité + Vitesse)
+        // À terre : on rampe lentement ; pendant la roulade, les touches ne dirigent plus le joueur
+        float moveSpeed = _isDowned ? crawlSpeed : _velocity * _potionSpeedMultiplier;
+        if (_isRolling) moveSpeed = 0f;
+
         _newDirection = new Vector3(
-             _direction.x * _velocity * _potionSpeedMultiplier * Time.deltaTime,
+             _direction.x * moveSpeed * Time.deltaTime,
              _direction.y * speed * _jumpHeight * Time.deltaTime,
-             _direction.z * _velocity * _potionSpeedMultiplier * Time.deltaTime
+             _direction.z * moveSpeed * Time.deltaTime
         );
 
         _newDirection = cameraRotation * _newDirection;
+
+        if (_isRolling)
+        {
+            float t = (Time.time - _rollStartTime) / rollDuration;
+            if (t >= 1f)
+            {
+                _isRolling = false;
+                _nextRollTime = Time.time + rollCooldown;
+            }
+            else
+            {
+                _newDirection += _rollDirection * (rollSpeed * Mathf.Lerp(1f, rollEndSpeedRatio, t) * Time.deltaTime);
+            }
+        }
 
         // --- AJOUT : INTEGRATION DU KNOCKBACK ---
         
@@ -213,6 +269,40 @@ public class PlayerController : MonoBehaviour
 
         _characterController.Move(_newDirection);
         _isWalking = _input.sqrMagnitude > 0.01f;
+    }
+
+    /// <summary>Roulade (action Roll : Ctrl gauche, bouton Est de la manette).</summary>
+    public void Roll(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        if (_isRolling || _isAttacking || _isDowned || !IsGrounded() || Time.time < _nextRollTime) return;
+
+        // Direction : celle des touches (relative à la caméra), sinon droit devant
+        Vector3 dir = transform.forward;
+        if (_input.sqrMagnitude > 0.01f && _cameraForward.sqrMagnitude > 0.001f)
+        {
+            dir = Quaternion.LookRotation(_cameraForward) * new Vector3(_input.x, 0f, _input.y);
+        }
+        dir.y = 0f;
+        _rollDirection = dir.normalized;
+        transform.rotation = Quaternion.LookRotation(_rollDirection);
+        _rollStartTime = Time.time;
+        _invulnerableUntil = Time.time + rollInvincibility;
+        _isRolling = true;
+        OnRoll?.Invoke();
+    }
+
+    /// <summary>Passe le joueur « à terre » (0 cœur, appelé par PlayerHealth) ou le relève.</summary>
+    public void SetDowned(bool downed)
+    {
+        _isDowned = downed;
+        if (!downed) return;
+        _isRolling = false;
+        _canSprint = false;
+        _sprintActivated = false;
+        _velocity = speed;
+        _jumpHeight = 1.0f;
+        _jumpBufferExpiration = 0f;
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -232,7 +322,7 @@ public class PlayerController : MonoBehaviour
   public void Attack(InputAction.CallbackContext context)
 {
 
-    if (context.started && !_isAttacking)
+    if (context.started && !_isAttacking && !_isDowned && !_isRolling && Time.time >= _nextAttackTime)
     {
         StartCoroutine(AttackRoutine());
     }
@@ -241,7 +331,8 @@ public class PlayerController : MonoBehaviour
 private IEnumerator AttackRoutine()
 {
     _isAttacking = true;
-    Debug.Log("Start attack");
+    _nextAttackTime = Time.time + attackCooldown;
+    OnAttack?.Invoke();
 
     float originalSpeed = _velocity;
     _velocity = 0; 
@@ -251,10 +342,10 @@ private IEnumerator AttackRoutine()
     _velocity = originalSpeed;
 
     _isAttacking = false;
-    Debug.Log("End attack");
 }
     public void HandleJump()
     {
+        if (_isDowned || _isRolling) return;
         bool canJump = IsGrounded() || Time.time <= _coyoteTimeExpiration;
         bool jumpBuffered = Time.time <= _jumpBufferExpiration;
 
@@ -272,6 +363,7 @@ private IEnumerator AttackRoutine()
     {
         if (context.phase == InputActionPhase.Started)
         {
+            if (_isDowned) return;
             _canSprint = true;
             StartCoroutine(BoostCoroutine());
         }
@@ -283,6 +375,18 @@ private IEnumerator AttackRoutine()
             _jumpHeight = 1.0f;
         }
     }
+
+    // États lus par AnimationStateController à chaque frame (sans allouer de tableau, contrairement à GetState)
+    public bool IsWalking => _isWalking;
+    public bool IsSprinting => _isSprinting;
+    public bool IsJumping => _isJumping;
+    public bool IsFalling => _isFalling;
+    public bool IsGroundedNow => IsGrounded();
+    public bool IsAttacking => _isAttacking;
+    public bool IsRolling => _isRolling;
+    public bool IsDowned => _isDowned;
+    /// <summary>Vrai pendant les frames d'invincibilité de la roulade (lu par PlayerHealth).</summary>
+    public bool IsInvulnerable => Time.time < _invulnerableUntil;
 
     public bool[] GetState()
     {

@@ -1,0 +1,173 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Renard_BrasDroit
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/Bassin
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Controlleur_Epaules
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Controlleur_Queue_Bas
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L/Tibias.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L/Tibias.L/Cheville.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L/Tibias.L/Cheville.L/Controlleur_Talon.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L/Tibias.L/Cheville.L/Doigts_Pied.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L/Tibias.L/Cheville.L/Pole_Genou.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.L/Tibias.L/Cheville.L/Talon.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R/Tibias.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R/Tibias.R/Cheville.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R/Tibias.R/Cheville.R/Controlleur_Talon.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R/Tibias.R/Cheville.R/Doigts_Pied.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R/Tibias.R/Cheville.R/Pole_Genou.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Cuisse.R/Tibias.R/Cheville.R/Talon.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Controlleur_Epaule.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Controlleur_Epaule.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Controlleur_Tete
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Avant_Bras.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Controlleur_Poignet.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Annulaire.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Controlleur_Annulaire.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Controlleur_Index.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Controlleur_Majeur.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Controlleur_Pouce.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Index.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Majeur.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.L/Controlleur_Avant_Bras.L/Poignet.L/Pouce.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R
+    m_Weight: 1
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R
+    m_Weight: 1
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Controlleur_Poignet.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R
+    m_Weight: 1
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Annulaire.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Controlleur_Annulaire.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Controlleur_Index.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Controlleur_Majeur.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Controlleur_Pouce.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Index.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Majeur.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Avant_Bras.R/Poignet.R/Pouce.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Epaule.R/Controlleur_Avant_Bras.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Controlleur_Oreille_Bas.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Controlleur_Oreille_Bas.R
+    m_Weight: 0
+  - m_Path: "Armature/Bassin/Epaules/Tete/Controlleur_Paupi\xE8re.L"
+    m_Weight: 0
+  - m_Path: "Armature/Bassin/Epaules/Tete/Controlleur_Paupi\xE8re.R"
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Controlleur_Yeux
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Controlleur_Yeux/Controlleur_Oeil.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Controlleur_Yeux/Controlleur_Oeil.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oeil.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oeil.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oreille_Bas.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oreille_Bas.L/Controlleur_Oreille_Haut.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oreille_Bas.L/Oreille_Haut.L
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oreille_Bas.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oreille_Bas.R/Controlleur_Oreille_Haut.R
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Epaules/Tete/Oreille_Bas.R/Oreille_Haut.R
+    m_Weight: 0
+  - m_Path: "Armature/Bassin/Epaules/Tete/Paupi\xE8re.L"
+    m_Weight: 0
+  - m_Path: "Armature/Bassin/Epaules/Tete/Paupi\xE8re.R"
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Queue_Bas
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Queue_Bas/Controlleur_Queue_Milieu
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Queue_Bas/Queue_Milieu
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Queue_Bas/Queue_Milieu/Controlleur_Queue_Bout
+    m_Weight: 0
+  - m_Path: Armature/Bassin/Queue_Bas/Queue_Milieu/Queue_Bout
+    m_Weight: 0
+  - m_Path: Armature/Controlleur_Bassin
+    m_Weight: 0
+  - m_Path: Armature/IK_Pied.L
+    m_Weight: 0
+  - m_Path: Armature/IK_Pied.R
+    m_Weight: 0
+  - m_Path: Museau
+    m_Weight: 0
+  - m_Path: Oeil_Droit
+    m_Weight: 0
+  - m_Path: Oeil_Gauche
+    m_Weight: 0
+  - m_Path: "Paupi\xE8re_Droite"
+    m_Weight: 0
+  - m_Path: "Paupi\xE8re_Gauche"
+    m_Weight: 0
+  - m_Path: Renard
+    m_Weight: 0
+  - m_Path: Sourcils
+    m_Weight: 0

@@ -1,0 +1,46 @@
+/* Invite d'interaction au-dessus de l'objet le plus proche (InteractionPromptUI) : petite touche « E ».
+   left / top sont donnés par le script (point juste au-dessus de l'objet) : la pastille est centrée dessus. */
+.interaction-prompt {
+    position: absolute;
+    flex-direction: row;
+    align-items: center;
+    translate: -50% -100%;
+    padding: 2px;
+    border-radius: 8px;
+    background-color: rgba(30, 24, 16, 0.55);
+    opacity: 0;
+    scale: 0.5 0.5;
+    transition-property: opacity, scale;
+    transition-duration: 0.12s, 0.2s;
+    transition-timing-function: ease-out, ease-out-back;
+}
+
+.interaction-prompt--visible {
+    opacity: 1;
+    scale: 1 1;
+}
+
+/* Pastille de la touche, façon touche de clavier */
+.interaction-prompt__key {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+    border-bottom-width: 3px;
+    border-color: rgb(176, 146, 100);
+    background-color: rgb(255, 236, 190);
+    color: rgb(40, 28, 16);
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+/* Texte optionnel (InteractionPromptUI.showActionText) */
+.interaction-prompt__text {
+    margin-left: 5px;
+    margin-right: 4px;
+    color: rgb(255, 246, 225);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
